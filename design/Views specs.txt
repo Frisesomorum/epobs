@@ -1,5 +1,6 @@
 ----------------------------------------------------------
 	VIEWS
+  Reviewed 2018
 ----------------------------------------------------------
 
 Home / Dashboard
@@ -17,7 +18,7 @@ Expenditure Budget Form
 	The form is a table with four columns: Fund, Category, Ledger Account and Budget. The Category and Ledger Account columns will be populated with values from the database and not user-editable. Cells in the Fund column will be dropdown boxes, and cells in the budget column will be numeric. All cells will be populated with previously saved values, if any.
 	Additionally, on the expense budget form, since there are many more expense ledger accounts, the table will have header rows for each category. The table will initially be collapsed so that the user sees only the totals for each category. The user can click on a header row to expand and view/edit all of the individual ledger account values for that category.
 	There is a 'Submit' button at the bottom of the form, which saves the values to the database. There is a 'Back' button, which allows the user to go back and select a different term [year?].
-	
+
 Revenue Form
 	%baseurl%/revenue/
 Expenditure Form
@@ -46,7 +47,7 @@ Expenditure Form
 		Total billing
 		Total paid
 	There is a 'Submit' button below the entry fields, which saves the values to the database and clears the following fields:
-		
+
 	Below the entry fields is an abbreviated table listing the most recent 10[?] entries.
 
 Revenue Summary
@@ -89,7 +90,7 @@ Students
 	To be used by Accountants and Bookkeepers only.
 	A form to add students to the database and edit existing students.
 	Nice to have: ability to upload a picture
-	
+
 The app will also include standard login/logout and user admin views. If an unregistered user tries to access any part of the app, they will be redirected to the login view.
 
 
