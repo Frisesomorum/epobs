@@ -1,0 +1,115 @@
+----------------------------------------------------------
+	VIEWS
+----------------------------------------------------------
+
+Home / Dashboard
+	%baseurl%/*
+	Accessible by all registered users.
+	Default landing page; contains links to other views as appropriate for the logged in user.
+
+Revenue Budget Form
+	%baseurl%/revBudget/
+Expenditure Budget Form
+	%baseurl%/expBudget/
+	[Suggested titles: Revenue/Expense Budget]
+	To be used by Accountants only.
+	These are forms where the user can enter the budgeted amounts for the current term. There is initially a dropdown box where the user selects a term [is it a term or a fiscal year?]. Once the term is selected and a 'Next' button clicked, the dropdown box is replaced by the budget entry form:
+	The form is a table with four columns: Fund, Category, Ledger Account and Budget. The Category and Ledger Account columns will be populated with values from the database and not user-editable. Cells in the Fund column will be dropdown boxes, and cells in the budget column will be numeric. All cells will be populated with previously saved values, if any.
+	Additionally, on the expense budget form, since there are many more expense ledger accounts, the table will have header rows for each category. The table will initially be collapsed so that the user sees only the totals for each category. The user can click on a header row to expand and view/edit all of the individual ledger account values for that category.
+	There is a 'Submit' button at the bottom of the form, which saves the values to the database. There is a 'Back' button, which allows the user to go back and select a different term [year?].
+	
+Revenue Form
+	%baseurl%/revenue/
+Expenditure Form
+	%baseurl%/expense/
+	[Suggested titles: Revenue/Expense]
+	To be used by Bookkeepers and Accountants only.
+	These are forms where the user can enter a single expenditure or revenue transaction.
+	Fields for the revenue form:
+		Date
+		Description (free text)
+		Category and ledger account (dropdown)
+		Fund (dropdown)
+		Source
+		Extended amount (???)
+	Fields for the expense form:
+		Date
+		Description (free text)
+		Category and ledger account (dropdown)
+		Fund (dropdown)
+		Quantity
+		Unit cost
+		Unit of measure
+		Extended amount (???)
+		Supplier
+		Billing date
+		Total billing
+		Total paid
+	There is a 'Submit' button below the entry fields, which saves the values to the database and clears the following fields:
+		
+	Below the entry fields is an abbreviated table listing the most recent 10[?] entries.
+
+Revenue Summary
+	%baseurl%/revSummary/
+Expenditure Summary
+	%baseurl%/expSummary/
+Revenue and Expenditure Summary
+	%baseurl%/revExpSummary/
+Expenditure Category Summary
+	%baseurl%/expCatSummary/
+	The summary reports may be accessed by any registered user, but are intended to be used by Accountants and Stakeholders.
+	These are read-only tables with the following columns:
+		Fund
+		Revenue Category
+		Ledger Account
+		Annual Budget
+		Period Actual
+		YTD Actual
+		Budget Balance
+		% Budget Used
+		Est. Budget
+		Est'd. Remaining
+		% Est'd Used
+	The table will have header rows for each category. The table will initially be collapsed so that the user sees only the totals for each category. The user can click on a header row to expand and view/edit all of the individual ledger account values for that category. There will also be an 'expand all' toggle.
+	There is an 'Export' ['Download'?] button, which saves the displayed information to .csv or .xlsx.
+	Nice to have: drilldowns, visualizations
+
+Purchase Orders
+	%baseurl%/purchaseOrder/
+	To be used by Accountants and Bookkeepers only.
+	A form to add purchase orders to the database and edit existing purchase orders.
+
+Suppliers
+	%baseurl%/supplier/
+	To be used by Accountants and Bookkeepers only.
+	A form to add suppliers to the database and edit existing suppliers.
+
+Students
+	%baseurl%/student/
+	To be used by Accountants and Bookkeepers only.
+	A form to add students to the database and edit existing students.
+	Nice to have: ability to upload a picture
+	
+The app will also include standard login/logout and user admin views. If an unregistered user tries to access any part of the app, they will be redirected to the login view.
+
+
+
+
+
+----------------------------------------------------------
+	NOT IMPLEMENTED
+----------------------------------------------------------
+
+Employees Info Form
+	Included in the 'Epobs Reports and  Forms Displays' Excel sheet. I don't understand the relevance; it doesn't seem to affect the finance data in any way?
+
+Revenue Budget
+Expenditure Budget
+	These were included in the site diagram (Dashboard.pdf) and mockups (budget.html), but I can't figure out what the intent was.
+
+Revenue Report
+Expenditure Report
+Revenue Budget Report
+Expenditure Budget Report
+Standard Reports
+	Not sure what these refer to. Mentioned in the site diagram, but no other details or mockups.
