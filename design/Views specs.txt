@@ -2,7 +2,6 @@
 	VIEWS
   Reviewed 2018
 	*thu test git
-	* another
 ----------------------------------------------------------
 
 Home / Dashboard
