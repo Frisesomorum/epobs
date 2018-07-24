@@ -2,6 +2,7 @@
 	VIEWS
   Reviewed 2018
 	*thu test git
+	* another
 ----------------------------------------------------------
 
 Home / Dashboard
@@ -10,7 +11,7 @@ Home / Dashboard
 	Default landing page; contains links to other views as appropriate for the logged in user.
 
 Revenue Budget Form
-	%baseurl%/revBudget/
+	%baseurl%/revBudget
 Expenditure Budget Form
 	%baseurl%/expBudget/
 	[Suggested titles: Revenue/Expense Budget]
