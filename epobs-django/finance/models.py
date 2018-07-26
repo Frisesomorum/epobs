@@ -25,13 +25,13 @@ class Term(models.Model):
     start = models.DateField()
     end = models.DateField()
 
-    def revenueBudgets():
+    def revenueBudgets(self):
         return Nothing
-    def expenseBudgets():
+    def expenseBudgets(self):
         return Nothing
-    def revenuesCollected():
+    def revenuesCollected(self):
         return Nothing
-    def expensesPaid():
+    def expensesPaid(self):
         return Nothing
 
 class Fund(Descriptor):
@@ -40,9 +40,9 @@ class Fund(Descriptor):
 class Category(Descriptor):
     fund = models.ForeignKey(Fund, on_delete=models.CASCADE, related_name='%(app_label)s_%(class)s_categories')
 
-    def totalForTerm(term):
+    def totalForTerm(self, term):
         return Nothing
-    def totalYTD(year):
+    def totalYTD(self, year):
         return Nothing
 
     class Meta:
@@ -81,6 +81,9 @@ class Person(models.Model):
     last_name = models.CharField(max_length=255)
     date_of_birth = models.DateField()
     email = models.CharField(max_length=255)
+    def __str__(self):
+        return self.last_name + ', ' + self.first_name
+
     class Meta:
         abstract = True
 
@@ -93,7 +96,7 @@ class Transaction(models.Model):
     date_issued = models.DateField()
     date_paid = models.DateField()
 
-    def balanceDue():
+    def balanceDue(self):
         return Nothing
 
     class Meta:
@@ -102,9 +105,9 @@ class Transaction(models.Model):
 class Payee(models.Model):
     date_hired = models.DateField()
     date_terminated = models.DateField()
-    def balanceDue():
+    def balanceDue(self):
         return Nothing
-    def amountPaid():
+    def amountPaid(self):
         return Nothing
     class Meta:
         abstract = True
@@ -125,8 +128,14 @@ class ExpenseTransaction(Transaction):
     unit_cost = models.FloatField()
     unit_of_measure = models.CharField(max_length=255)
 
+# class StudentAccount(Student, term):
+##  get student student = Student(id)
+##  amounthistory =  Student.records
+##  current_amount_due = Student.current_amount_due
+##  next_payment  = Student.next_payment
+##  balanceDue()
 class Student(Person):
-    def balanceDue():
+    def balanceDue(self):
         return Nothing
 
 class RevenueTransaction(Transaction):
