@@ -372,7 +372,7 @@
 											"_parent": {
 												"$ref": "AAAAAAFksgp+HSZrjQE="
 											},
-											"font": "Arial;13;1",
+											"font": "Arial;13;3",
 											"left": 653,
 											"top": 167,
 											"width": 134,
@@ -603,7 +603,7 @@
 											"_parent": {
 												"$ref": "AAAAAAFksgqsQyaVrjE="
 											},
-											"font": "Arial;13;1",
+											"font": "Arial;13;3",
 											"left": 853,
 											"top": 151,
 											"width": 134,
@@ -2295,7 +2295,7 @@
 											"_parent": {
 												"$ref": "AAAAAAFkshNyvS3nALI="
 											},
-											"font": "Arial;13;1",
+											"font": "Arial;13;3",
 											"left": 1133,
 											"top": 119,
 											"width": 151.39794921875,
@@ -3484,7 +3484,7 @@
 											"_parent": {
 												"$ref": "AAAAAAFksjFqUTfh9r0="
 											},
-											"font": "Arial;13;1",
+											"font": "Arial;13;3",
 											"left": 269,
 											"top": 135,
 											"width": 147.0751953125,
@@ -7138,7 +7138,7 @@
 											"_parent": {
 												"$ref": "AAAAAAFkyNCF8aLRQtM="
 											},
-											"font": "Arial;13;1",
+											"font": "Arial;13;3",
 											"left": 485,
 											"top": 167,
 											"width": 87,
@@ -7874,7 +7874,7 @@
 											"_parent": {
 												"$ref": "AAAAAAFkycvF4/uZKwU="
 											},
-											"font": "Arial;13;1",
+											"font": "Arial;13;3",
 											"left": 589,
 											"top": 15,
 											"width": 190,
@@ -9050,7 +9050,7 @@
 											"_parent": {
 												"$ref": "AAAAAAFkzQwD6SwA9hQ="
 											},
-											"font": "Arial;13;1",
+											"font": "Arial;13;3",
 											"left": 1741,
 											"top": 375,
 											"width": 100.08349609375,
@@ -9580,7 +9580,8 @@
 								}
 							]
 						}
-					]
+					],
+					"isAbstract": true
 				},
 				{
 					"_type": "UMLClass",
@@ -9630,7 +9631,8 @@
 								"$ref": "AAAAAAFkycvF3/uWvys="
 							}
 						}
-					]
+					],
+					"isAbstract": true
 				},
 				{
 					"_type": "UMLClass",
@@ -9997,7 +9999,8 @@
 							},
 							"name": "balanceDue"
 						}
-					]
+					],
+					"isAbstract": true
 				},
 				{
 					"_type": "UMLClass",
@@ -10198,7 +10201,8 @@
 							"name": "Term",
 							"type": ""
 						}
-					]
+					],
+					"isAbstract": true
 				},
 				{
 					"_type": "UMLClass",
@@ -10519,7 +10523,8 @@
 								"$ref": "AAAAAAFkycvF3/uWvys="
 							}
 						}
-					]
+					],
+					"isAbstract": true
 				},
 				{
 					"_type": "UMLClass",
@@ -10855,7 +10860,8 @@
 							"name": "Description",
 							"type": "string"
 						}
-					]
+					],
+					"isAbstract": true
 				},
 				{
 					"_type": "UMLClass",
@@ -10901,7 +10907,8 @@
 							},
 							"name": "amountPaid"
 						}
-					]
+					],
+					"isAbstract": true
 				}
 			]
 		},
