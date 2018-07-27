@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}EPOBS - Add Students{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item">Students</li>
+  <li class="breadcrumb-item">Add</li>
+{% endblock %}
+
+{% block content %}
+
+  <form method="post" class="mb-4">
+    {% csrf_token %}
+    {% include 'includes/form.html' %}
+    <button type="submit" class="btn btn-success">Submit</button>
+  </form>
+
+{% endblock %}
