@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from finance.models import Student
+from .models import Student
 from .forms import NewStudentForm
 
 def edit(request):
