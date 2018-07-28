@@ -23,6 +23,9 @@ def add(request):
 def edit(request, pk):
     student = get_object_or_404(Student, pk=pk)  # TODO: Make a nice error page for this
     if request.method == 'POST':
+        if 'delete' in request.POST:
+            student.delete()
+            return redirect('view_students')
         form = EditStudentForm(request.POST)
         if form.is_valid():
             student.first_name = form.cleaned_data.get('first_name')

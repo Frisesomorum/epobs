@@ -21,5 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     re_path(r'students/add/$', studentViews.add, name='add_students'),
     re_path(r'students/edit/(?P<pk>\d+)/$', studentViews.edit, name='edit_students'),
-    re_path(r'students/view/$', studentViews.view, name='view_students'),
+    re_path(r'students/$', studentViews.view, name='view_students'),
 ]
