@@ -19,7 +19,7 @@ from students import views as studentViews
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    re_path(r'students/add/$', studentViews.add, name='add_students'),
-    re_path(r'students/edit/(?P<pk>\d+)/$', studentViews.edit, name='edit_students'),
+    re_path(r'students/add/$', studentViews.add.as_view(), name='add_students'),
+    re_path(r'students/edit/(?P<pk>\d+)/$', studentViews.edit.as_view(), name='edit_students'),
     re_path(r'students/$', studentViews.view, name='view_students'),
 ]

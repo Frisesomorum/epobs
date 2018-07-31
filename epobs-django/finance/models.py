@@ -63,7 +63,7 @@ class RevenueBudgetItem(BudgetItem):
 
 class Transaction(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    notes = models.TextField(max_length=4000, blank=true)
+    notes = models.TextField(max_length=4000, blank=True)
     amount_charged = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     partial_amount_paid = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     paid = models.BooleanField()
