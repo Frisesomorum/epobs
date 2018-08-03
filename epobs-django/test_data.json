@@ -1,0 +1,22 @@
+[
+  {
+    "model": "students.student",
+    "pk": 1,
+    "fields": {
+      "first_name": "John",
+      "last_name": "Lennon",
+      "date_of_birth" : "2001-02-01",
+      "email" : "JohnL@gmail.com"
+    }
+  },
+  {
+    "model": "students.student",
+    "pk": 2,
+    "fields": {
+      "first_name": "Paul",
+      "last_name": "McCartney",
+      "date_of_birth" : "2002-02-02",
+      "email" : "PaulM@gmail.com"
+    }
+  }
+]
