@@ -8,6 +8,12 @@ class add(CreateView):
     template_name = 'student/add.html'
     added_students_list = []  # TODO: tie this to the user session instead, and clear it when they click 'done' or navigate to this page?
 
+    def post(self, request, **kwargs):
+        if 'done' in request.POST:
+            return redirect('view_students')
+        else:
+            return super().post(request, **kwargs)
+
     def form_valid(self, form):
         student = form.save(commit=False)
         student.first_name = form.cleaned_data.get('first_name')
@@ -27,11 +33,13 @@ class edit(UpdateView):
 
     def post(self, request, **kwargs):
         if 'delete' in request.POST:
-            student = get_object_or_404(Student, pk=pk)
+            student = self.get_object()
             student.delete()
             return redirect('view_students')
         elif 'cancel' in request.POST:
             return redirect('view_students')
+        else:
+            return super().post(request, **kwargs)
 
 
 def view(request):
