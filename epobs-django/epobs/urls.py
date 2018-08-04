@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path
 from students import views as studentViews
-from epobs import views as homeViews
+from epobs import views as indexViews
 
 urlpatterns = [
     re_path(r'^$', indexViews.index, name='index'),
