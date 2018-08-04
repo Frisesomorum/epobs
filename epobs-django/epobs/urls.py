@@ -19,7 +19,7 @@ from students import views as studentViews
 from epobs import views as homeViews
 
 urlpatterns = [
-    re_path(r'^$', homeViews.home, name='home'),
+    re_path(r'^$', indexViews.index, name='index'),
     path('admin/', admin.site.urls, name='admin'),
     re_path(r'students/add/$', studentViews.add.as_view(), name='add_students'),
     re_path(r'students/edit/(?P<pk>\d+)/$', studentViews.edit.as_view(), name='edit_students'),
