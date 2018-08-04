@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Student
 from django.views.generic.edit import CreateView, UpdateView
 
@@ -18,11 +18,21 @@ class add(CreateView):
         self.added_students_list.insert(0, student)
         return render(self.request, 'student/add.html', { 'form': form, 'added_students_list': self.added_students_list } )
 
+
 class edit(UpdateView):
     model = Student
     fields = '__all__'
     template_name = 'student/edit.html'
     success_url = '/students/'
+
+    def post(self, request, **kwargs):
+        if 'delete' in request.POST:
+            student = get_object_or_404(Student, pk=pk)
+            student.delete()
+            return redirect('view_students')
+        elif 'cancel' in request.POST:
+            return redirect('view_students')
+
 
 def view(request):
     students = Student.objects.all()
