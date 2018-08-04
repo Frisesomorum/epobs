@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Student
+from django.http import HttpResponse
+from tablib import Dataset
 from django.views.generic.edit import CreateView, UpdateView
+from .models import Student
+from .resources import StudentResource
 
 class add(CreateView):
     model = Student
@@ -43,5 +46,25 @@ class edit(UpdateView):
 
 
 def view(request):
-    students = Student.objects.all()
-    return render(request, 'student/view.html', {'students': students})
+    if request.method=="POST":
+        if 'export' in request.POST:
+            student_resource = StudentResource()
+            dataset = student_resource.export()
+            response = HttpResponse(dataset.csv, content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename="students.csv"'
+            return response
+        elif 'import' in request.POST:
+            #if 'import_students' not in request.FILES.keys():
+            #if not form.is_valid():
+            #    return HttpResponse("No file uploaded. Fix it, please.", content_type="text/plain") # TODO: nicer error handling
+            student_resource = StudentResource()
+            dataset = Dataset()
+            new_students = request.FILES['import_students']
+            imported_data = dataset.load(new_students.read().decode('utf-8'),format='csv') # TODO: shouldn't need to hardcode 'utf-8' or 'csv' here. Is the tablib detect_format code working correctly?
+            result = student_resource.import_data(dataset, dry_run=True)  # Test the data import
+            if not result.has_errors():
+                student_resource.import_data(dataset, dry_run=False)  # Actually import now
+            return redirect('view_students')
+    else:
+        students = Student.objects.all()
+        return render(request, 'student/view.html', {'students': students})

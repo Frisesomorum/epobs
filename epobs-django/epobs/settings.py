@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'widget_tweaks',
-    
+    'import_export',
+
     'epobs',
     'finance',
     'students',
@@ -131,3 +132,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+# django-import-export setting; default is False
+IMPORT_EXPORT_USE_TRANSACTIONS = True
