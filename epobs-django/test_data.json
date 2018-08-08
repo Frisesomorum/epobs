@@ -128,7 +128,6 @@
     "pk": 1,
     "fields": {
       "employee_id" : 1,
-      "date_of_birth": "1972-02-02"
     }
   },
   {
@@ -164,7 +163,6 @@
     "pk": 1,
     "fields": {
       "student_id": 1,
-      "date_of_birth" : "2001-02-01"
     }
   },
   {

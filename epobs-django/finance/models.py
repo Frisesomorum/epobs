@@ -57,9 +57,13 @@ class BudgetItem(sharedModels.Descriptor):
 
 class ExpenseBudgetItem(BudgetItem):
     ledgerAccount = models.ForeignKey(ExpenseLedgerAccount, on_delete=models.CASCADE, related_name='budget')
+    class Meta:
+        unique_together = (("term", "ledgerAccount"),)
 
 class RevenueBudgetItem(BudgetItem):
     ledgerAccount = models.ForeignKey(RevenueLedgerAccount, on_delete=models.CASCADE, related_name='budget')
+    class Meta:
+        unique_together = (("term", "ledgerAccount"),)
 
 class Transaction(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -84,7 +88,7 @@ class Payee(models.Model):
     class Meta:
         abstract = True
 
-class EmployeeAccount(sharedModels.Person, Payee):
+class EmployeeAccount(Payee):
     employee = models.ForeignKey(personnelModels.Employee, on_delete=models.CASCADE)
 
 class SupplierAccount(Payee):
@@ -100,7 +104,7 @@ class ExpenseTransaction(Transaction):
     unit_cost = models.FloatField(blank=True)
     unit_of_measure = models.CharField(max_length=255, blank=True)
 
-class StudentAccount(sharedModels.Person):
+class StudentAccount(models.Model):
     student = models.ForeignKey(studentsModels.Student, on_delete=models.CASCADE)
     def balanceDue(self):
         return Nothing
