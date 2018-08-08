@@ -18,5 +18,168 @@
       "date_of_birth" : "2002-02-02",
       "email" : "PaulM@gmail.com"
     }
+  },
+  {
+    "model": "personnel.employee",
+    "pk": 1,
+    "fields": {
+      "date_hired": "2018-02-12",
+      "date_terminated": "2018-08-01",
+      "first_name": "Bob",
+      "last_name": "Worker",
+      "date_of_birth" : "1972-02-02"
+    }
+  },
+  {
+    "model": "personnel.supplier",
+    "pk": 1,
+    "fields": {
+      "name": "Supply Company Awesome",
+      "date_hired": "2018-02-12",
+      "date_terminated": "2018-08-10"
+    }
+  },
+  {
+    "model": "finance.term",
+    "pk": 1,
+    "fields": {
+      "start": "2018-01-01",
+      "end": "2018-02-01"
+    }
+  },
+  {
+    "model": "finance.fund",
+    "pk": 1,
+    "fields":{
+      "name": "Operational Funding",
+      "abbreviation": "OPG1",
+      "description": "Government grant"
+    }
+  },
+  {
+    "model": "finance.fund",
+    "pk": 2,
+    "fields":{
+      "name": "Tuition",
+      "abbreviation": "TUT",
+      "description": "Student tuition"
+    }
+  },
+  {
+    "model": "finance.ExpenseCategory",
+    "pk": 1,
+    "fields":{
+      "name": "Transporation",
+      "abbreviation": "trans",
+      "description": "Ways to get around",
+      "fund_id": 1
+    }
+  },
+  {
+    "model": "finance.RevenueCategory",
+    "pk": 1,
+    "fields":{
+      "name": "Student Payment",
+      "abbreviation": "tuition",
+      "description": "Student pay tuition",
+      "fund_id": 2
+    }
+  },
+  {
+    "model": "finance.ExpenseLedgerAccount",
+    "pk": 1,
+    "fields": {
+      "name": "Oil",
+      "abbreviation": "O",
+      "description": "Oil for Cars",
+      "category_id": 1
+    }
+  },
+  {
+    "model": "finance.RevenueLedgerAccount",
+    "pk": 1,
+    "fields": {
+      "name": "Grant",
+      "abbreviation": "G1",
+      "description": "Money from grant",
+      "category_id": 1
+    }
+  },
+  {
+    "model": "finance.ExpenseBudgetItem",
+    "pk": 1,
+    "fields": {
+      "amount": "5.00",
+      "term": 1,
+      "ledgerAccount_id" : 1
+    }
+  },
+  {
+    "model": "finance.RevenueBudgetItem",
+    "pk": 1,
+    "fields": {
+      "amount": "5.00",
+      "term": 1,
+      "ledgerAccount_id" : 1
+    }
+  },
+  {
+    "model": "finance.EmployeeAccount",
+    "pk": 1,
+    "fields": {
+      "employee_id" : 1,
+      "date_of_birth": "1972-02-02"
+    }
+  },
+  {
+    "model" : "finance.SupplierAccount",
+    "pk": 1,
+    "fields": {
+      "supplier_id": 1
+    }
+  },
+  {
+    "model": "finance.ExpenseTransaction",
+    "pk" : 1,
+    "fields": {
+      "created" : "2018-08-01T17:41:28+00:00",
+      "notes": " Bought this item for a test",
+      "amount_charged" : "51.80",
+      "partial_amount_paid" : "51.80",
+      "paid": 1,
+      "date_issued": "2018-08-01",
+      "date_paid": "2018-08-01",
+      "ledgerAccount_id": 1,
+      "employee_id" : 1,
+      "supplier_id" : 1,
+      "date_approved" : "2018-08-01",
+      "discount" : "0.00",
+      "quantity" : 1,
+      "unit_cost" : "51.80",
+      "unit_of_measure" : "dollar"
+    }
+  },
+  {
+    "model": "finance.StudentAccount",
+    "pk": 1,
+    "fields": {
+      "student_id": 1,
+      "date_of_birth" : "2001-02-01"
+    }
+  },
+  {
+    "model": "finance.RevenueTransaction",
+    "pk" : 1,
+    "fields": {
+      "created" : "2018-07-01T17:41:28+00:00",
+      "notes": "Made this money",
+      "amount_charged" : "100.00",
+      "partial_amount_paid" : "100.00",
+      "paid": 1,
+      "date_issued": "2018-07-01",
+      "date_paid": "2018-07-01",
+      "ledgerAccount_id" : 1,
+      "student_id" : 1
+    }
   }
 ]
