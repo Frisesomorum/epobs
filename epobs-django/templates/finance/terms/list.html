@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}EPOBS - List Terms{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item">Terms</li>
+  <li class="breadcrumb-item">List</li>
+{% endblock %}
+
+{% block content %}
+<!-- TODO: display discontiguity and overlap errors -->
+  <table class="table table-striped table-sm">
+    <thead>
+      <tr>
+        <th>Start</th>
+        <th>End</th>
+        <th>Edit</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for term in object_list %}
+        <tr>
+          <td>{{ term.start }}</td>
+          <td>{{ term.end }}</td>
+          <td><a href="{% url 'edit_term' term.pk %}"><i class="fas fa-pencil-alt"></i></a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from tablib import Dataset
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView
+from epobs.views import UpdateDeleteView
 from .models import Student
 from .resources import StudentResource
 
@@ -13,7 +14,7 @@ class add(CreateView):
 
     def post(self, request, **kwargs):
         if 'done' in request.POST:
-            return redirect('view_students')
+            return redirect('list_students')
         else:
             return super().post(request, **kwargs)
 
@@ -28,24 +29,14 @@ class add(CreateView):
         return render(self.request, 'student/add.html', { 'form': form, 'added_students_list': self.added_students_list } )
 
 
-class edit(UpdateView):
+class edit(UpdateDeleteView):
     model = Student
     fields = '__all__'
     template_name = 'student/edit.html'
     success_url = '/students/'
 
-    def post(self, request, **kwargs):
-        if 'delete' in request.POST:
-            student = self.get_object()
-            student.delete()
-            return redirect('view_students')
-        elif 'cancel' in request.POST:
-            return redirect('view_students')
-        else:
-            return super().post(request, **kwargs)
 
-
-def view(request):
+def list(request):
     if request.method=="POST":
         if 'export' in request.POST:
             student_resource = StudentResource()
@@ -64,7 +55,7 @@ def view(request):
             result = student_resource.import_data(dataset, dry_run=True)  # Test the data import
             if not result.has_errors():
                 student_resource.import_data(dataset, dry_run=False)  # Actually import now
-            return redirect('view_students')
+            return redirect('list_students')
     else:
         students = Student.objects.all()
-        return render(request, 'student/view.html', {'students': students})
+        return render(request, 'student/list.html', {'students': students})
