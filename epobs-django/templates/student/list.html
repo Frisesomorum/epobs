@@ -28,6 +28,7 @@
         <th>Last Name</th>
         <th>Date of Birth</th>
         <th>Email</th>
+        <th>Balance Due</th>
         <th>Edit</th>
       </tr>
     </thead>
@@ -38,6 +39,7 @@
           <td>{{ student.last_name }}</td>
           <td>{{ student.date_of_birth }}</td>
           <td>{{ student.email }}</td>
+          <td>{{ student.studentaccount.balanceDue }}</td>
           <td><a href="{% url 'edit_students' student.pk %}"><i class="fas fa-pencil-alt"></i></a></td>
         </tr>
       {% endfor %}
@@ -54,6 +56,7 @@
         null,
         null,
         { "type": "date" },
+        null,
         null,
         { "orderable": false }
       ],
