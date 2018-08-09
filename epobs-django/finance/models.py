@@ -56,14 +56,14 @@ class BudgetItem(sharedModels.Descriptor):
         abstract = True
 
 class ExpenseBudgetItem(BudgetItem):
-    ledgerAccount = models.ForeignKey(ExpenseLedgerAccount, on_delete=models.CASCADE, related_name='budget')
+    ledger_account = models.ForeignKey(ExpenseLedgerAccount, on_delete=models.CASCADE, related_name='budget')
     class Meta:
-        unique_together = (("term", "ledgerAccount"),)
+        unique_together = (("term", "ledger_account"),)
 
 class RevenueBudgetItem(BudgetItem):
-    ledgerAccount = models.ForeignKey(RevenueLedgerAccount, on_delete=models.CASCADE, related_name='budget')
+    ledger_account = models.ForeignKey(RevenueLedgerAccount, on_delete=models.CASCADE, related_name='budget')
     class Meta:
-        unique_together = (("term", "ledgerAccount"),)
+        unique_together = (("term", "ledger_account"),)
 
 class Transaction(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -89,13 +89,17 @@ class Payee(models.Model):
         abstract = True
 
 class EmployeeAccount(Payee):
-    employee = models.ForeignKey(personnelModels.Employee, on_delete=models.CASCADE)
+    employee = models.OneToOneField(personnelModels.Employee, on_delete=models.CASCADE)
+    def __str__(self):
+        return str(self.employee)
 
 class SupplierAccount(Payee):
-    supplier = models.ForeignKey(personnelModels.Supplier, on_delete=models.CASCADE)
+    supplier = models.OneToOneField(personnelModels.Supplier, on_delete=models.CASCADE)
+    def __str__(self):
+        return str(self.supplier)
 
 class ExpenseTransaction(Transaction):
-    ledgerAccount = models.ForeignKey(ExpenseLedgerAccount, on_delete=models.CASCADE, related_name='expenses')
+    ledger_account = models.ForeignKey(ExpenseLedgerAccount, on_delete=models.CASCADE, related_name='expenses')
     employee = models.ForeignKey(EmployeeAccount, on_delete=models.CASCADE, related_name='transactions', blank=True)
     supplier = models.ForeignKey(SupplierAccount, on_delete=models.CASCADE, related_name='transactions', blank=True)
     date_approved = models.DateField(blank=True)
@@ -105,12 +109,15 @@ class ExpenseTransaction(Transaction):
     unit_of_measure = models.CharField(max_length=255, blank=True)
 
 class StudentAccount(models.Model):
-    student = models.ForeignKey(studentsModels.Student, on_delete=models.CASCADE)
+    student = models.OneToOneField(studentsModels.Student, on_delete=models.CASCADE)
+    def __str__(self):
+        return str(self.student)
+
     def balanceDue(self):
         return Nothing
     def nextPayment(self):
         return Nothing
 
 class RevenueTransaction(Transaction):
-    ledgerAccount = models.ForeignKey(RevenueLedgerAccount, on_delete=models.CASCADE, related_name='revenues')
+    ledger_account = models.ForeignKey(RevenueLedgerAccount, on_delete=models.CASCADE, related_name='revenues')
     student = models.ForeignKey(StudentAccount, on_delete=models.CASCADE, related_name='transactions')

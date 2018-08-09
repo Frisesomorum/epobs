@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView
-from epobs.views import UpdateDeleteView
+from django.views.generic.edit import CreateView, UpdateView
+from epobs.views import DeletionFormMixin
 from ..models import Term
 
 class list(ListView):
@@ -14,7 +14,7 @@ class create(CreateView):
     template_name = 'finance/terms/create.html'
     success_url = 'finance/terms/'
 
-class edit(UpdateDeleteView):
+class edit(DeletionFormMixin, UpdateView):
     model = Term
     fields = '__all__'
     template_name = 'finance/terms/edit.html'

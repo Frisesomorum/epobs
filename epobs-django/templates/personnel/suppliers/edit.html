@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}EPOBS - Edit Supplier{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item">Personnel</li>
+  <li class="breadcrumb-item">Suppliers</li>
+  <li class="breadcrumb-item">Edit</li>
+{% endblock %}
+
+{% block content %}
+
+  <form method="post" class="mb-4" novalidate>
+    {% csrf_token %}
+    {% include 'includes/form.html' %}
+    <input type="submit" name="save" value="Save" />
+    <input type="submit" name="delete" value="Delete" />
+    <input type="submit" name="cancel" value="Cancel" />
+  </form>
+
+{% endblock %}

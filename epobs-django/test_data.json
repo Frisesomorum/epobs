@@ -111,7 +111,7 @@
     "fields": {
       "amount": "5.00",
       "term": 1,
-      "ledgerAccount_id" : 1
+      "ledger_account_id" : 1
     }
   },
   {
@@ -120,14 +120,14 @@
     "fields": {
       "amount": "5.00",
       "term": 1,
-      "ledgerAccount_id" : 1
+      "ledger_account_id" : 1
     }
   },
   {
     "model": "finance.EmployeeAccount",
     "pk": 1,
     "fields": {
-      "employee_id" : 1,
+      "employee_id" : 1
     }
   },
   {
@@ -148,7 +148,7 @@
       "paid": 1,
       "date_issued": "2018-08-01",
       "date_paid": "2018-08-01",
-      "ledgerAccount_id": 1,
+      "ledger_account_id": 1,
       "employee_id" : 1,
       "supplier_id" : 1,
       "date_approved" : "2018-08-01",
@@ -162,7 +162,7 @@
     "model": "finance.StudentAccount",
     "pk": 1,
     "fields": {
-      "student_id": 1,
+      "student_id": 1
     }
   },
   {
@@ -176,7 +176,7 @@
       "paid": 1,
       "date_issued": "2018-07-01",
       "date_paid": "2018-07-01",
-      "ledgerAccount_id" : 1,
+      "ledger_account_id" : 1,
       "student_id" : 1
     }
   }

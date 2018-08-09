@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}EPOBS - Add Revenues{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item">Revenues</li>
+  <li class="breadcrumb-item">Add</li>
+{% endblock %}
+
+{% block content %}
+
+  <form method="post" class="mb-4" novalidate>
+    {% csrf_token %}
+    {% include 'includes/form.html' %}
+    <input type="submit" name="save" value="Save" />
+  </form>
+
+{% endblock %}

@@ -4,8 +4,8 @@
     <h1>Home page</h1>
     <ul>
       <li>Budget</li>
-      <li>Revenue</li>
-      <li>Expenses</li>
+      <li><a href='{% url 'list_revenues' %}'>Revenue</a></li>
+      <li><a href='{% url 'list_expenses' %}'>Expenses</a></li>
       <li>Personnel</li>
       <li><i class="fas fa-child"></i> <a href='{% url 'list_students' %}'>Students</a></li>
     </ul>

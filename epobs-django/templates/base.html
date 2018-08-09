@@ -25,14 +25,21 @@
                   Menu
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
-                  <a class="dropdown-item" href="#">Expenses</a>
-                  <a class="dropdown-item" href="#">Revenues</a>
+                  <a class="dropdown-item" href="{% url 'list_expenses' %}">List Expenses</a>
+                  <a class="dropdown-item" href="{% url 'add_expenses' %}">Add Expenses</a>
+                  <a class="dropdown-item" href="{% url 'list_revenues' %}">List Revenues</a>
+                  <a class="dropdown-item" href="{% url 'add_revenues' %}">Add Revenues</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="#">Budget</a>
                   <a class="dropdown-item" href="#">Reports</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="{% url 'list_term' %}">List Terms</a>
                   <a class="dropdown-item" href="{% url 'create_term' %}">Create Term</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="{% url 'list_employees' %}">List Employees</a>
+                  <a class="dropdown-item" href="{% url 'add_employees' %}">Add Employees</a>
+                  <a class="dropdown-item" href="{% url 'list_suppliers' %}">List Suppliers</a>
+                  <a class="dropdown-item" href="{% url 'add_suppliers' %}">Add Suppliers</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="{% url 'list_students' %}">List Students</a>
                   <a class="dropdown-item" href="{% url 'add_students' %}">Add Students</a>
