@@ -74,8 +74,11 @@ class Transaction(models.Model):
     date_issued = models.DateField(blank=True)
     date_paid = models.DateField(blank=True)
 
+    @property
     def balanceDue(self):
-        return Nothing
+        if self.paid:
+            return 0
+        return self.amount_charged - self.partial_amount_paid
 
     class Meta:
         abstract = True
@@ -113,10 +116,17 @@ class StudentAccount(models.Model):
     def __str__(self):
         return str(self.student)
 
+    @property
     def balanceDue(self):
-        return Nothing
+        sum = 0
+        for transaction in self.transactions.all():
+            sum += transaction.balanceDue
+        return sum
+        # collection of RevenueTransaction
+        # self.transactions  loop
+        # sum the due_payment
     def nextPayment(self):
-        return Nothing
+        return str(self.student) + "_nextPay"
 
 class RevenueTransaction(Transaction):
     ledger_account = models.ForeignKey(RevenueLedgerAccount, on_delete=models.CASCADE, related_name='revenues')
