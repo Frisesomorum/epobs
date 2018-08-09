@@ -6,6 +6,7 @@ from django.views.generic.edit import CreateView, UpdateView
 from epobs.views import DeletionFormMixin
 from .models import Student
 from .resources import StudentResource
+from finance.models import StudentAccount
 
 class add(CreateView):
     model = Student
@@ -26,6 +27,8 @@ class add(CreateView):
         student.email = form.cleaned_data.get('email')
         student.date_of_birth = form.cleaned_data.get('date_of_birth')
         student.save()
+        account = StudentAccount(student = student)  # Create the linked payment account
+        account.save()
         self.added_students_list.insert(0, student)
         return render(self.request, 'student/add.html', { 'form': form, 'added_students_list': self.added_students_list } )
 
