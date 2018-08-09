@@ -10,13 +10,17 @@
 {% endblock %}
 
 {% block content %}
-  <form method="post" class="mb-4" enctype="multipart/form-data">
-    {% csrf_token %}
-    <input type="submit" name="export" value="Export" />
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <input type="submit" name="import" value="Import" />
-    <input type="file" name="import_students">
-  </form>
+  <div class="form-group">
+    <form method="post" class="mb-4" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type="submit" name="export" value="Export" />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <input type="submit" name="import" value="Import" />
+      <input type="file" name="import_students">
+    </form>
+    <a href="{% url 'add_students' %}" class="btn btn-secondary"><i class="fas fa-plus-square"></i> Add Students...</a>
+  </div>
+
   <table id="students" class="table table-striped table-sm">
     <thead>
       <tr>
