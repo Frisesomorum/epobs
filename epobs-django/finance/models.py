@@ -119,14 +119,11 @@ class StudentAccount(models.Model):
     @property
     def balanceDue(self):
         sum = 0
-        for transaction in self.transactions.all():
+        for transaction in self.transactions.filter(paid=False):
             sum += transaction.balanceDue
         return sum
-        # collection of RevenueTransaction
-        # self.transactions  loop
-        # sum the due_payment
     def nextPayment(self):
-        return str(self.student) + "_nextPay"
+        return NotImplented
 
 class RevenueTransaction(Transaction):
     ledger_account = models.ForeignKey(RevenueLedgerAccount, on_delete=models.CASCADE, related_name='revenues')
