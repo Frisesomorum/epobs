@@ -12,10 +12,10 @@ class add(CreateView):
     model = RevenueTransaction
     fields = '__all__'
     template_name = 'finance/revenues/add.html'
-    success_url = 'finance/revenues/'
+    success_url = '/finance/revenues/'
 
 class edit(DeletionFormMixin, UpdateView):
     model = RevenueTransaction
     fields = '__all__'
     template_name = 'finance/revenues/edit.html'
-    success_url = 'finance/revenues/'
+    success_url = '/finance/revenues/'

@@ -14,7 +14,7 @@ class Term(models.Model):
     def __str__(self):
         if len(self.name) > 0:
             return self.name
-        return self.start + " - " + self.end
+        return str(self.start) + " - " + str(self.end)
 
     def revenueBudgets(self):
         return Nothing

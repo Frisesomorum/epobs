@@ -11,23 +11,26 @@
 {% endblock %}
 
 {% block content %}
-<form method="post">
+
+{{ errors }}
+
+<form method="post" class="mb-4" novalidate>
   {% csrf_token %}
+  {{ expense_formset.management_form }}
   <div class="form-group">
     <h3>Expense Budgets</h3>
-    {% for item in expense_budget_items %}
-      {{ item.ledger_account }}:
-      <input type="number" name="{{ item.ledger_account }}" />
-      <br />
+    {% for form in expense_formset.forms %}
+      <h6>{{ form.instance.ledger_account }}</h6>
+      {{ form.as_p }}
     {% endfor %}
   </div>
 
+  {{ revenue_formset.management_form }}
   <div class="form-group">
     <h3>Revenue Budgets</h3>
-    {% for item in revenue_budget_items %}
-      {{ item.ledger_account }}:
-      <input type="number" name="{{ item.ledger_account }}" />
-      <br />
+    {% for form in revenue_formset.forms %}
+      <h6>{{ form.instance.ledger_account }}</h6>
+      {{ form.as_p }}
     {% endfor %}
   </div>
 

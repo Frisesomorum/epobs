@@ -12,10 +12,10 @@ class add(CreateView):
     model = Supplier
     fields = '__all__'
     template_name = 'personnel/suppliers/add.html'
-    success_url = 'personnel/suppliers/'
+    success_url = '/personnel/suppliers/'
 
 class edit(DeletionFormMixin, UpdateView):
     model = Supplier
     fields = '__all__'
     template_name = 'personnel/suppliers/edit.html'
-    success_url = 'personnel/suppliers/'
+    success_url = '/personnel/suppliers/'
