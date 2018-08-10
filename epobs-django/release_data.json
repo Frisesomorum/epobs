@@ -1,0 +1,240 @@
+[
+  {
+    "model": "finance.fund",
+    "pk": 1,
+    "fields":{
+      "name": "Operational Funding",
+      "abbreviation": "",
+      "description": ""
+    }
+  },
+  {
+    "model": "finance.fund",
+    "pk": 2,
+    "fields":{
+      "name": "Tuition",
+      "abbreviation": "TUT",
+      "description": "Student tuition"
+    }
+  },
+  {
+    "model": "finance.ExpenseCategory",
+    "pk": 1,
+    "fields":{
+      "name": "Transporation",
+      "abbreviation": "",
+      "description": "",
+      "fund_id": 1
+    }
+  },
+  {
+    "model": "finance.ExpenseLedgerAccount",
+    "pk": 1,
+    "fields": {
+      "name": "Professional Services",
+      "abbreviation": "",
+      "description": "",
+      "category_id": 1
+    }
+  },
+  {
+    "model": "finance.ExpenseLedgerAccount",
+    "pk": 2,
+    "fields": {
+      "name": "Repairs",
+      "abbreviation": "",
+      "description": "",
+      "category_id": 1
+    }
+  },
+  {
+    "model": "finance.ExpenseLedgerAccount",
+    "pk": 3,
+    "fields": {
+      "name": "Maintenance",
+      "abbreviation": "",
+      "description": "",
+      "category_id": 1
+    }
+  },
+  {
+    "model": "finance.ExpenseLedgerAccount",
+    "pk": 4,
+    "fields": {
+      "name": "Oil",
+      "abbreviation": "",
+      "description": "",
+      "category_id": 1
+    }
+  },
+  {
+    "model": "finance.ExpenseLedgerAccount",
+    "pk": 5,
+    "fields": {
+      "name": "Petrol/Diesel/Gas",
+      "abbreviation": "",
+      "description": "",
+      "category_id": 1
+    }
+  },
+  {
+    "model": "finance.ExpenseLedgerAccount",
+    "pk": 6,
+    "fields": {
+      "name": "Other Services",
+      "abbreviation": "",
+      "description": "",
+      "category_id": 1
+    }
+  },
+  {
+    "model": "finance.ExpenseLedgerAccount",
+    "pk": 7,
+    "fields": {
+      "name": "Tires",
+      "abbreviation": "",
+      "description": "",
+      "category_id": 1
+    }
+  },
+  {
+    "model": "finance.ExpenseLedgerAccount",
+    "pk": 8,
+    "fields": {
+      "name": "Car Batteries",
+      "abbreviation": "",
+      "description": "",
+      "category_id": 1
+    }
+  },
+  {
+    "model": "finance.ExpenseLedgerAccount",
+    "pk": 9,
+    "fields": {
+      "name": "Car Hiring",
+      "abbreviation": "",
+      "description": "",
+      "category_id": 1
+    }
+  },
+  {
+    "model": "finance.ExpenseLedgerAccount",
+    "pk": 10,
+    "fields": {
+      "name": "Seat Repair",
+      "abbreviation": "",
+      "description": "",
+      "category_id": 1
+    }
+  },
+  {
+    "model": "finance.ExpenseLedgerAccount",
+    "pk": 11,
+    "fields": {
+      "name": "Mechanic/workmanship",
+      "abbreviation": "",
+      "description": "",
+      "category_id": 1
+    }
+  },
+  {
+    "model": "finance.ExpenseLedgerAccount",
+    "pk": 12 ,
+    "fields": {
+      "name": "Travel Expenses",
+      "abbreviation": "",
+      "description": "",
+      "category_id": 1
+    }
+  },
+  {
+    "model": "finance.ExpenseLedgerAccount",
+    "pk": 13,
+    "fields": {
+      "name": "Training",
+      "abbreviation": "",
+      "description": "",
+      "category_id": 1
+    }
+  },
+  {
+    "model": "finance.ExpenseLedgerAccount",
+    "pk": 14,
+    "fields": {
+      "name": "Insurance",
+      "abbreviation": "",
+      "description": "",
+      "category_id": 1
+    }
+  },
+  {
+    "model": "finance.ExpenseLedgerAccount",
+    "pk": 15,
+    "fields": {
+      "name": "DVLA",
+      "abbreviation": "",
+      "description": "",
+      "category_id": 1
+    }
+  },
+  {
+    "model": "finance.ExpenseLedgerAccount",
+    "pk": 16,
+    "fields": {
+      "name": "Overhauling",
+      "abbreviation": "",
+      "description": "",
+      "category_id": 1
+    }
+  },
+  {
+    "model": "finance.ExpenseCategory",
+    "pk": 2,
+    "fields":{
+      "name": "Salaries & Wages",
+      "abbreviation": "",
+      "description": "",
+      "fund_id": 1
+    }
+  },
+  {
+    "model": "finance.ExpenseLedgerAccount",
+    "pk": 1,
+    "fields": {
+      "name": "Regular Time",
+      "abbreviation": "",
+      "description": "",
+      "category_id": 2
+    }
+  },
+  {
+    "model": "finance.ExpenseLedgerAccount",
+    "pk": 2,
+    "fields": {
+      "name": "Extra Time/Classes",
+      "abbreviation": "",
+      "description": "",
+      "category_id": 2
+    }
+  },
+  {
+    "model": "finance.ExpenseLedgerAccount",
+    "pk": 3,
+    "fields": {
+      "name": "Counsultant Personnel",
+      "abbreviation": "",
+      "description": "",
+      "category_id": 2
+    }
+  },
+  {
+    "model": "finance.ExpenseLedgerAccount",
+    "pk": 4,
+    "fields": {
+      "name": "Awards",
+      "abbreviation": "",
+      "description": "",
+      "category_id": 2
+    }
+  }
+]
