@@ -12,8 +12,6 @@
 
 {% block content %}
 
-{{ errors }}
-
 <form method="post" class="mb-4" novalidate>
   {% csrf_token %}
   {{ expense_formset.management_form }}
