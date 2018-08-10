@@ -14,7 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, re_path
+from django.conf import settings
+from django.urls import path, re_path, include
 from epobs import views as indexViews
 from finance.views import terms as termViews
 from finance.views import expenses as expenseViews
@@ -52,3 +53,9 @@ urlpatterns = [
     re_path(r'students/edit/(?P<pk>\d+)/$', studentViews.edit.as_view(), name='edit_students'),
     re_path(r'students/$', studentViews.list.as_view(), name='list_students'),
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        re_path(r'^__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns

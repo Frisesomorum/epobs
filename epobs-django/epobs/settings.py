@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'finance',
     'students',
     'personnel',
+
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -55,6 +57,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'epobs.urls'
@@ -135,3 +139,8 @@ STATICFILES_DIRS = [
 
 # django-import-export setting; default is False
 IMPORT_EXPORT_USE_TRANSACTIONS = True
+
+# Used in debug_toolbar
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
