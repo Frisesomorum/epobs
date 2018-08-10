@@ -7,8 +7,14 @@ import personnel.models as personnelModels
 # TODO: update the UML document to reflect changes done during development
 
 class Term(models.Model):
+    name = models.CharField(max_length=255, blank=True)
     start = models.DateField()
     end = models.DateField()
+
+    def __str__(self):
+        if len(self.name) > 0:
+            return self.name
+        return self.start + " - " + self.end
 
     def revenueBudgets(self):
         return Nothing
@@ -49,21 +55,20 @@ class ExpenseLedgerAccount(LedgerAccount):
 class RevenueLedgerAccount(LedgerAccount):
     category = models.ForeignKey(RevenueCategory, on_delete=models.CASCADE, related_name='ledger_accounts')
 
-class BudgetItem(sharedModels.Descriptor):
+class BudgetItem(models.Model):
     amount = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     term = models.ForeignKey(Term, on_delete=models.CASCADE, related_name='%(app_label)s_%(class)s_budget')
+    def __str__(self):
+        str(self.term) + " - " + str(self.ledger_account)
     class Meta:
         abstract = True
+        unique_together = (("term", "ledger_account"),)
 
 class ExpenseBudgetItem(BudgetItem):
     ledger_account = models.ForeignKey(ExpenseLedgerAccount, on_delete=models.CASCADE, related_name='budget')
-    class Meta:
-        unique_together = (("term", "ledger_account"),)
 
 class RevenueBudgetItem(BudgetItem):
     ledger_account = models.ForeignKey(RevenueLedgerAccount, on_delete=models.CASCADE, related_name='budget')
-    class Meta:
-        unique_together = (("term", "ledger_account"),)
 
 class Transaction(models.Model):
     created = models.DateTimeField(auto_now_add=True)

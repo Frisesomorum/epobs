@@ -43,8 +43,9 @@
     "model": "finance.term",
     "pk": 1,
     "fields": {
+      "name": "Winter 2018",
       "start": "2018-01-01",
-      "end": "2018-02-01"
+      "end": "2018-02-28"
     }
   },
   {
@@ -163,6 +164,13 @@
     "pk": 1,
     "fields": {
       "student_id": 1
+    }
+  },
+  {
+    "model": "finance.StudentAccount",
+    "pk": 2,
+    "fields": {
+      "student_id": 2
     }
   },
   {
