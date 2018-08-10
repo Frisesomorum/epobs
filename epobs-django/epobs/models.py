@@ -13,7 +13,7 @@ class School(models.Model):
     # TODO: define static set/get methods
 
 class Descriptor(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     abbreviation = models.CharField(max_length=15)
     description = models.TextField(max_length=4000, blank=True)
     class Meta:
@@ -31,3 +31,4 @@ class Person(models.Model):
 
     class Meta:
         abstract = True
+        unique_together = (("first_name", "last_name", "date_of_birth"),)
