@@ -15,6 +15,37 @@
     {% csrf_token %}
     {% include 'includes/form.html' %}
     <input type="submit" name="save" value="Save" />
+    <input type="submit" name="done" value="Done" />
   </form>
+
+  {% if recent_expensetransactions_list|length > 0 %}
+    <h3>{{ user }}'s recently added expenses</h3>
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>
+          <th>Date Paid</th>
+          <th>Payee</th>
+          <th>Ledger Account</th>
+          <th>Amount</th>
+          <th>Edit</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for expense in recent_expensetransactions_list %}
+          <tr>
+            <td>{{ expense.date_paid }}</td>
+            <td>
+              {% if expense.employee %} {{ expense.employee }}
+              {% else %}{{ expense.supplier }}
+              {% endif %}
+            </td>
+            <td>{{ expense.ledger_account }}</td>
+            <td>{{ expense.amount_charged }}</td>
+            <td><a href="{% url 'edit_expense' expense.pk %}"><i class="fas fa-pencil-alt"></i></a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
 
 {% endblock %}

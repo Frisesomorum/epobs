@@ -3,42 +3,21 @@ from django.http import HttpResponse, HttpResponseRedirect
 from tablib import Dataset
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView
-from epobs.views import DeletionFormMixin
+from epobs.views import DeletionFormMixin, SessionRecentsMixin
 from .models import Student
 from .resources import StudentResource
 from finance.models import StudentAccount
 
-class add(CreateView):
+class add(SessionRecentsMixin, CreateView):
     model = Student
     fields = '__all__'
     template_name = 'student/add.html'
-
-    def post(self, request, **kwargs):
-        if 'done' in request.POST:
-            return redirect('list_students')
-        else:
-            return super().post(request, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if 'added_students_list' in self.request.session:
-            context['added_students_list'] = [ Student.objects.get(pk=pk)
-                for pk in self.request.session['added_students_list']
-            ]
-        return context
+    success_url = '/students/'
 
     def form_valid(self, form):
-        student = form.save(commit=False)
-        student.first_name = form.cleaned_data.get('first_name')
-        student.last_name = form.cleaned_data.get('last_name')
-        student.email = form.cleaned_data.get('email')
-        student.date_of_birth = form.cleaned_data.get('date_of_birth')
-        student.save()
-        account = StudentAccount(student = student)  # Create the linked payment account
-        account.save()
-        if 'added_students_list' not in self.request.session:
-            self.request.session['added_students_list'] = []
-        self.request.session['added_students_list'] = [student.pk] + self.request.session['added_students_list']
+        student = form.save()
+        self.add_object_to_session(student.pk)
+        account = StudentAccount.objects.create(student = student)  # Create the linked payment account
         return HttpResponseRedirect(self.request.path_info)  # Return the user to this page with a fresh form
 
 

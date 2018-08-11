@@ -18,7 +18,7 @@
     <input type="submit" name="done" value="Done" />
   </form>
 
-  {% if added_students_list|length > 0 %}
+  {% if recent_students_list|length > 0 %}
     <h3>{{ user }}'s recently added students</h3>
     <table id="students" class="table table-striped table-sm">
       <thead>
@@ -31,7 +31,7 @@
         </tr>
       </thead>
       <tbody>
-        {% for student in added_students_list %}
+        {% for student in recent_students_list %}
           <tr>
             <td>{{ student.first_name }}</td>
             <td>{{ student.last_name }}</td>

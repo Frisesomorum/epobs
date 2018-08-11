@@ -20,3 +20,29 @@ class DeletionFormMixin:
             return redirect(self.get_success_url())
         else:
             return super().post(request, **kwargs)
+
+
+class SessionRecentsMixin:
+
+    def post(self, request, **kwargs):
+        if 'done' in request.POST:
+            return redirect(self.success_url)
+        else:
+            return super().post(request, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.recents_key in self.request.session:
+            context[self.recents_key] = [ self.model.objects.get(pk=pk)
+                for pk in self.request.session[self.recents_key]
+            ]
+        return context
+
+    def add_object_to_session(self, pk):
+        if self.recents_key not in self.request.session:
+            self.request.session[self.recents_key] = []
+        self.request.session[self.recents_key] = [pk] + self.request.session[self.recents_key]
+
+    @property
+    def recents_key(self):
+        return 'recent_' + self.model.__name__.lower() + 's_list'
