@@ -4,6 +4,7 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView
 from epobs.views import DeletionFormMixin, SessionRecentsMixin
 from ..models import Supplier
+from finance.models import SupplierAccount
 
 class list(ListView):
     model = Supplier
@@ -16,8 +17,9 @@ class add(SessionRecentsMixin, CreateView):
     success_url = '/personnel/suppliers/'
 
     def form_valid(self, form):
-        transaction = form.save()
-        self.add_object_to_session(transaction.pk)
+        supplier = form.save()
+        self.add_object_to_session(supplier.pk)
+        account = SupplierAccount.objects.create(supplier=supplier)
         return HttpResponseRedirect(self.request.path_info)  # Return the user to this page with a fresh form
 
 
