@@ -150,13 +150,28 @@
       "date_issued": "2018-08-01",
       "date_paid": "2018-08-01",
       "ledger_account_id": 1,
-      "employee_id" : 1,
       "supplier_id" : 1,
       "date_approved" : "2018-08-01",
       "discount" : "0.00",
       "quantity" : 1,
       "unit_cost" : "51.80",
       "unit_of_measure" : "dollar"
+    }
+  },
+  {
+    "model": "finance.ExpenseTransaction",
+    "pk" : 2,
+    "fields": {
+      "created" : "2018-08-04T17:41:28+00:00",
+      "notes": "Performance bonus",
+      "amount_charged" : "216.00",
+      "partial_amount_paid" : "216.00",
+      "paid": 1,
+      "date_issued": "2018-08-04",
+      "date_paid": "2018-08-04",
+      "ledger_account_id": 5,
+      "employee_id" : 1,
+      "date_approved" : "2018-08-04"
     }
   },
   {

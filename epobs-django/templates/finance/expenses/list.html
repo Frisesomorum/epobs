@@ -20,6 +20,7 @@
         <th>Date Paid</th>
         <th>Payee</th>
         <th>Ledger Account</th>
+        <th>Amount</th>
         <th>Edit</th>
       </tr>
     </thead>
@@ -27,8 +28,13 @@
       {% for expense in object_list %}
         <tr>
           <td>{{ expense.date_paid }}</td>
-          <td>{{ expense.employee }}</td>  <!-- TODO: if payee is a supplier, show supplier instead -->
+          <td>
+            {% if expense.employee %} {{ expense.employee }}
+            {% else %}{{ expense.supplier }}
+            {% endif %}
+          </td>
           <td>{{ expense.ledger_account }}</td>
+          <td>{{ expense.amount_charged }}</td>
           <td><a href="{% url 'edit_expense' expense.pk %}"><i class="fas fa-pencil-alt"></i></a></td>
         </tr>
       {% endfor %}
