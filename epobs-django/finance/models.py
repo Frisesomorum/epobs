@@ -76,8 +76,8 @@ class Transaction(models.Model):
     amount_charged = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     partial_amount_paid = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     paid = models.BooleanField()
-    date_issued = models.DateField(blank=True)
-    date_paid = models.DateField(blank=True)
+    date_issued = models.DateField(blank=True, null=True)
+    date_paid = models.DateField(blank=True, null=True)
 
     @property
     def balanceDue(self):
@@ -108,12 +108,12 @@ class SupplierAccount(Payee):
 
 class ExpenseTransaction(Transaction):
     ledger_account = models.ForeignKey(ExpenseLedgerAccount, on_delete=models.CASCADE, related_name='expenses')
-    employee = models.ForeignKey(EmployeeAccount, on_delete=models.CASCADE, related_name='transactions', blank=True)
-    supplier = models.ForeignKey(SupplierAccount, on_delete=models.CASCADE, related_name='transactions', blank=True)
-    date_approved = models.DateField(blank=True)
-    discount = models.FloatField(blank=True)
-    quantity = models.FloatField(blank=True)
-    unit_cost = models.FloatField(blank=True)
+    employee = models.ForeignKey(EmployeeAccount, on_delete=models.CASCADE, related_name='transactions', blank=True, null=True)
+    supplier = models.ForeignKey(SupplierAccount, on_delete=models.CASCADE, related_name='transactions', blank=True, null=True)
+    date_approved = models.DateField(blank=True, null=True)
+    discount = models.FloatField(blank=True, null=True)
+    quantity = models.FloatField(blank=True, null=True)
+    unit_cost = models.FloatField(blank=True, null=True)
     unit_of_measure = models.CharField(max_length=255, blank=True)
 
 class StudentAccount(models.Model):

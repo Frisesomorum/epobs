@@ -25,7 +25,7 @@ class Person(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     date_of_birth = models.DateField()
-    email = models.EmailField(blank=True)
+    email = models.EmailField(blank=True, null=True)
     def __str__(self):
         return self.last_name + ', ' + self.first_name
 
