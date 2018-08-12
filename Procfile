@@ -1,1 +1,1 @@
-web: gunicorn epobs-django.wsgi —-log-file -
+web: gunicorn epobs.wsgi —-log-file -
