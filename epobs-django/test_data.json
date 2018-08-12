@@ -169,7 +169,7 @@
       "paid": 1,
       "date_issued": "2018-08-04",
       "date_paid": "2018-08-04",
-      "ledger_account_id": 5,
+      "expenseledger_account_id": 5,
       "employee_id" : 1,
       "date_approved" : "2018-08-04"
     }
