@@ -80,9 +80,9 @@
     "model": "finance.RevenueCategory",
     "pk": 1,
     "fields":{
-      "name": "Student Payment",
-      "abbreviation": "tuition",
-      "description": "Student pay tuition",
+      "name": "General",
+      "abbreviation": "",
+      "description": "",
       "fund_id": 2
     }
   },

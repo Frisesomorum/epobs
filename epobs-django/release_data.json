@@ -18,6 +18,26 @@
     }
   },
   {
+    "model": "finance.RevenueCategory",
+    "pk": 1,
+    "fields":{
+      "name": "General",
+      "abbreviation": "",
+      "description": "",
+      "fund_id": 2
+    }
+  },
+   {
+     "model": "finance.RevenueLedgerAccount",
+      "pk": 1,
+      "fields": {
+        "name": "Tuition",
+        "abbreviation": "",
+        "description": "",
+        "category_id": 1
+      }
+    },
+  {
     "model": "finance.ExpenseCategory",
     "pk": 1,
     "fields":{
