@@ -1,10 +1,24 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import UpdateView
+from .models import School
 
 @login_required
 def index_view(request):
     return render(request, 'index.html')
+
+
+class EditSchool(PermissionRequiredMixin, UpdateView):
+    permission_required = 'epobs.change_school'
+    model = School
+    fields = '__all__'
+    template_name = 'edit_school.html'
+    success_url = '/'
+    def get_object(self):
+        if not School.objects.exists():
+            school = School.objects.create()
+        return School.objects.first()
 
 
     """ The combined edit/delete view expects a form

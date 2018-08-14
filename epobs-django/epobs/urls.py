@@ -31,6 +31,8 @@ urlpatterns = [
     re_path(r'logout/$', authViews.LogoutView.as_view(), name='logout'),
     path('admin/', admin.site.urls, name='admin'),
 
+    re_path(r'school/$', indexViews.EditSchool.as_view(), name='school'),
+
     re_path(r'finance/terms/create/$', termViews.create.as_view(), name='create_term'),
     re_path(r'finance/terms/edit/(?P<pk>\d+)/$', termViews.edit.as_view(), name='edit_term'),
     re_path(r'finance/terms/$', termViews.list.as_view(), name='list_term'),

@@ -28,13 +28,15 @@
                     Menu
                   </a>
                   <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+                    <a class="dropdown-item" href="#">(Reports)</a>
+                    <div class="dropdown-divider"></div>
                     {% if perms.finance.view_expensetransaction %}<a class="dropdown-item" href="{% url 'list_expenses' %}">Expenses</a>{% endif %}
                     {% if perms.finance.view_revenuetransaction %}<a class="dropdown-item" href="{% url 'list_revenues' %}">Revenues</a>{% endif %}
                     {% if perms.finance.view_term %}<a class="dropdown-item" href="{% url 'list_term' %}">Terms &amp; Budgets</a>{% endif %}
                     {% if perms.personnel.view_employee %}<a class="dropdown-item" href="{% url 'list_employees' %}">Employees</a>{% endif %}
                     {% if perms.personnel.view_supplier %}<a class="dropdown-item" href="{% url 'list_suppliers' %}">Suppliers</a>{% endif %}
                     {% if perms.students.view_student %}<a class="dropdown-item" href="{% url 'list_students' %}">Students</a>{% endif %}
-                    <a class="dropdown-item" href="#">(Reports)</a>
+                    {% if perms.epobs.change_school %}<a class="dropdown-item" href="{% url 'school' %}">School Info</a>{% endif %}
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{% url 'logout' %}">Log out</a>
                   </div>

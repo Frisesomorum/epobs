@@ -1,6 +1,6 @@
 [
   {
-    "model": "finance.fund",
+    "model": "finance.Fund",
     "pk": 1,
     "fields":{
       "name": "Operational Funding",
@@ -9,7 +9,7 @@
     }
   },
   {
-    "model": "finance.fund",
+    "model": "finance.Fund",
     "pk": 2,
     "fields":{
       "name": "Tuition",
