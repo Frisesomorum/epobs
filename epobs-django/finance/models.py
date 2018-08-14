@@ -2,9 +2,6 @@ from django.db import models
 import epobs.models as sharedModels
 import students.models as studentsModels
 import personnel.models as personnelModels
-# TODO: documentation
-# TODO: implement all methods
-# TODO: update the UML document to reflect changes done during development
 
 class Term(models.Model):
     name = models.CharField(max_length=255, blank=True)
@@ -115,6 +112,10 @@ class ExpenseTransaction(Transaction):
     quantity = models.FloatField(blank=True, null=True)
     unit_cost = models.FloatField(blank=True, null=True)
     unit_of_measure = models.CharField(max_length=255, blank=True)
+    class Meta:
+        permissions = (
+            ("approve_expensetransaction", "Can approve expenses"),
+        )
 
 class StudentAccount(models.Model):
     student = models.OneToOneField(studentsModels.Student, on_delete=models.CASCADE)

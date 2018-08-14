@@ -1,15 +1,18 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView
 from epobs.views import DeletionFormMixin,SessionRecentsMixin
 from ..models import RevenueTransaction
 
-class list(ListView):
+class list(PermissionRequiredMixin, ListView):
+    permission_required = 'finance.view_revenuetransaction'
     model = RevenueTransaction
     template_name = 'finance/revenues/list.html'
 
-class add(SessionRecentsMixin, CreateView):
+class add(PermissionRequiredMixin, SessionRecentsMixin, CreateView):
+    permission_required = 'finance.add_revenuetransaction'
     model = RevenueTransaction
     fields = '__all__'
     template_name = 'finance/revenues/add.html'
@@ -21,7 +24,8 @@ class add(SessionRecentsMixin, CreateView):
         return HttpResponseRedirect(self.request.path_info)  # Return the user to this page with a fresh form
 
 
-class edit(DeletionFormMixin, UpdateView):
+class edit(PermissionRequiredMixin, DeletionFormMixin, UpdateView):
+    permission_required = 'finance.change_revenuetransaction'
     model = RevenueTransaction
     fields = '__all__'
     template_name = 'finance/revenues/edit.html'

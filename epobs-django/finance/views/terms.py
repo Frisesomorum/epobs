@@ -1,23 +1,27 @@
 from django import forms
 from django.forms import inlineformset_factory
 from django.shortcuts import render, redirect
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http.response import HttpResponseRedirect
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, FormView
 from epobs.views import DeletionFormMixin
 from ..models import Term, ExpenseBudgetItem, RevenueBudgetItem, ExpenseLedgerAccount, RevenueLedgerAccount
 
-class list(ListView):
+class list(PermissionRequiredMixin, ListView):
+    permission_required = 'finance.view_term'
     model = Term
     template_name = 'finance/terms/list.html'
 
-class create(CreateView):
+class create(PermissionRequiredMixin, CreateView):
+    permission_required = 'finance.add_term'
     model = Term
     fields = '__all__'
     template_name = 'finance/terms/create.html'
     success_url = '/finance/terms/'
 
-class edit(DeletionFormMixin, UpdateView):
+class edit(PermissionRequiredMixin, DeletionFormMixin, UpdateView):
+    permission_required = 'finance.change_term'
     model = Term
     fields = '__all__'
     template_name = 'finance/terms/edit.html'
@@ -26,7 +30,8 @@ class edit(DeletionFormMixin, UpdateView):
 ExpenseBudgetFormSet = inlineformset_factory(Term, ExpenseBudgetItem, exclude=('term', 'ledger_account'), extra=0, can_delete=False)
 RevenueBudgetFormSet = inlineformset_factory(Term, RevenueBudgetItem, exclude=('term', 'ledger_account'), extra=0, can_delete=False)
 
-class editBudget(UpdateView):
+class editBudget(PermissionRequiredMixin, UpdateView):
+    permission_required = 'finance.change_budgetitem'
     model = Term
     template_name = 'finance/terms/budget.html'
     success_url = '/finance/terms/'

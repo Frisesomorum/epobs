@@ -3,6 +3,8 @@ Shared data model classes
 """
 
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 
 class School(models.Model):
     name = models.CharField(max_length=255)
@@ -11,6 +13,15 @@ class School(models.Model):
     school_fee = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     canteen_fee = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     # TODO: define static set/get methods
+
+    def save(self, *args, **kwargs):
+        if School.objects.exists() and not self.pk:
+            raise ValidationError('There can be only one instance of the School class.')
+        return super(School, self).save(*args, **kwargs)
+
+class User(AbstractUser):
+    pass
+
 
 class Descriptor(models.Model):
     name = models.CharField(max_length=255, unique=True)

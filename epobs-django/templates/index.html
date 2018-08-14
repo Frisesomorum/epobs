@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
 
+{% block breadcrumb %}
+  <li class="breadcrumb-item">Index</li>
+{% endblock %}
+
 {% block content %}
-    <h1>Home page</h1>
+  <div class="container">
+    <h1>Dashboard (mockup)</h1>
     <ul>
-      <li>Budget</li>
-      <li><a href='{% url 'list_revenues' %}'>Revenue</a></li>
-      <li><a href='{% url 'list_expenses' %}'>Expenses</a></li>
-      <li>Personnel</li>
-      <li><i class="fas fa-child"></i> <a href='{% url 'list_students' %}'>Students</a></li>
+      {% if perms.finance.approve_expensetransaction %}<li>There are N <a href="{% url 'list_expenses' %}">expenses</a> waiting for approval.</li>{% endif %}
+      {% if perms.students.view_student %}<li>There are M <a href="{% url 'list_students' %}">students</a> with outstanding fees.</li>{% endif %}
+      <li><a href="#reports">H%</a> of the current term's budget has been used.</li>
     </ul>
+  </div>
 {% endblock content %}

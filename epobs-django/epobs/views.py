@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import UpdateView
 
-def index(request):
-
+@login_required
+def index_view(request):
     return render(request, 'index.html')
+
 
     """ The combined edit/delete view expects a form
     that includes buttons named 'delete' and 'cancel'.

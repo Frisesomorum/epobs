@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from tablib import Dataset
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView
@@ -8,7 +9,8 @@ from .models import Student
 from .resources import StudentResource
 from finance.models import StudentAccount
 
-class add(SessionRecentsMixin, CreateView):
+class add(PermissionRequiredMixin, SessionRecentsMixin, CreateView):
+    permission_required = 'students.add_student'
     model = Student
     fields = '__all__'
     template_name = 'student/add.html'
@@ -21,14 +23,16 @@ class add(SessionRecentsMixin, CreateView):
         return HttpResponseRedirect(self.request.path_info)  # Return the user to this page with a fresh form
 
 
-class edit(DeletionFormMixin, UpdateView):
+class edit(PermissionRequiredMixin, DeletionFormMixin, UpdateView):
+    permission_required = 'students.change_student'
     model = Student
     fields = '__all__'
     template_name = 'student/edit.html'
     success_url = '/students/'
 
 
-class list(ListView):
+class list(PermissionRequiredMixin, ListView):
+    permission_required = 'students.view_student'
     model = Student
     template_name = 'student/list.html'
 
