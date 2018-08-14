@@ -1,4 +1,4 @@
 # epobs
 
 See the Dev deployment here:
-https://dashboard.heroku.com/apps/afternoon-fortress-89719
+https://afternoon-fortress-89719.herokuapp.com/
