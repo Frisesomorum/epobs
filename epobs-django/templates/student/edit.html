@@ -16,7 +16,7 @@
     {% csrf_token %}
     {% include 'includes/form.html' %}
     <input type="submit" name="save" value="Save" />
-    <input type="submit" name="delete" value="Delete" />
+    {% if perms.students.delete_student %}<input type="submit" name="delete" value="Delete" />{% endif %}
     <input type="submit" name="cancel" value="Cancel" />
   </form>
 
