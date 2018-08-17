@@ -95,7 +95,7 @@ class StudentAccount(models.Model):
     @property
     def balanceDue(self):
         sum = 0
-        for transaction in self.transactions.filter(paid=False):
+        for transaction in self.related_finance_revenuetransaction.filter(paid=False):
             sum += transaction.balanceDue
         return sum
     def nextPayment(self):
