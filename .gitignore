@@ -102,6 +102,3 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-
-# Project specficx
-epobs-django/epobs/settings.py
