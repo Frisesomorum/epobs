@@ -28,5 +28,5 @@ class UserAdmin(UserAdmin):
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
 
-admin.site.unregister(Group)
+#admin.site.unregister(Group)
 admin.site.register(User, UserAdmin)

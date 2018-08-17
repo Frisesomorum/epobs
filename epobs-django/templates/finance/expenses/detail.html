@@ -15,7 +15,7 @@
     <tr><th>Payee:</th><td>{{ expense.payee }}</td></tr>
     <tr><th>Amount:</th><td>{{ expense.amount_charged }}</td></tr>
     <tr><th>Created:</th><td>{{ expense.created }} by {{ expense.created_by }}</td></tr>
-    <tr><th>Status:</th><td>{{ expense.approval_status }}</td></tr>
+    <tr><th>Status:</th><td>{{ expense.get_approval_status_display }}</td></tr>
     {% if expense.approval_status == 'S' %}<tr><th>Submitted:</th><td>{{ expense.date_submitted }} by {{ expense.submitted_by }}</td></tr>{% endif %}
     {% if expense.approval_status == 'A' %}<tr><th>Approved:</th><td>{{ expense.date_approved }} by {{ expense.approved_by }}</td></tr>{% endif %}
     {% if expense.paid %}<tr><th>Date Paid:</th><td>{{ expense.when_paid }}</td></tr>
@@ -29,13 +29,17 @@
 
   {% if expense.revised_by_cje %}This transaction has been corrected by <a href="#">journal entry {{ expense.revised_by_cje.pk }}</a>.{% endif %}
 
-  {% if expense.approval_status == 'D' %}{% if perms.finance.change_expensetransaction %}
-    <a href="{% url 'submit_expense' expense.pk %}"><span class="btn btn-secondary">Submit for Approval</span></a>
-  {% endif %}{% endif %}
-  {% if expense.approval_status == 'S' %}{% if perms.finance.approve_expensetransaction %}{% if user != expense.submitted_by %}
+  {% if expense.approval_status == 'S' and perms.finance.approve_expensetransaction and user != expense.submitted_by %}
     <a href="{% url 'approve_expense' expense.pk %}"><span class="btn btn-secondary">Approve</span></a>
-  {% endif %}{% endif %}{% endif %}
-  {% if perms.finance.change_expensetransaction %}
+  {% endif %}
+  {% if expense.approval_status == 'S' and perms.finance.change_expensetransaction %}
+    <a href="{% url 'unsubmit_expense' expense.pk %}"><span class="btn btn-secondary">Revert to draft</span></a>
+  {% endif %}
+  {% if expense.approval_status == 'D' and perms.finance.change_expensetransaction %}
+    <a href="{% url 'submit_expense' expense.pk %}"><span class="btn btn-secondary">Submit for Approval</span></a>
     <a href="{% url 'edit_expense' expense.pk %}"><span class="btn btn-secondary">Edit</span></a>
+  {% endif %}
+  {% if expense.approval_status == 'A' and perms.finance.add_expensecorrectivejournalentry %}
+    <a href="#"><span class="btn btn-secondary">Revise using journal entry</span></a>
   {% endif %}
 {% endblock %}

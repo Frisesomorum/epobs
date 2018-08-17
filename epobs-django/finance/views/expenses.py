@@ -64,6 +64,18 @@ def submitForApproval(request, pk):
     expense.save()
     return redirect('list_expenses')
 
+def unsubmitForApproval(request, pk):
+    expense = get_object_or_404(ExpenseTransaction, pk=pk)
+    if expense.approval_status != 'S':
+        raise OperationalError("This transaction is not in 'submitted' status and cannot be reverted to draft.")
+    if not request.user.has_perm('finance.change_expensetransaction'):
+        raise PermissionDenied("You do not have authorization to revert expenses to draft status.")
+    expense.approval_status = 'D'
+    expense.submitted_by = None
+    expense.date_submitted = None
+    expense.save()
+    return redirect('list_expenses')
+
 def approve(request, pk):
     expense = get_object_or_404(ExpenseTransaction, pk=pk)
     if expense.approval_status != 'S':
