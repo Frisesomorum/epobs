@@ -23,7 +23,7 @@
         <th>Student</th>
         <th>Ledger Account</th>
         <th>Amount</th>
-        {% if perms.finance.change_revenuetransaction %}<th>Edit</th>{% endif %}
+        <th>View</th>
       </tr>
     </thead>
     <tbody>
@@ -33,7 +33,7 @@
           <td>{{ revenue.student }}</td>
           <td>{{ revenue.ledger_account }}</td>
           <td>{{ revenue.amount_charged }}</td>
-          {% if perms.finance.change_revenuetransaction %}<td><a href="{% url 'edit_revenue' revenue.pk %}"><i class="fas fa-pencil-alt"></i></a></td>{% endif %}
+          <td><a href="{% url 'view_revenue' revenue.pk %}"><i class="fas fa-file-invoice"></i></a></td>
         </tr>
       {% endfor %}
     </tbody>

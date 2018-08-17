@@ -26,7 +26,6 @@
           <th>Student</th>
           <th>Ledger Account</th>
           <th>Amount</th>
-          <th>Edit</th>
         </tr>
       </thead>
       <tbody>
@@ -35,7 +34,6 @@
             <td>{{ revenue.student }}</td>
             <td>{{ revenue.ledger_account }}</td>
             <td>{{ revenue.amount_charged }}</td>
-            <td><a href="{% url 'edit_revenue' revenue.pk %}"><i class="fas fa-pencil-alt"></i></a></td>
           </tr>
         {% endfor %}
       </tbody>

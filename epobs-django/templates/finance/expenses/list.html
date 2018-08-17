@@ -44,9 +44,9 @@
             {% endif %}
           </td>{% endif %}
           {% if perms.finance.approve_expensetransaction %}<td>
-            {% if expense.approval_status == 'S' %}{% if user != expense.submitted_by %}
+            {% if expense.approval_status == 'S' and if user != expense.submitted_by %}
               <a href="{% url 'approve_expense' expense.pk %}"><i class="fas fa-check-double"></i></a>
-            {% endif %}{% endif %}
+            {% endif %}
           </td>{% endif %}
         </tr>
       {% endfor %}
