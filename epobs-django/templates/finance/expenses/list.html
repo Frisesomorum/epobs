@@ -23,21 +23,31 @@
         <th>Payee</th>
         <th>Ledger Account</th>
         <th>Amount</th>
+        <th>Status</th>
+        <th>View</th>
         {% if perms.finance.change_expensetransaction %}<th>Edit</th>{% endif %}
+        {% if perms.finance.approve_expensetransaction %}<th>Approve</th>{% endif %}
       </tr>
     </thead>
     <tbody>
       {% for expense in object_list %}
         <tr>
-          <td>{{ expense.date_paid }}</td>
-          <td>
-            {% if expense.employee %} {{ expense.employee }}
-            {% else %}{{ expense.supplier }}
-            {% endif %}
-          </td>
+          <td>{{ expense.when_paid }}</td>
+          <td>{{ expense.payee }}</td>
           <td>{{ expense.ledger_account }}</td>
           <td>{{ expense.amount_charged }}</td>
-          {% if perms.finance.change_expensetransaction %}<td><a href="{% url 'edit_expense' expense.pk %}"><i class="fas fa-pencil-alt"></i></a></td>{% endif %}
+          <td>{{ expense.get_approval_status_display }}</td>
+          <td><a href="{% url 'view_expense' expense.pk %}"><i class="fas fa-file-invoice"></i></a></td>
+          {% if perms.finance.change_expensetransaction %}<td>
+            {% if expense.approval_status == 'D' %}
+              <a href="{% url 'edit_expense' expense.pk %}"><i class="fas fa-pencil-alt"></i></a>
+            {% endif %}
+          </td>{% endif %}
+          {% if perms.finance.approve_expensetransaction %}<td>
+            {% if expense.approval_status == 'S' %}{% if user != expense.submitted_by %}
+              <a href="{% url 'approve_expense' expense.pk %}"><i class="fas fa-check-double"></i></a>
+            {% endif %}{% endif %}
+          </td>{% endif %}
         </tr>
       {% endfor %}
     </tbody>

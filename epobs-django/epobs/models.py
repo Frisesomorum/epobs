@@ -20,7 +20,8 @@ class School(models.Model):
         return super(School, self).save(*args, **kwargs)
 
 class User(AbstractUser):
-    pass
+    def __str__(self):
+        return self.last_name + ", " + self.first_name
 
 
 class Descriptor(models.Model):

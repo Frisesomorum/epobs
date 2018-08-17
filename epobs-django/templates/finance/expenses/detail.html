@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}EPOBS - View Expense{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item">Expenses</li>
+  <li class="breadcrumb-item">View</li>
+{% endblock %}
+
+{% block content %}
+  <table class="table">
+    <tr><th>Ledger Account:</th><td>{{ expense.ledger_account }}</td></tr>
+    <tr><th>Payee:</th><td>{{ expense.payee }}</td></tr>
+    <tr><th>Amount:</th><td>{{ expense.amount_charged }}</td></tr>
+    <tr><th>Created:</th><td>{{ expense.created }} by {{ expense.created_by }}</td></tr>
+    <tr><th>Status:</th><td>{{ expense.approval_status }}</td></tr>
+    {% if expense.approval_status == 'S' %}<tr><th>Submitted:</th><td>{{ expense.date_submitted }} by {{ expense.submitted_by }}</td></tr>{% endif %}
+    {% if expense.approval_status == 'A' %}<tr><th>Approved:</th><td>{{ expense.date_approved }} by {{ expense.approved_by }}</td></tr>{% endif %}
+    {% if expense.paid %}<tr><th>Date Paid:</th><td>{{ expense.when_paid }}</td></tr>
+    {% else %}<tr><th>Amount Paid:</th><td>{{ expense.partial_amount_paid }}</td></tr>
+    {% endif %}
+    {% if expense.notes %}<tr><th>Notes:</th><td>{{ expense.notes }}</td></tr>{% endif %}
+    {% if expense.discount %}<tr><th>Discount:</th><td>{{ expense.discount }}</td></tr>{% endif %}
+    {% if expense.quantity %}<tr><th>Quantity:</th><td>{{ expense.quantity }}</td></tr>{% endif %}
+    {% if expense.unit_cost %}<tr><th>Cost:</th><td>{{ expense.unit_cost }}{% if expense.unit_cost %} per {{ expense.unit_of_measure }}{% endif %}</td></tr>{% endif %}
+  </table>
+
+  {% if expense.revised_by_cje %}This transaction has been corrected by <a href="#">journal entry {{ expense.revised_by_cje.pk }}</a>.{% endif %}
+
+  {% if expense.approval_status == 'D' %}{% if perms.finance.change_expensetransaction %}
+    <a href="{% url 'submit_expense' expense.pk %}"><span class="btn btn-secondary">Submit for Approval</span></a>
+  {% endif %}{% endif %}
+  {% if expense.approval_status == 'S' %}{% if perms.finance.approve_expensetransaction %}{% if user != expense.submitted_by %}
+    <a href="{% url 'approve_expense' expense.pk %}"><span class="btn btn-secondary">Approve</span></a>
+  {% endif %}{% endif %}{% endif %}
+  {% if perms.finance.change_expensetransaction %}
+    <a href="{% url 'edit_expense' expense.pk %}"><span class="btn btn-secondary">Edit</span></a>
+  {% endif %}
+{% endblock %}

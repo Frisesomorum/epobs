@@ -45,6 +45,9 @@ urlpatterns = [
     re_path(r'finance/expenses/add/$', expenseViews.add.as_view(), name='add_expenses'),
     re_path(r'finance/expenses/edit/(?P<pk>\d+)/$', expenseViews.edit.as_view(), name='edit_expense'),
     re_path(r'finance/expenses/$', expenseViews.list.as_view(), name='list_expenses'),
+    re_path(r'finance/expenses/view/(?P<pk>\d+)/$', expenseViews.detail.as_view(), name='view_expense'),
+    re_path(r'finance/expenses/submit/(?P<pk>\d+)/$', expenseViews.submitForApproval, name='submit_expense'),
+    re_path(r'finance/expenses/approve/(?P<pk>\d+)/$', expenseViews.approve, name='approve_expense'),
 
     re_path(r'personnel/employees/add/$', employeeViews.add.as_view(), name='add_employees'),
     re_path(r'personnel/employees/edit/(?P<pk>\d+)/$', employeeViews.edit.as_view(), name='edit_employee'),
