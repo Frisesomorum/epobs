@@ -21,7 +21,7 @@
     {% if revenue.notes %}<tr><th>Notes:</th><td>{{ revenue.notes }}</td></tr>{% endif %}
   </table>
 
-  {% if revenue.revised_by_cje %}This transaction has been corrected by <a href="#">journal entry {{ revenue.revised_by_cje.pk }}</a>.{% endif %}
+  {% if revenue.corrected_by_cje %}This transaction has been corrected by <a href="#">journal entry {{ revenue.corrected_by_cje.pk }}</a>.{% endif %}
 
   {% if perms.finance.add_revenuecorrectivejournalentry %}
     <a href="#"><span class="btn btn-secondary">Revise using journal entry</span></a>

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}EPOBS - Add Expense Corrective Journal Entry{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item">Expenses</li>
+  <li class="breadcrumb-item">Corrective Journal Entry</li>
+  <li class="breadcrumb-item">Add</li>
+{% endblock %}
+
+{% block content %}
+
+  <form method="post" class="mb-4" novalidate>
+    {% csrf_token %}
+    {% include 'includes/form.html' %}
+    <input type="submit" name="save" value="Save" />
+    <input type="submit" name="done" value="Done" />
+  </form>
+
+{% endblock %}

@@ -114,6 +114,8 @@ class Transaction(models.Model):
     paid = models.BooleanField(default=False)
     when_paid = models.DateTimeField(blank=True, null=True)
     partial_amount_paid = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+    class Meta:
+        abstract = True
 
     @property
     def balanceDue(self):
@@ -121,8 +123,8 @@ class Transaction(models.Model):
             return 0
         return self.amount_charged - self.partial_amount_paid
 
-    class Meta:
-        abstract = True
+    def __str__(self):
+        return "payment of {0} on {1}".format(self.amount_charged, self.created.date())
 
 APPROVAL_STATUS_CHOICES = (
     ('D', 'Draft'),
@@ -188,9 +190,9 @@ class ExpenseTransaction(RequiresApproval, ExpenseInfo):
     unit_cost = models.FloatField(blank=True, null=True)
     unit_of_measure = models.CharField(max_length=255, blank=True)
 
-    revised_by_cje = models.OneToOneField(ExpenseCorrectiveJournalEntry, on_delete= models.CASCADE, related_name='revision_to', blank=True, null=True)
-    reversal_for_cje = models.OneToOneField(ExpenseCorrectiveJournalEntry, on_delete= models.CASCADE, related_name='reversed_in', blank=True, null=True)
-    restatement_for_cje = models.OneToOneField(ExpenseCorrectiveJournalEntry, on_delete= models.CASCADE, related_name='restated_in', blank=True, null=True)
+    corrected_by_cje = models.OneToOneField(ExpenseCorrectiveJournalEntry, on_delete= models.SET_NULL, related_name='correction_to', blank=True, null=True)
+    reversal_for_cje = models.OneToOneField(ExpenseCorrectiveJournalEntry, on_delete= models.SET_NULL, related_name='reversed_in', blank=True, null=True)
+    restatement_for_cje = models.OneToOneField(ExpenseCorrectiveJournalEntry, on_delete= models.SET_NULL, related_name='restated_in', blank=True, null=True)
     class Meta:
         permissions = (
             ("approve_expensetransaction", "Can approve expenses"),
@@ -209,6 +211,6 @@ class RevenueCorrectiveJournalEntry(RequiresApproval, RevenueInfo):
         )
 
 class RevenueTransaction(RevenueInfo):
-    revised_by_cje = models.OneToOneField(RevenueCorrectiveJournalEntry, on_delete= models.CASCADE, related_name='revision_to', blank=True, null=True)
-    reversal_for_cje = models.OneToOneField(RevenueCorrectiveJournalEntry, on_delete= models.CASCADE, related_name='reversed_in', blank=True, null=True)
-    restatement_for_cje = models.OneToOneField(RevenueCorrectiveJournalEntry, on_delete= models.CASCADE, related_name='restated_in', blank=True, null=True)
+    corrected_by_cje = models.OneToOneField(RevenueCorrectiveJournalEntry, on_delete= models.SET_NULL, related_name='correction_to', blank=True, null=True)
+    reversal_for_cje = models.OneToOneField(RevenueCorrectiveJournalEntry, on_delete= models.SET_NULL, related_name='reversed_in', blank=True, null=True)
+    restatement_for_cje = models.OneToOneField(RevenueCorrectiveJournalEntry, on_delete= models.SET_NULL, related_name='restated_in', blank=True, null=True)

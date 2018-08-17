@@ -31,7 +31,7 @@
     </thead>
     <tbody>
       {% for expense in object_list %}
-        <tr>
+        {% if expense.corrected_by_cje %}<tr class="table-danger">{% else %}<tr>{% endif %}
           <td>{{ expense.when_paid }}</td>
           <td>{{ expense.payee }}</td>
           <td>{{ expense.ledger_account }}</td>
@@ -44,7 +44,7 @@
             {% endif %}
           </td>{% endif %}
           {% if perms.finance.approve_expensetransaction %}<td>
-            {% if expense.approval_status == 'S' and if user != expense.submitted_by %}
+            {% if expense.approval_status == 'S' and user != expense.submitted_by %}
               <a href="{% url 'approve_expense' expense.pk %}"><i class="fas fa-check-double"></i></a>
             {% endif %}
           </td>{% endif %}
@@ -52,4 +52,42 @@
       {% endfor %}
     </tbody>
   </table>
+
+  {% if cje_list|length > 0 %}
+  <h4>Outstanding Corrective Journal Entries</h4>
+  <table class="table table-striped table-sm">
+    <thead>
+      <tr>
+        <th>Payee</th>
+        <th>Ledger Account</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>View</th>
+        {% if perms.finance.change_expensecorrectivejournalentry %}<th>Edit</th>{% endif %}
+        {% if perms.finance.approve_expensecorrectivejournalentry %}<th>Approve</th>{% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for expensecje in cje_list %}
+        <tr>
+          <td>{{ expensecje.payee }}</td>
+          <td>{{ expensecje.ledger_account }}</td>
+          <td>{{ expensecje.amount_charged }}</td>
+          <td>{{ expensecje.get_approval_status_display }}</td>
+          <td><a href="{% url 'view_expense_cje' expensecje.pk %}"><i class="fas fa-file-invoice"></i></a></td>
+          {% if perms.finance.change_expensecorrectivejournalentry %}<td>
+            {% if expensecje.approval_status == 'D' %}
+              <a href="{% url 'edit_expense_cje' expensecje.pk %}"><i class="fas fa-pencil-alt"></i></a>
+            {% endif %}
+          </td>{% endif %}
+          {% if perms.finance.approve_expensecorrectivejournalentry %}<td>
+            {% if expensecje.approval_status == 'S' and user != expensecje.submitted_by %}
+              <a href="{% url 'approve_expense_cje' expensecje.pk %}"><i class="fas fa-check-double"></i></a>
+            {% endif %}
+          </td>{% endif %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
 {% endblock %}

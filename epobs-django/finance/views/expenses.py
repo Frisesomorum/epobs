@@ -1,19 +1,25 @@
 import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
+from django.db import OperationalError
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.decorators import permission_required
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from epobs.views import DeletionFormMixin, SessionRecentsMixin
-from ..models import ExpenseTransaction
+from ..models import ExpenseTransaction, ExpenseCorrectiveJournalEntry
 
 
 class list(PermissionRequiredMixin, ListView):
     permission_required = 'finance.view_expensetransaction'
     model = ExpenseTransaction
     template_name = 'finance/expenses/list.html'
+
+    def get_context_data(self, **kwargs):
+        context = {}
+        context['cje_list'] = ExpenseCorrectiveJournalEntry.objects.exclude(approval_status='A')
+        return super().get_context_data(**context)
 
 class detail(PermissionRequiredMixin, DetailView):
     permission_required = 'finance.view_expensetransaction'

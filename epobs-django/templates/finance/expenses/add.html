@@ -32,14 +32,10 @@
       <tbody>
         {% for expense in recent_expensetransactions_list %}
           <tr>
-            <td>
-              {% if expense.employee %} {{ expense.employee }}
-              {% else %}{{ expense.supplier }}
-              {% endif %}
-            </td>
+            <td>{{ expense.payee }}</td>
             <td>{{ expense.ledger_account }}</td>
             <td>{{ expense.amount_charged }}</td>
-            <td><a href="{% url 'edit_expense' expense.pk %}"><i class="fas fa-pencil-alt"></i></a></td>
+            <td>{% if expense.approval_status == 'D' %}<a href="{% url 'edit_expense' expense.pk %}"><i class="fas fa-pencil-alt"></i></a>{% endif %}</td>
           </tr>
         {% endfor %}
       </tbody>

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}EPOBS - Edit Expense Corrective Journal Entry{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item">Expenses</li>
+  <li class="breadcrumb-item">Corrective Journal Entry</li>
+  <li class="breadcrumb-item">Edit</li>
+{% endblock %}
+
+{% block content %}
+
+  <form method="post" class="mb-4" novalidate>
+    {% csrf_token %}
+    {% include 'includes/form.html' %}
+    <input type="submit" name="save" value="Save" />
+    {% if perms.finance.delete_expensecorrectivejournalentry %}<input type="submit" name="delete" value="Delete" />{% endif %}
+    <input type="submit" name="cancel" value="Cancel" />
+  </form>
+
+{% endblock %}

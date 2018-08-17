@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}EPOBS - View Expense Corrective Journal Entry{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item">Expenses</li>
+  <li class="breadcrumb-item">Corrective Journal Entry</li>
+  <li class="breadcrumb-item">View</li>
+{% endblock %}
+
+{% block content %}
+
+  <div class="alert alert-light">
+    This journal entry is a correction to <a href="{% url 'view_expense' expensecje.correction_to.pk %}">{{ expensecje.correction_to }}</a>.
+
+    {% if expensecje.approval_status == 'A' %}
+      It was resolved in expenses
+      {% if expensecje.reversed_in %}<a href="{% url 'view_expense' expensecje.reversed_in.pk %}">{{ expensecje.reversed_in }}</a> and{% endif %}
+      <a href="{% url 'view_expense' expensecje.restated_in.pk %}">{{ expensecje.restated_in }}</a>.
+    {% endif %}
+  </div>
+
+  <table class="table">
+    <tr><td></td><th>Original</th><th>Correction</th></tr>
+    <tr><th>Ledger Account:</th>
+      <td>{{ expensecje.correction_to.ledger_account }}</td>
+      <td>{{ expensecje.ledger_account }}</td></tr>
+    <tr><th>Payee:</th>
+      <td>{{ expensecje.correction_to.payee }}</td>
+      <td>{{ expensecje.payee }}</td></tr>
+    <tr><th>Amount:</th>
+      <td>{{ expensecje.correction_to.amount_charged }}</td>
+      <td>{{ expensecje.amount_charged }}</td></tr>
+    <tr><th>Notes:</th>
+      <td>{{ expensecje.correction_to.notes }}</td>
+      <td>{{ expensecje.notes }}</td></tr>
+  </table>
+
+  <table class="table">
+    <tr><th>Created:</th>
+      <td>{{ expensecje.created }} by {{ expensecje.created_by }}</td></tr>
+    <tr><th>Status:</th>
+      <td>{{ expensecje.get_approval_status_display }}</td></tr>
+    {% if expensecje.approval_status == 'S' %}<tr><th>Submitted:</th>
+      <td>{{ expensecje.date_submitted }} by {{ expensecje.submitted_by }}</td></tr>{% endif %}
+    {% if expensecje.approval_status == 'A' %}<tr><th>Approved:</th>
+      <td>{{ expensecje.date_approved }} by {{ expensecje.approved_by }}</td></tr>{% endif %}
+  </table>
+
+  {% if expensecje.approval_status == 'S' and perms.finance.approve_expensecorrectivejournalentry and user != expensecje.submitted_by %}
+    <a href="{% url 'approve_expense_cje' expensecje.pk %}"><span class="btn btn-secondary">Approve</span></a>
+  {% endif %}
+  {% if expensecje.approval_status == 'S' and perms.finance.change_expensecorrectivejournalentry %}
+    <a href="{% url 'unsubmit_expense_cje' expensecje.pk %}"><span class="btn btn-secondary">Revert to draft</span></a>
+  {% endif %}
+  {% if expensecje.approval_status == 'D' and perms.finance.change_expensecorrectivejournalentry %}
+    <a href="{% url 'submit_expense_cje' expensecje.pk %}"><span class="btn btn-secondary">Submit for Approval</span></a>
+    <a href="{% url 'edit_expense_cje' expensecje.pk %}"><span class="btn btn-secondary">Edit</span></a>
+  {% endif %}
+
+{% endblock %}
