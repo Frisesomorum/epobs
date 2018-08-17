@@ -1,4 +1,6 @@
-from django.db import models
+import datetime
+from django.db import models, OperationalError
+from django.core.exceptions import PermissionDenied
 import epobs.models as sharedModels
 import students.models as studentsModels
 import personnel.models as personnelModels
@@ -135,6 +137,32 @@ class RequiresApproval(models.Model):
     approved_by = models.ForeignKey(sharedModels.User, on_delete=models.PROTECT, related_name='approved_%(app_label)s_%(class)s', blank=True, null=True)
     class Meta:
         abstract=True
+
+    def submitForApproval(self, user):
+        if self.approval_status != 'D':
+            raise OperationalError("This transaction is not in 'draft' status and cannot be submitted for approval.")
+        self.approval_status = 'S'
+        self.submitted_by = user
+        self.date_submitted = datetime.date.today()
+        self.save()
+
+    def unsubmitForApproval(self):
+        if self.approval_status != 'S':
+            raise OperationalError("This transaction is not in 'submitted' status and cannot be reverted to draft.")
+        self.approval_status = 'D'
+        self.submitted_by = None
+        self.date_submitted = None
+        self.save()
+
+    def approve(self, user):
+        if self.approval_status != 'S':
+            raise OperationalError("This transaction is not in 'submitted' status and cannot be approved.")
+        if self.submitted_by == user:
+            raise OperationalError("The same user cannot both submit and approve the same transaction.")
+        self.approval_status = 'A'
+        self.approved_by = user
+        self.date_approved = datetime.date.today()
+        self.save()
 
 class ExpenseInfo(Transaction):
     ledger_account = models.ForeignKey(ExpenseLedgerAccount, on_delete=models.CASCADE, related_name='related_%(app_label)s_%(class)s')
