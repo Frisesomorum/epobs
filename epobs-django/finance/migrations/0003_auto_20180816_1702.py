@@ -89,7 +89,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='expensetransaction',
             name='created_by',
-            field=models.ForeignKey(default=User.objects.first(), on_delete=django.db.models.deletion.PROTECT, related_name='created_finance_expensetransaction', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(default=User.objects.first().pk, on_delete=django.db.models.deletion.PROTECT, related_name='created_finance_expensetransaction', to=settings.AUTH_USER_MODEL),
             preserve_default=False,
         ),
         migrations.AddField(
@@ -110,7 +110,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='revenuetransaction',
             name='created_by',
-            field=models.ForeignKey(default=User.objects.first(), on_delete=django.db.models.deletion.PROTECT, related_name='created_finance_revenuetransaction', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(default=User.objects.first().pk, on_delete=django.db.models.deletion.PROTECT, related_name='created_finance_revenuetransaction', to=settings.AUTH_USER_MODEL),
             preserve_default=False,
         ),
         migrations.AddField(
