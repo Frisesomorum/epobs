@@ -38,14 +38,11 @@
   <table class="table">
     <tr><th>Ledger Account:</th><td>{{ expense.ledger_account }}</td></tr>
     <tr><th>Payee:</th><td>{{ expense.payee }}</td></tr>
-    <tr><th>Amount:</th><td>{{ expense.amount_charged }}</td></tr>
+    <tr><th>Amount:</th><td>{{ expense.amount }}</td></tr>
     <tr><th>Created:</th><td>{{ expense.created }} by {{ expense.created_by }}</td></tr>
     <tr><th>Status:</th><td>{{ expense.get_approval_status_display }}</td></tr>
     {% if expense.approval_status == 'S' %}<tr><th>Submitted:</th><td>{{ expense.date_submitted }} by {{ expense.submitted_by }}</td></tr>{% endif %}
     {% if expense.approval_status == 'A' %}<tr><th>Approved:</th><td>{{ expense.date_approved }} by {{ expense.approved_by }}</td></tr>{% endif %}
-    {% if expense.paid %}<tr><th>Date Paid:</th><td>{{ expense.when_paid }}</td></tr>
-    {% else %}<tr><th>Amount Paid:</th><td>{{ expense.partial_amount_paid }}</td></tr>
-    {% endif %}
     {% if expense.notes %}<tr><th>Notes:</th><td>{{ expense.notes }}</td></tr>{% endif %}
     {% if expense.discount %}<tr><th>Discount:</th><td>{{ expense.discount }}</td></tr>{% endif %}
     {% if expense.quantity %}<tr><th>Quantity:</th><td>{{ expense.quantity }}</td></tr>{% endif %}

@@ -1,12 +1,112 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django import forms
+from django.core.exceptions import PermissionDenied, SuspiciousOperation
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
+from django.views.generic import FormView
 from django.views.generic.edit import UpdateView
 from .models import School
 
+
+class SelectSchoolForm(forms.Form):
+    school_list = []
+    is_admin = False
+
+    def __init__(self, *args, **kwargs):
+        self.school_list = kwargs.pop('schools')
+        self.is_admin = kwargs.pop('is_admin')
+        super().__init__(*args, **kwargs)
+        self.fields['school'] = forms.ChoiceField(choices=self.make_selection_list())
+
+    def make_selection_list(self):
+        choices = ()
+        for school in self.school_list:
+            choices = choices + ((school, str(School.objects.get(pk=school))),)
+        if self.is_admin:
+            choices = choices + (('admin', '(log in as admin)'),)
+        return choices
+
+class SelectSchool(FormView):
+    form_class = SelectSchoolForm
+    template_name = 'select_school.html'
+    success_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context['is_admin'] = user.is_staff
+        context['schools'] = list(user.schools.values_list('pk', flat=True))
+        return context
+
+    # TODO: One of these is probably redundant
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        user = self.request.user
+        kwargs['is_admin'] = user.is_staff
+        kwargs['schools'] = list(user.schools.values_list('pk', flat=True))
+        return kwargs
+
+    def render_to_response(self, context, **kwargs):
+        schools = context['schools']
+        #If user is an admin and doesn't belong to any schools, set this as an admin session
+        if len(schools) == 0:
+            if context['is_admin']:
+                setAdminMode(self.request.session)
+                return redirect('/admin/')
+            else:
+                raise PermissionDenied("You do not have membership in any schools.")
+        #If user is not admin and belongs to exactly one school, set that school
+        if len(schools) == 1 and not context['is_admin']:
+            setSchool(self.request.session, schools.pop())
+            return redirect(self.get_success_url())
+        #Else, show the selection form
+        return super().render_to_response(context, **kwargs)
+
+
+    def form_valid(self, form):
+        user = self.request.user
+        #verify that the selected is one of the user's schools
+        selection = form.cleaned_data['school']
+        if selection == 'admin':
+            if user.is_staff:
+                setAdminMode(self.request.session)
+                return redirect('/admin/')
+            else:
+                raise PermissionDenied("You are not an admin of this site.")
+        user_schools = list(user.schools.values_list('pk', flat=True))
+        if user.is_school_member(selection):
+            setSchool(self.request.session, selection)
+            return redirect(self.get_success_url())
+        raise OperationalError("You do not have membership in this school.")
+
+def setAdminMode(session):
+    session['school'] = 'admin'
+    session['school_name'] = "(Administrator Mode)"
+    session['is_admin'] = True
+
+def setSchool(session, school_pk):
+    session['school'] = school_pk
+    session['school_name'] = str(School.objects.get(pk=school_pk))
+    session['is_admin'] = False
+
+def isAdminMode(session):
+    if 'is_admin' not in session.keys():
+        raise SuspiciousOperation("School context hasn't been set for this session.")
+    return session['is_admin']
+
+def getSchool(session):
+    if 'school' not in session.keys():
+        raise SuspiciousOperation("School context hasn't been set for this session.")
+    school_pk = session['school']
+    if school_pk == 'admin':
+        return None
+    school = School.objects.get(pk=school_pk)
+    return school
+
 @login_required
-def index_view(request):
+def IndexView(request):
     return render(request, 'index.html')
+
 
 
 class EditSchool(PermissionRequiredMixin, UpdateView):
@@ -16,10 +116,19 @@ class EditSchool(PermissionRequiredMixin, UpdateView):
     template_name = 'edit_school.html'
     success_url = '/'
     def get_object(self):
-        if not School.objects.exists():
-            school = School.objects.create()
-        return School.objects.first()
+        if isAdminMode(self.request.session):
+            raise SuspiciousOperation("You are in administrator mode and cannot edit school info.")
+        return getSchool(self.request.session)
 
+class CheckSchoolContextMixin(UserPassesTestMixin):
+    def test_func(self):
+        return (getSchool(self.request.session) == self.get_object().school)
+
+def get_school_object_or_404(request, klass, **kwargs):
+    object = get_object_or_404(klass, **kwargs)
+    if getSchool(request.session) != object.school:
+        raise SuspiciousOperation("This " + type(object) + " belongs to a school to which you are not logged in to.")
+    return object
 
     """ The combined edit/delete view expects a form
     that includes buttons named 'delete' and 'cancel'.
@@ -40,25 +149,22 @@ class DeletionFormMixin:
 
 class SessionRecentsMixin:
 
-    def post(self, request, **kwargs):
-        if 'done' in request.POST:
-            return redirect(self.success_url)
-        else:
-            return super().post(request, **kwargs)
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.recents_key in self.request.session:
-            context[self.recents_key] = [ self.model.objects.get(pk=pk)
-                for pk in self.request.session[self.recents_key]
+        if self.session_recents_key in self.request.session:
+            context[self.context_recents_key] = [ self.model.objects.get(pk=pk)
+                for pk in self.request.session[self.session_recents_key]
             ]
         return context
 
     def add_object_to_session(self, pk):
-        if self.recents_key not in self.request.session:
-            self.request.session[self.recents_key] = []
-        self.request.session[self.recents_key] = [pk] + self.request.session[self.recents_key]
+        if self.session_recents_key not in self.request.session:
+            self.request.session[self.session_recents_key] = []
+        self.request.session[self.session_recents_key] = [pk] + self.request.session[self.session_recents_key]
 
     @property
-    def recents_key(self):
-        return 'recent_' + self.model.__name__.lower() + 's_list'
+    def session_recents_key(self):
+        return 'recent_school' + self.request.session['school'] + '_' + self.model.__name__.lower() + '_list'
+    @property
+    def context_recents_key(self):
+        return 'recent_' + self.model.__name__.lower() + '_list'

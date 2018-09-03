@@ -7,6 +7,7 @@ from finance.views import terms as termViews
 from finance.views import expenses as expenseViews
 from finance.views import expensecje as expenseCjeViews
 from finance.views import revenues as revenueViews
+from finance.views import revenuecje as revenueCjeViews
 from personnel.views import employees as employeeViews
 from personnel.views import suppliers as supplierViews
 from students import views as studentViews
@@ -14,9 +15,10 @@ from students import views as studentViews
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
 
-    re_path(r'^$', indexViews.index_view, name='index'),
+    re_path(r'^$', indexViews.IndexView, name='index'),
     re_path(r'login/$', authViews.LoginView.as_view(template_name='login.html'), name='login'),
     re_path(r'logout/$', authViews.LogoutView.as_view(), name='logout'),
+    re_path(r'selectschool/$', indexViews.SelectSchool.as_view(), name='select_school'),
 
     re_path(r'school/$', indexViews.EditSchool.as_view(), name='school'),
 
@@ -28,6 +30,13 @@ urlpatterns = [
     re_path(r'finance/revenues/$', revenueViews.list.as_view(), name='list_revenues'),
     re_path(r'finance/revenues/add/$', revenueViews.add.as_view(), name='add_revenues'),
     re_path(r'finance/revenues/view/(?P<pk>\d+)/$', revenueViews.detail.as_view(), name='view_revenue'),
+
+    re_path(r'finance/revenues/cje/add/(?P<revenue_pk>\d+)/$', revenueCjeViews.add.as_view(), name='add_revenue_cje'),
+    re_path(r'finance/revenues/cje/edit/(?P<pk>\d+)/$', revenueCjeViews.edit.as_view(), name='edit_revenue_cje'),
+    re_path(r'finance/revenues/cje/view/(?P<pk>\d+)/$', revenueCjeViews.detail.as_view(), name='view_revenue_cje'),
+    re_path(r'finance/revenues/cje/submit/(?P<pk>\d+)/$', revenueCjeViews.submitForApproval, name='submit_revenue_cje'),
+    re_path(r'finance/revenues/cje/unsubmit/(?P<pk>\d+)/$', revenueCjeViews.unsubmitForApproval, name='unsubmit_revenue_cje'),
+    re_path(r'finance/revenues/cje/approve/(?P<pk>\d+)/$', revenueCjeViews.approve, name='approve_revenue_cje'),
 
     re_path(r'finance/expenses/$', expenseViews.list.as_view(), name='list_expenses'),
     re_path(r'finance/expenses/add/$', expenseViews.add.as_view(), name='add_expenses'),

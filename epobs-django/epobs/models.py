@@ -7,21 +7,20 @@ from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 
 class School(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     location = models.CharField(max_length=255)
     admission_fee = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     school_fee = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     canteen_fee = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    # TODO: define static set/get methods
-
-    def save(self, *args, **kwargs):
-        if School.objects.exists() and not self.pk:
-            raise ValidationError('There can be only one instance of the School class.')
-        return super(School, self).save(*args, **kwargs)
+    def __str__(self):
+        return self.name
 
 class User(AbstractUser):
+    schools = models.ManyToManyField(School, blank=True, related_name='users')
     def __str__(self):
         return self.last_name + ", " + self.first_name
+    def is_school_member(self, school_pk):
+        return (int(school_pk) in list(self.schools.values_list('pk', flat=True)))
 
 
 class Descriptor(models.Model):

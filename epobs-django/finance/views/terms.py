@@ -5,25 +5,32 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http.response import HttpResponseRedirect
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, FormView
-from epobs.views import DeletionFormMixin
+from epobs.views import DeletionFormMixin, CheckSchoolContextMixin, getSchool
 from ..models import Term, ExpenseBudgetItem, RevenueBudgetItem, ExpenseLedgerAccount, RevenueLedgerAccount
 
 class list(PermissionRequiredMixin, ListView):
     permission_required = 'finance.view_term'
     model = Term
     template_name = 'finance/terms/list.html'
+    def get_queryset(self):
+        return Term.objects.filter(school=getSchool(self.request.session))
 
 class create(PermissionRequiredMixin, CreateView):
     permission_required = 'finance.add_term'
     model = Term
-    fields = '__all__'
+    fields = ('name', 'start', 'end')
     template_name = 'finance/terms/create.html'
     success_url = '/finance/terms/'
+    def form_valid(self, form):
+        term = form.save(commit=False)
+        term.school = getSchool(self.request.session)
+        term.save()
+        return HttpResponseRedirect(self.get_success_url())
 
-class edit(PermissionRequiredMixin, DeletionFormMixin, UpdateView):
+class edit(PermissionRequiredMixin, CheckSchoolContextMixin, DeletionFormMixin, UpdateView):
     permission_required = 'finance.change_term'
     model = Term
-    fields = '__all__'
+    fields = ('name', 'start', 'end')
     template_name = 'finance/terms/edit.html'
     success_url = '/finance/terms/'
 

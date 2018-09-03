@@ -10,20 +10,40 @@
 {% endblock %}
 
 {% block content %}
+  {% if revenue.corrected_by_cje %}
+  <div class="alert alert-danger">
+    {% if revenue.corrected_by_cje.approval_status == 'A' %}
+      This transaction has been corrected by a
+    {% else %}
+      This transaction is in the process of being corrected by a
+    {% endif %}
+    <a href="{% url 'view_revenue_cje' revenue.corrected_by_cje.pk %}">journal entry</a>.
+  </div>
+  {% endif %}
+
+  {% if revenue.reversal_for_cje %}
+  <div class="alert alert-light">
+    This transaction reverses an error in
+    <a href="{% url 'view_revenue' revenue.reversal_for_cje.correction_to.pk %}">{{ revenue.reversal_for_cje.correction_to }}</a>.
+  </div>
+  {% endif %}
+
+  {% if revenue.restatement_for_cje %}
+  <div class="alert alert-light">
+    This transaction replaces
+    <a href="{% url 'view_revenue' revenue.restatement_for_cje.correction_to.pk %}">{{ revenue.restatement_for_cje.correction_to }}</a>.
+  </div>
+  {% endif %}
+
   <table class="table">
     <tr><th>Ledger Account:</th><td>{{ revenue.ledger_account }}</td></tr>
     <tr><th>Student:</th><td>{{ revenue.student }}</td></tr>
-    <tr><th>Amount:</th><td>{{ revenue.amount_charged }}</td></tr>
+    <tr><th>Amount:</th><td>{{ revenue.amount }}</td></tr>
     <tr><th>Created:</th><td>{{ revenue.created }} by {{ revenue.created_by }}</td></tr>
-    {% if revenue.paid %}<tr><th>Date Paid:</th><td>{{ revenue.when_paid }}</td></tr>
-    {% else %}<tr><th>Amount Paid:</th><td>{{ revenue.partial_amount_paid }}</td></tr>
-    {% endif %}
     {% if revenue.notes %}<tr><th>Notes:</th><td>{{ revenue.notes }}</td></tr>{% endif %}
   </table>
 
-  {% if revenue.corrected_by_cje %}This transaction has been corrected by <a href="#">journal entry {{ revenue.corrected_by_cje.pk }}</a>.{% endif %}
-
-  {% if perms.finance.add_revenuecorrectivejournalentry %}
-    <a href="#"><span class="btn btn-secondary">Revise using journal entry</span></a>
+  {% if perms.finance.add_revenuecorrectivejournalentry and not revenue.corrected_by_cje and not revenue.reversal_for_cje %}
+    <a href="{% url 'add_revenue_cje' revenue.pk %}"><span class="btn btn-secondary">Revise using journal entry</span></a>
   {% endif %}
 {% endblock %}

@@ -15,10 +15,9 @@
     {% csrf_token %}
     {% include 'includes/form.html' %}
     <input type="submit" name="save" value="Save" />
-    <input type="submit" name="done" value="Done" />
   </form>
 
-  {% if recent_revenuetransactions_list|length > 0 %}
+  {% if recent_revenuetransaction_list|length > 0 %}
     <h3>{{ user }}'s recently added revenues</h3>
     <table class="table table-striped table-sm">
       <thead>
@@ -29,11 +28,11 @@
         </tr>
       </thead>
       <tbody>
-        {% for revenue in recent_revenuetransactions_list %}
+        {% for revenue in recent_revenuetransaction_list %}
           <tr>
             <td>{{ revenue.student }}</td>
             <td>{{ revenue.ledger_account }}</td>
-            <td>{{ revenue.amount_charged }}</td>
+            <td>{{ revenue.amount }}</td>
           </tr>
         {% endfor %}
       </tbody>

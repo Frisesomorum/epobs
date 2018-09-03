@@ -28,14 +28,52 @@
     </thead>
     <tbody>
       {% for revenue in object_list %}
-        <tr>
-          <td>{{ revenue.when_paid }}</td>
+        {% if revenue.corrected_by_cje %}<tr class="table-danger">{% else %}<tr>{% endif %}
+          <td>{{ revenue.created }}</td>
           <td>{{ revenue.student }}</td>
           <td>{{ revenue.ledger_account }}</td>
-          <td>{{ revenue.amount_charged }}</td>
+          <td>{{ revenue.amount }}</td>
           <td><a href="{% url 'view_revenue' revenue.pk %}"><i class="fas fa-file-invoice"></i></a></td>
         </tr>
       {% endfor %}
     </tbody>
   </table>
+
+  {% if cje_list|length > 0 %}
+  <h4>Outstanding Corrective Journal Entries</h4>
+  <table class="table table-striped table-sm">
+    <thead>
+      <tr>
+        <th>Student</th>
+        <th>Ledger Account</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>View</th>
+        {% if perms.finance.change_revenuecorrectivejournalentry %}<th>Edit</th>{% endif %}
+        {% if perms.finance.approve_revenuecorrectivejournalentry %}<th>Approve</th>{% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for revenuecje in cje_list %}
+        <tr>
+          <td>{{ revenuecje.student }}</td>
+          <td>{{ revenuecje.ledger_account }}</td>
+          <td>{{ revenuecje.amount }}</td>
+          <td>{{ revenuecje.get_approval_status_display }}</td>
+          <td><a href="{% url 'view_revenue_cje' revenuecje.pk %}"><i class="fas fa-file-invoice"></i></a></td>
+          {% if perms.finance.change_revenuecorrectivejournalentry %}<td>
+            {% if revenuecje.approval_status == 'D' %}
+              <a href="{% url 'edit_revenue_cje' revenuecje.pk %}"><i class="fas fa-pencil-alt"></i></a>
+            {% endif %}
+          </td>{% endif %}
+          {% if perms.finance.approve_revenuecorrectivejournalentry %}<td>
+            {% if revenuecje.approval_status == 'S' and user != revenuecje.submitted_by %}
+              <a href="{% url 'approve_revenue_cje' revenuecje.pk %}"><i class="fas fa-check-double"></i></a>
+            {% endif %}
+          </td>{% endif %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
 {% endblock %}

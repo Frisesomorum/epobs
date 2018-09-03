@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}EPOBS - View Revenue Corrective Journal Entry{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item">Revenues</li>
+  <li class="breadcrumb-item">Corrective Journal Entry</li>
+  <li class="breadcrumb-item">View</li>
+{% endblock %}
+
+{% block content %}
+
+  <div class="alert alert-light">
+    This journal entry is a correction to <a href="{% url 'view_revenue' revenuecje.correction_to.pk %}">{{ revenuecje.correction_to }}</a>.
+
+    {% if revenuecje.approval_status == 'A' %}
+      It was resolved in revenues
+      {% if revenuecje.reversed_in %}<a href="{% url 'view_revenue' revenuecje.reversed_in.pk %}">{{ revenuecje.reversed_in }}</a> and{% endif %}
+      <a href="{% url 'view_revenue' revenuecje.restated_in.pk %}">{{ revenuecje.restated_in }}</a>.
+    {% endif %}
+  </div>
+
+  <table class="table">
+    <tr><td></td><th>Original</th><th>Correction</th></tr>
+    <tr><th>Ledger Account:</th>
+      <td>{{ revenuecje.correction_to.ledger_account }}</td>
+      <td>{{ revenuecje.ledger_account }}</td></tr>
+    <tr><th>Student:</th>
+      <td>{{ revenuecje.correction_to.student }}</td>
+      <td>{{ revenuecje.student }}</td></tr>
+    <tr><th>Amount:</th>
+      <td>{{ revenuecje.correction_to.amount }}</td>
+      <td>{{ revenuecje.amount }}</td></tr>
+    <tr><th>Notes:</th>
+      <td>{{ revenuecje.correction_to.notes }}</td>
+      <td>{{ revenuecje.notes }}</td></tr>
+  </table>
+
+  <table class="table">
+    <tr><th>Created:</th>
+      <td>{{ revenuecje.created }} by {{ revenuecje.created_by }}</td></tr>
+    <tr><th>Status:</th>
+      <td>{{ revenuecje.get_approval_status_display }}</td></tr>
+    {% if revenuecje.approval_status == 'S' %}<tr><th>Submitted:</th>
+      <td>{{ revenuecje.date_submitted }} by {{ revenuecje.submitted_by }}</td></tr>{% endif %}
+    {% if revenuecje.approval_status == 'A' %}<tr><th>Approved:</th>
+      <td>{{ revenuecje.date_approved }} by {{ revenuecje.approved_by }}</td></tr>{% endif %}
+  </table>
+
+  {% if revenuecje.approval_status == 'S' and perms.finance.approve_revenuecorrectivejournalentry and user != revenuecje.submitted_by %}
+    <a href="{% url 'approve_revenue_cje' revenuecje.pk %}"><span class="btn btn-secondary">Approve</span></a>
+  {% endif %}
+  {% if revenuecje.approval_status == 'S' and perms.finance.change_revenuecorrectivejournalentry %}
+    <a href="{% url 'unsubmit_revenue_cje' revenuecje.pk %}"><span class="btn btn-secondary">Revert to draft</span></a>
+  {% endif %}
+  {% if revenuecje.approval_status == 'D' and perms.finance.change_revenuecorrectivejournalentry %}
+    <a href="{% url 'submit_revenue_cje' revenuecje.pk %}"><span class="btn btn-secondary">Submit for Approval</span></a>
+    <a href="{% url 'edit_revenue_cje' revenuecje.pk %}"><span class="btn btn-secondary">Edit</span></a>
+  {% endif %}
+
+{% endblock %}

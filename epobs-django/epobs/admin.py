@@ -1,14 +1,13 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin, Group
+from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserCreationForm
 from django.utils.translation import ugettext_lazy as _
 from .models import User, School
 
 class UserCreateForm(UserCreationForm):
-
     class Meta:
         model = User
-        fields = ('username', 'first_name' , 'last_name', 'groups')
+        fields = ('username', 'first_name' , 'last_name', 'groups', 'schools')
 
 
 class UserAdmin(UserAdmin):
@@ -17,16 +16,28 @@ class UserAdmin(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('first_name', 'last_name', 'username', 'groups', 'password1', 'password2'),
+            'fields': ('first_name', 'last_name', 'username', 'groups', 'schools', 'password1', 'password2'),
         }),
     )
 
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
-        (_('Permissions'), {'fields': ('is_active', 'is_superuser', 'groups')}),
+        (_('Permissions'), {'fields': ('is_active', 'is_superuser', 'is_staff', 'groups', 'schools')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
 
-admin.site.unregister(Group)
+class SchoolAdmin(admin.ModelAdmin):
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('name', 'location'),
+        }),
+    )
+
+    fieldsets = (
+        (None, {'fields': ('name', 'location')}),
+    )
+
 admin.site.register(User, UserAdmin)
+admin.site.register(School, SchoolAdmin)

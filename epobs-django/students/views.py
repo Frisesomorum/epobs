@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from tablib import Dataset
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView
-from epobs.views import DeletionFormMixin, SessionRecentsMixin
+from epobs.views import DeletionFormMixin, SessionRecentsMixin, CheckSchoolContextMixin, getSchool
 from .models import Student
 from .resources import StudentResource
 from finance.models import StudentAccount
@@ -12,21 +12,23 @@ from finance.models import StudentAccount
 class add(PermissionRequiredMixin, SessionRecentsMixin, CreateView):
     permission_required = 'students.add_student'
     model = Student
-    fields = '__all__'
+    fields = ('first_name', 'last_name', 'date_of_birth', 'email')
     template_name = 'student/add.html'
     success_url = '/students/'
 
     def form_valid(self, form):
-        student = form.save()
+        student = form.save(commit=False)
+        student.school = getSchool(self.request.session)
+        student.save()
         self.add_object_to_session(student.pk)
         account = StudentAccount.objects.create(student = student)  # Create the linked payment account
         return HttpResponseRedirect(self.request.path_info)  # Return the user to this page with a fresh form
 
 
-class edit(PermissionRequiredMixin, DeletionFormMixin, UpdateView):
+class edit(PermissionRequiredMixin, CheckSchoolContextMixin, DeletionFormMixin, UpdateView):
     permission_required = 'students.change_student'
     model = Student
-    fields = '__all__'
+    fields = ('first_name', 'last_name', 'date_of_birth', 'email')
     template_name = 'student/edit.html'
     success_url = '/students/'
 
@@ -35,6 +37,9 @@ class list(PermissionRequiredMixin, ListView):
     permission_required = 'students.view_student'
     model = Student
     template_name = 'student/list.html'
+
+    def get_queryset(self):
+        return Student.objects.filter(school=getSchool(self.request.session))
 
     def post(self, request, **kwargs):
         if 'export' in request.POST:

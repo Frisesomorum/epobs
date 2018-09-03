@@ -58,6 +58,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+
+    'epobs.middleware.LoginRequiredMiddleware'
 ]
 
 ROOT_URLCONF = 'epobs.urls'
@@ -78,6 +80,10 @@ TEMPLATES = [
             ],
         },
     },
+]
+
+FIXTURE_DIRS = [
+    os.path.join(BASE_DIR, 'fixtures'),
 ]
 
 WSGI_APPLICATION = 'epobs.wsgi.application'
@@ -127,7 +133,7 @@ USE_L10N = True
 USE_TZ = True
 
 LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'index'
+LOGIN_REDIRECT_URL = 'select_school'
 LOGOUT_REDIRECT_URL = 'login'
 
 AUTH_USER_MODEL = 'epobs.User'

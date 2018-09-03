@@ -32,10 +32,10 @@
     <tbody>
       {% for expense in object_list %}
         {% if expense.corrected_by_cje %}<tr class="table-danger">{% else %}<tr>{% endif %}
-          <td>{{ expense.when_paid }}</td>
+          <td>{{ expense.date_approved }}</td>
           <td>{{ expense.payee }}</td>
           <td>{{ expense.ledger_account }}</td>
-          <td>{{ expense.amount_charged }}</td>
+          <td>{{ expense.amount }}</td>
           <td>{{ expense.get_approval_status_display }}</td>
           <td><a href="{% url 'view_expense' expense.pk %}"><i class="fas fa-file-invoice"></i></a></td>
           {% if perms.finance.change_expensetransaction %}<td>
@@ -72,7 +72,7 @@
         <tr>
           <td>{{ expensecje.payee }}</td>
           <td>{{ expensecje.ledger_account }}</td>
-          <td>{{ expensecje.amount_charged }}</td>
+          <td>{{ expensecje.amount }}</td>
           <td>{{ expensecje.get_approval_status_display }}</td>
           <td><a href="{% url 'view_expense_cje' expensecje.pk %}"><i class="fas fa-file-invoice"></i></a></td>
           {% if perms.finance.change_expensecorrectivejournalentry %}<td>
