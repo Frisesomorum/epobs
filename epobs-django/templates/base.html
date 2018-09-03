@@ -37,7 +37,7 @@
                     {% if perms.personnel.view_employee %}<a class="dropdown-item" href="{% url 'list_employees' %}">Employees</a>{% endif %}
                     {% if perms.personnel.view_supplier %}<a class="dropdown-item" href="{% url 'list_suppliers' %}">Suppliers</a>{% endif %}
                     {% if perms.students.view_student %}<a class="dropdown-item" href="{% url 'list_students' %}">Students</a>{% endif %}
-                    {% if perms.epobs.change_school and request.session.school != 'admin' %}<a class="dropdown-item" href="{% url 'school' %}">School Info</a>{% endif %}
+                    {% if perms.schools.change_school and request.session.school != 'admin' %}<a class="dropdown-item" href="{% url 'school' %}">School Info</a>{% endif %}
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{% url 'logout' %}">Log out</a>
                   </div>

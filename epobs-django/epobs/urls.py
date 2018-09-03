@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.contrib.auth import views as authViews
 from django.conf import settings
 from django.urls import path, re_path, include
-from epobs import views as indexViews
+from core import views as coreViews
+from schools import views as schoolViews
 from finance.views import terms as termViews
 from finance.views import expenses as expenseViews
 from finance.views import expensecje as expenseCjeViews
@@ -15,12 +16,12 @@ from students import views as studentViews
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
 
-    re_path(r'^$', indexViews.IndexView, name='index'),
+    re_path(r'^$', coreViews.IndexView, name='index'),
     re_path(r'login/$', authViews.LoginView.as_view(template_name='login.html'), name='login'),
     re_path(r'logout/$', authViews.LogoutView.as_view(), name='logout'),
-    re_path(r'selectschool/$', indexViews.SelectSchool.as_view(), name='select_school'),
+    re_path(r'selectschool/$', schoolViews.SelectSchool.as_view(), name='select_school'),
 
-    re_path(r'school/$', indexViews.EditSchool.as_view(), name='school'),
+    re_path(r'school/$', schoolViews.EditSchool.as_view(), name='school'),
 
     re_path(r'finance/terms/$', termViews.list.as_view(), name='list_term'),
     re_path(r'finance/terms/create/$', termViews.create.as_view(), name='create_term'),

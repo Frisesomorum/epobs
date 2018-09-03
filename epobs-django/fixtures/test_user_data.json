@@ -1,9 +1,31 @@
 [
 {
-  "model": "epobs.user",
+  "model": "schools.school",
+  "pk": 1,
+  "fields": {
+    "name": "Epobs Polytechnic",
+    "location": "Seattle, WA, USA",
+    "admission_fee": "0.00",
+    "school_fee": "0.00",
+    "canteen_fee": "0.00"
+  }
+},
+{
+  "model": "schools.school",
+  "pk": 2,
+  "fields": {
+    "name": "Adeshie Collections",
+    "location": "Nima",
+    "admission_fee": "0.00",
+    "school_fee": "0.00",
+    "canteen_fee": "0.00"
+  }
+},
+{
+  "model": "core.user",
   "fields": {
     "password": "pbkdf2_sha256$120000$VTfLqsFzOhKU$Xcufu4sJugWo8ncXFUbzb7PjiUtz5RSXuEZJ5YcXZfk=",
-    "last_login": "2018-08-26T23:23:08.601Z",
+    "last_login": "2018-09-03T19:50:34.444Z",
     "is_superuser": true,
     "username": "admin",
     "first_name": "Thorin",
@@ -13,14 +35,15 @@
     "is_active": true,
     "date_joined": "2018-08-12T21:57:04Z",
     "groups": [],
-    "user_permissions": []
+    "user_permissions": [],
+    "schools": []
   }
 },
 {
-  "model": "epobs.user",
+  "model": "core.user",
   "fields": {
     "password": "pbkdf2_sha256$120000$fy4MLLdqP87W$rgTf7o2cSvnaYqQaDHzKFx8LV8cuzy4ZueldGfgwG1c=",
-    "last_login": "2018-08-27T00:46:32.173Z",
+    "last_login": "2018-09-03T19:50:45.061Z",
     "is_superuser": false,
     "username": "acct",
     "first_name": "Fili",
@@ -34,14 +57,17 @@
         "Accountant"
       ]
     ],
-    "user_permissions": []
+    "user_permissions": [],
+    "schools": [
+      1
+    ]
   }
 },
 {
-  "model": "epobs.user",
+  "model": "core.user",
   "fields": {
     "password": "pbkdf2_sha256$120000$2f4XjpJsUrhH$7Luy7C/dDATx5Esjis06ZXBT8bZ1Dr8qOuzWHQFi5ws=",
-    "last_login": "2018-08-17T04:47:06.991Z",
+    "last_login": "2018-08-17T04:47:06Z",
     "is_superuser": false,
     "username": "bkpr",
     "first_name": "Bifur",
@@ -55,14 +81,17 @@
         "Bookkeeper"
       ]
     ],
-    "user_permissions": []
+    "user_permissions": [],
+    "schools": [
+      1
+    ]
   }
 },
 {
-  "model": "epobs.user",
+  "model": "core.user",
   "fields": {
     "password": "pbkdf2_sha256$120000$N56KtIYx0QiE$FMKWNKb8XyqT80hV9y0OomF8O3MUA2P7NJYebNz3//g=",
-    "last_login": "2018-08-17T01:40:51.985Z",
+    "last_login": "2018-09-03T19:50:19.573Z",
     "is_superuser": false,
     "username": "acctbkpr",
     "first_name": "Ori",
@@ -79,14 +108,18 @@
         "Accountant"
       ]
     ],
-    "user_permissions": []
+    "user_permissions": [],
+    "schools": [
+      1,
+      2
+    ]
   }
 },
 {
-  "model": "epobs.user",
+  "model": "core.user",
   "fields": {
     "password": "pbkdf2_sha256$120000$oz3sz9WL9QQQ$ieAvLHithfmTJPPbe1SPUwIEH0+SEtNVX0UGIRwWnTs=",
-    "last_login": "2018-08-14T05:50:53.510Z",
+    "last_login": "2018-08-14T05:50:53Z",
     "is_superuser": false,
     "username": "user",
     "first_name": "Gloin",
@@ -96,11 +129,14 @@
     "is_active": true,
     "date_joined": "2018-08-14T05:23:40Z",
     "groups": [],
-    "user_permissions": []
+    "user_permissions": [],
+    "schools": [
+      1
+    ]
   }
 },
 {
-  "model": "epobs.user",
+  "model": "core.user",
   "fields": {
     "password": "pbkdf2_sha256$120000$aXYLjwkmAaql$KaMv9NKf5zW/v5wVdf07qud+C0UW+I4h18IZy5OX4d8=",
     "last_login": null,
@@ -120,7 +156,51 @@
         "Accountant"
       ]
     ],
-    "user_permissions": []
+    "user_permissions": [],
+    "schools": [
+      1
+    ]
+  }
+},
+{
+  "model": "core.user",
+  "fields": {
+    "password": "pbkdf2_sha256$120000$b1vnq0NSyVW3$YK7fKQp9L+Ws3pbjztoNDohIqgwNISE+qFOJSK1NAZ4=",
+    "last_login": "2018-09-03T19:49:36.665Z",
+    "is_superuser": false,
+    "username": "staff",
+    "first_name": "Bombur",
+    "last_name": "Stafferson",
+    "email": "bombur@epobs.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2018-09-02T19:30:46Z",
+    "groups": [],
+    "user_permissions": [],
+    "schools": [
+      1
+    ]
+  }
+},
+{
+  "model": "core.user",
+  "fields": {
+    "password": "pbkdf2_sha256$120000$IFhFgwGQobp6$GofJK0jJRtGplJht3csNSA8rd9Xxkv+K39RhMIRbZGg=",
+    "last_login": "2018-09-03T01:48:29.296Z",
+    "is_superuser": false,
+    "username": "stake",
+    "first_name": "Kili",
+    "last_name": "Stakeholt",
+    "email": "kili@epobs.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-09-03T00:55:59Z",
+    "groups": [],
+    "user_permissions": [],
+    "schools": [
+      1,
+      2
+    ]
   }
 }
 ]

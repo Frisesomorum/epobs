@@ -154,12 +154,12 @@
     "permissions": [
       [
         "change_school",
-        "epobs",
+        "schools",
         "school"
       ],
       [
         "view_school",
-        "epobs",
+        "schools",
         "school"
       ],
       [
@@ -241,6 +241,11 @@
         "view_revenuecorrectivejournalentry",
         "finance",
         "revenuecorrectivejournalentry"
+      ],
+      [
+        "view_revenuetransaction",
+        "finance",
+        "revenuetransaction"
       ],
       [
         "add_term",

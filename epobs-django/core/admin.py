@@ -2,13 +2,12 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserCreationForm
 from django.utils.translation import ugettext_lazy as _
-from .models import User, School
+from .models import User
 
 class UserCreateForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'first_name' , 'last_name', 'groups', 'schools')
-
 
 class UserAdmin(UserAdmin):
     add_form = UserCreateForm
@@ -27,17 +26,4 @@ class UserAdmin(UserAdmin):
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
 
-class SchoolAdmin(admin.ModelAdmin):
-    add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('name', 'location'),
-        }),
-    )
-
-    fieldsets = (
-        (None, {'fields': ('name', 'location')}),
-    )
-
 admin.site.register(User, UserAdmin)
-admin.site.register(School, SchoolAdmin)

@@ -2,11 +2,9 @@ from django import forms
 from django.core.exceptions import PermissionDenied, SuspiciousOperation
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.decorators import login_required
 from django.views.generic import FormView
 from django.views.generic.edit import UpdateView
 from .models import School
-
 
 class SelectSchoolForm(forms.Form):
     school_list = []
@@ -103,23 +101,6 @@ def getSchool(session):
     school = School.objects.get(pk=school_pk)
     return school
 
-@login_required
-def IndexView(request):
-    return render(request, 'index.html')
-
-
-
-class EditSchool(PermissionRequiredMixin, UpdateView):
-    permission_required = 'epobs.change_school'
-    model = School
-    fields = '__all__'
-    template_name = 'edit_school.html'
-    success_url = '/'
-    def get_object(self):
-        if isAdminMode(self.request.session):
-            raise SuspiciousOperation("You are in administrator mode and cannot edit school info.")
-        return getSchool(self.request.session)
-
 class CheckSchoolContextMixin(UserPassesTestMixin):
     def test_func(self):
         return (getSchool(self.request.session) == self.get_object().school)
@@ -130,41 +111,14 @@ def get_school_object_or_404(request, klass, **kwargs):
         raise SuspiciousOperation("This " + type(object) + " belongs to a school to which you are not logged in to.")
     return object
 
-    """ The combined edit/delete view expects a form
-    that includes buttons named 'delete' and 'cancel'.
-    """
-class DeletionFormMixin:
 
-    def post(self, request, **kwargs):
-        if 'delete' in request.POST:
-            self.object = self.get_object()
-            self.object.delete()
-            return redirect(self.get_success_url())
-        elif 'cancel' in request.POST:
-            self.object = self.get_object()
-            return redirect(self.get_success_url())
-        else:
-            return super().post(request, **kwargs)
-
-
-class SessionRecentsMixin:
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if self.session_recents_key in self.request.session:
-            context[self.context_recents_key] = [ self.model.objects.get(pk=pk)
-                for pk in self.request.session[self.session_recents_key]
-            ]
-        return context
-
-    def add_object_to_session(self, pk):
-        if self.session_recents_key not in self.request.session:
-            self.request.session[self.session_recents_key] = []
-        self.request.session[self.session_recents_key] = [pk] + self.request.session[self.session_recents_key]
-
-    @property
-    def session_recents_key(self):
-        return 'recent_school' + self.request.session['school'] + '_' + self.model.__name__.lower() + '_list'
-    @property
-    def context_recents_key(self):
-        return 'recent_' + self.model.__name__.lower() + '_list'
+class EditSchool(PermissionRequiredMixin, UpdateView):
+    permission_required = 'schools.change_school'
+    model = School
+    fields = '__all__'
+    template_name = 'edit_school.html'
+    success_url = '/'
+    def get_object(self):
+        if isAdminMode(self.request.session):
+            raise SuspiciousOperation("You are in administrator mode and cannot edit school info.")
+        return getSchool(self.request.session)

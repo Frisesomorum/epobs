@@ -1,14 +1,15 @@
 import datetime
 from django.db import models, OperationalError
 from django.core.exceptions import PermissionDenied
-import epobs.models as sharedModels
-import students.models as studentsModels
-import personnel.models as personnelModels
+import core.models as coreModels
+from schools.models import School
+from students.models import Student
+from personnel.models import Employee, Supplier
 
-class Fund(sharedModels.Descriptor):
+class Fund(coreModels.Descriptor):
     pass
 
-class Category(sharedModels.Descriptor):
+class Category(coreModels.Descriptor):
     fund = models.ForeignKey(Fund, on_delete=models.CASCADE, related_name='related_%(app_label)s_%(class)s')
 
     def totalForTerm(self, term):
@@ -25,7 +26,7 @@ class ExpenseCategory(Category):
 class RevenueCategory(Category):
     pass
 
-class LedgerAccount(sharedModels.Descriptor):
+class LedgerAccount(coreModels.Descriptor):
     class Meta:
         abstract = True
 
@@ -37,7 +38,7 @@ class RevenueLedgerAccount(LedgerAccount):
 
 
 class Term(models.Model):
-    school = models.ForeignKey(sharedModels.School, on_delete=models.CASCADE, related_name='terms')
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='terms')
     name = models.CharField(max_length=255, blank=True)
     start = models.DateField()
     end = models.DateField()
@@ -81,17 +82,17 @@ class Payee(models.Model):
         abstract = True
 
 class EmployeeAccount(Payee):
-    employee = models.OneToOneField(personnelModels.Employee, on_delete=models.CASCADE)
+    employee = models.OneToOneField(Employee, on_delete=models.CASCADE)
     def __str__(self):
         return str(self.employee)
 
 class SupplierAccount(Payee):
-    supplier = models.OneToOneField(personnelModels.Supplier, on_delete=models.CASCADE)
+    supplier = models.OneToOneField(Supplier, on_delete=models.CASCADE)
     def __str__(self):
         return str(self.supplier)
 
 class StudentAccount(models.Model):
-    student = models.OneToOneField(studentsModels.Student, on_delete=models.CASCADE)
+    student = models.OneToOneField(Student, on_delete=models.CASCADE)
     def __str__(self):
         return str(self.student)
 
@@ -103,10 +104,10 @@ class StudentAccount(models.Model):
 
 
 class Transaction(models.Model):
-    school = models.ForeignKey(sharedModels.School, on_delete=models.CASCADE, related_name='related_%(app_label)s_%(class)s')
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='related_%(app_label)s_%(class)s')
     notes = models.TextField(max_length=4000, blank=True)
     created = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(sharedModels.User, on_delete=models.PROTECT, related_name='created_%(app_label)s_%(class)s')
+    created_by = models.ForeignKey(coreModels.User, on_delete=models.PROTECT, related_name='created_%(app_label)s_%(class)s')
     amount = models.DecimalField(max_digits=15, decimal_places=2, default=0)
 
     class Meta:
@@ -123,9 +124,9 @@ APPROVAL_STATUS_CHOICES = (
 class RequiresApproval(models.Model):
     approval_status = models.CharField(max_length=1, choices=APPROVAL_STATUS_CHOICES, default='D')
     date_submitted = models.DateField(blank=True, null=True)
-    submitted_by = models.ForeignKey(sharedModels.User, on_delete=models.PROTECT, related_name='submitted_%(app_label)s_%(class)s', blank=True, null=True)
+    submitted_by = models.ForeignKey(coreModels.User, on_delete=models.PROTECT, related_name='submitted_%(app_label)s_%(class)s', blank=True, null=True)
     date_approved = models.DateField(blank=True, null=True)
-    approved_by = models.ForeignKey(sharedModels.User, on_delete=models.PROTECT, related_name='approved_%(app_label)s_%(class)s', blank=True, null=True)
+    approved_by = models.ForeignKey(coreModels.User, on_delete=models.PROTECT, related_name='approved_%(app_label)s_%(class)s', blank=True, null=True)
     class Meta:
         abstract=True
 

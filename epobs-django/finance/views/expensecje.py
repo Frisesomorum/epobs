@@ -9,7 +9,8 @@ from django.contrib.auth.decorators import permission_required
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
-from epobs.views import DeletionFormMixin, SessionRecentsMixin, CheckSchoolContextMixin, getSchool, get_school_object_or_404
+from core.views import DeletionFormMixin, SessionRecentsMixin
+from schools.views import getSchool, get_school_object_or_404, CheckSchoolContextMixin
 from ..models import ExpenseTransaction, ExpenseCorrectiveJournalEntry
 
 

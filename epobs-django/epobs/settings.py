@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'widget_tweaks',
     'import_export',
-    'epobs',
+    'core',
+    'schools',
     'finance',
     'students',
     'personnel',
@@ -59,7 +60,7 @@ MIDDLEWARE = [
 
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 
-    'epobs.middleware.LoginRequiredMiddleware'
+    'core.middleware.LoginRequiredMiddleware'
 ]
 
 ROOT_URLCONF = 'epobs.urls'
@@ -136,7 +137,7 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'select_school'
 LOGOUT_REDIRECT_URL = 'login'
 
-AUTH_USER_MODEL = 'epobs.User'
+AUTH_USER_MODEL = 'core.User'
 
 
 # Static files (CSS, JavaScript, Images)

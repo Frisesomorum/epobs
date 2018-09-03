@@ -5,7 +5,8 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http.response import HttpResponseRedirect
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, FormView
-from epobs.views import DeletionFormMixin, CheckSchoolContextMixin, getSchool
+from core.views import DeletionFormMixin
+from schools.views import getSchool, CheckSchoolContextMixin
 from ..models import Term, ExpenseBudgetItem, RevenueBudgetItem, ExpenseLedgerAccount, RevenueLedgerAccount
 
 class list(PermissionRequiredMixin, ListView):

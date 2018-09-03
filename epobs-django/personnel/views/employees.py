@@ -3,7 +3,8 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView
-from epobs.views import DeletionFormMixin, SessionRecentsMixin, CheckSchoolContextMixin, getSchool
+from core.views import DeletionFormMixin, SessionRecentsMixin
+from schools.views import getSchool, CheckSchoolContextMixin
 from ..models import Employee
 from finance.models import EmployeeAccount
 
