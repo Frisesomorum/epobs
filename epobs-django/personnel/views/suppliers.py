@@ -8,12 +8,15 @@ from schools.views import getSchool, CheckSchoolContextMixin
 from ..models import Supplier
 from finance.models import SupplierAccount
 
+
 class list(PermissionRequiredMixin, ListView):
     permission_required = 'personnel.view_supplier'
     model = Supplier
     template_name = 'personnel/suppliers/list.html'
+
     def get_queryset(self):
         return Supplier.objects.filter(school=getSchool(self.request.session))
+
 
 class add(PermissionRequiredMixin, SessionRecentsMixin, CreateView):
     permission_required = 'personnel.add_supplier'
@@ -28,10 +31,13 @@ class add(PermissionRequiredMixin, SessionRecentsMixin, CreateView):
         supplier.save()
         self.add_object_to_session(supplier.pk)
         account = SupplierAccount.objects.create(supplier=supplier)
-        return HttpResponseRedirect(self.request.path_info)  # Return the user to this page with a fresh form
+        # Return the user to this page with a fresh form
+        return HttpResponseRedirect(self.request.path_info)
 
 
-class edit(PermissionRequiredMixin, CheckSchoolContextMixin, DeletionFormMixin, UpdateView):
+class edit(
+        PermissionRequiredMixin, CheckSchoolContextMixin,
+        DeletionFormMixin, UpdateView):
     permission_required = 'personnel.change_supplier'
     model = Supplier
     fields = ('name', 'date_hired', 'date_terminated')

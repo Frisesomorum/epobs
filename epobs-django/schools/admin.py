@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import School
 
+
 class SchoolAdmin(admin.ModelAdmin):
     add_fieldsets = (
         (None, {
@@ -12,5 +13,6 @@ class SchoolAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('name', 'location')}),
     )
+
 
 admin.site.register(School, SchoolAdmin)

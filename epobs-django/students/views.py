@@ -10,6 +10,7 @@ from .models import Student
 from .resources import StudentResource
 from finance.models import StudentAccount
 
+
 class add(PermissionRequiredMixin, SessionRecentsMixin, CreateView):
     permission_required = 'students.add_student'
     model = Student
@@ -22,11 +23,15 @@ class add(PermissionRequiredMixin, SessionRecentsMixin, CreateView):
         student.school = getSchool(self.request.session)
         student.save()
         self.add_object_to_session(student.pk)
-        account = StudentAccount.objects.create(student = student)  # Create the linked payment account
-        return HttpResponseRedirect(self.request.path_info)  # Return the user to this page with a fresh form
+        # Create the linked payment account
+        account = StudentAccount.objects.create(student=student)
+        # Return the user to this page with a fresh form
+        return HttpResponseRedirect(self.request.path_info)
 
 
-class edit(PermissionRequiredMixin, CheckSchoolContextMixin, DeletionFormMixin, UpdateView):
+class edit(
+        PermissionRequiredMixin, CheckSchoolContextMixin,
+        DeletionFormMixin, UpdateView):
     permission_required = 'students.change_student'
     model = Student
     fields = ('first_name', 'last_name', 'date_of_birth', 'email')
@@ -47,19 +52,23 @@ class list(PermissionRequiredMixin, ListView):
             student_resource = StudentResource()
             dataset = student_resource.export()
             response = HttpResponse(dataset.csv, content_type='text/csv')
-            response['Content-Disposition'] = 'attachment; filename="students.csv"'
+            response['Content-Disposition'] = (
+                'attachment; filename="students.csv"')
             return response
         elif 'import' in request.POST:
-            #if 'import_students' not in request.FILES.keys():
-            #if not form.is_valid():
-            #    return HttpResponse("No file uploaded. Fix it, please.", content_type="text/plain") # TODO: nicer error handling
+            # TODO: nicer error handling
             student_resource = StudentResource()
             dataset = Dataset()
             new_students = request.FILES['import_students']
-            imported_data = dataset.load(new_students.read().decode('utf-8'),format='csv') # TODO: shouldn't need to hardcode 'utf-8' or 'csv' here. Is the tablib detect_format code working correctly?
-            result = student_resource.import_data(dataset, dry_run=True)  # Test the data import
+            # TODO: shouldn't need to hardcode 'utf-8' or 'csv' here.
+            # Is the tablib detect_format code working correctly?
+            imported_data = dataset.load(
+                new_students.read().decode('utf-8'), format='csv')
+            # Test the data import
+            result = student_resource.import_data(dataset, dry_run=True)
             if not result.has_errors():
-                student_resource.import_data(dataset, dry_run=False)  # Actually import now
+                # Actually import now
+                student_resource.import_data(dataset, dry_run=False)
             return redirect('list_students')
         else:
             return super().post(request, **kwargs)

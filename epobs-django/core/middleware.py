@@ -3,9 +3,10 @@ from django.http import HttpResponseRedirect
 from django.conf import settings
 from re import compile
 
+
 class LoginRequiredMiddleware:
     login_exempt_urls = [compile(settings.LOGIN_URL.lstrip('/'))]
-    school_context_exempt_urls =[compile('logout/'), compile('selectschool/')]
+    school_context_exempt_urls = [compile('logout/'), compile('selectschool/')]
 
     def __init__(self, get_response):
         self.get_response = get_response
