@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 
 
-def IndexView(request):
+def index_view(request):
     return render(request, 'index.html')
 
 
@@ -35,14 +35,11 @@ class SessionRecentsMixin:
     def add_object_to_session(self, pk):
         if self.session_recents_key not in self.request.session:
             self.request.session[self.session_recents_key] = []
-        self.request.session[self.session_recents_key] = (
-            [pk] + self.request.session[self.session_recents_key]
-            )
+        self.request.session[self.session_recents_key] = [pk] + self.request.session[self.session_recents_key]
 
     @property
     def session_recents_key(self):
-        return ('recent_school' + self.request.session['school']
-                + '_' + self.model.__name__.lower() + '_list')
+        return 'recent_school' + self.request.session['school'] + '_' + self.model.__name__.lower() + '_list'
 
     @property
     def context_recents_key(self):

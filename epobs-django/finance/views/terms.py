@@ -1,27 +1,24 @@
-from django import forms
 from django.forms import inlineformset_factory
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http.response import HttpResponseRedirect
 from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView, UpdateView, FormView
+from django.views.generic.edit import CreateView, UpdateView
 from core.views import DeletionFormMixin
-from schools.views import getSchool, CheckSchoolContextMixin
-from ..models import (
-    Term, ExpenseBudgetItem, RevenueBudgetItem, ExpenseLedgerAccount,
-    RevenueLedgerAccount)
+from schools.views import get_school, CheckSchoolContextMixin
+from ..models import Term, ExpenseBudgetItem, RevenueBudgetItem, ExpenseLedgerAccount, RevenueLedgerAccount
 
 
-class list(PermissionRequiredMixin, ListView):
+class List(PermissionRequiredMixin, ListView):
     permission_required = 'finance.view_term'
     model = Term
     template_name = 'finance/terms/list.html'
 
     def get_queryset(self):
-        return Term.objects.filter(school=getSchool(self.request.session))
+        return Term.objects.filter(school=get_school(self.request.session))
 
 
-class create(PermissionRequiredMixin, CreateView):
+class Create(PermissionRequiredMixin, CreateView):
     permission_required = 'finance.add_term'
     model = Term
     fields = ('name', 'start', 'end')
@@ -30,12 +27,12 @@ class create(PermissionRequiredMixin, CreateView):
 
     def form_valid(self, form):
         term = form.save(commit=False)
-        term.school = getSchool(self.request.session)
+        term.school = get_school(self.request.session)
         term.save()
-        return HttpResponseRedirect(self.get_success_url())
+        return HttpResponseRedirect(self.success_url)
 
 
-class edit(
+class Edit(
         PermissionRequiredMixin, CheckSchoolContextMixin,
         DeletionFormMixin, UpdateView):
     permission_required = 'finance.change_term'
@@ -53,8 +50,9 @@ RevenueBudgetFormSet = inlineformset_factory(
     extra=0, can_delete=False)
 
 
-class editBudget(PermissionRequiredMixin, UpdateView):
-    permission_required = 'finance.change_budgetitem'
+class EditBudget(PermissionRequiredMixin, UpdateView):
+    permission_required = (
+        'finance.change_expensebudgetitem', 'finance.change_revenuebudgetitem')
     model = Term
     template_name = 'finance/terms/budget.html'
     success_url = '/finance/terms/'

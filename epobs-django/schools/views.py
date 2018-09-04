@@ -1,8 +1,7 @@
 from django import forms
 from django.core.exceptions import PermissionDenied, SuspiciousOperation
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.mixins import (
-    PermissionRequiredMixin, UserPassesTestMixin)
+from django.shortcuts import redirect, get_object_or_404
+from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMixin
 from django.views.generic import FormView
 from django.views.generic.edit import UpdateView
 from .models import School
@@ -54,15 +53,14 @@ class SelectSchool(FormView):
         # set this as an admin session
         if len(schools) == 0:
             if context['is_admin']:
-                setAdminMode(self.request.session)
+                set_admin_mode(self.request.session)
                 return redirect('/admin/')
             else:
-                raise PermissionDenied(
-                    "You do not have membership in any schools.")
+                raise PermissionDenied("You do not have membership in any schools.")
         # If user is not admin and belongs to exactly one school,
         # set that school
         if len(schools) == 1 and not context['is_admin']:
-            setSchool(self.request.session, schools.pop())
+            set_school(self.request.session, schools.pop())
             return redirect(self.get_success_url())
         # Else, show the selection form
         return super().render_to_response(context, **kwargs)
@@ -73,40 +71,37 @@ class SelectSchool(FormView):
         selection = form.cleaned_data['school']
         if selection == 'admin':
             if user.is_staff:
-                setAdminMode(self.request.session)
+                set_admin_mode(self.request.session)
                 return redirect('/admin/')
             else:
                 raise PermissionDenied("You are not an admin of this site.")
-        user_schools = list(user.schools.values_list('pk', flat=True))
         if user.is_school_member(selection):
-            setSchool(self.request.session, selection)
+            set_school(self.request.session, selection)
             return redirect(self.get_success_url())
-        raise OperationalError("You do not have membership in this school.")
+        raise SuspiciousOperation("You do not have membership in this school.")
 
 
-def setAdminMode(session):
+def set_admin_mode(session):
     session['school'] = 'admin'
     session['school_name'] = "(Administrator Mode)"
     session['is_admin'] = True
 
 
-def setSchool(session, school_pk):
+def set_school(session, school_pk):
     session['school'] = school_pk
     session['school_name'] = str(School.objects.get(pk=school_pk))
     session['is_admin'] = False
 
 
-def isAdminMode(session):
+def is_admin_mode(session):
     if 'is_admin' not in session.keys():
-        raise SuspiciousOperation(
-            "School context hasn't been set for this session.")
+        raise SuspiciousOperation("School context hasn't been set for this session.")
     return session['is_admin']
 
 
-def getSchool(session):
+def get_school(session):
     if 'school' not in session.keys():
-        raise SuspiciousOperation(
-            "School context hasn't been set for this session.")
+        raise SuspiciousOperation("School context hasn't been set for this session.")
     school_pk = session['school']
     if school_pk == 'admin':
         return None
@@ -116,15 +111,13 @@ def getSchool(session):
 
 class CheckSchoolContextMixin(UserPassesTestMixin):
     def test_func(self):
-        return (getSchool(self.request.session) == self.get_object().school)
+        return (get_school(self.request.session) == self.get_object().school)
 
 
 def get_school_object_or_404(request, klass, **kwargs):
     object = get_object_or_404(klass, **kwargs)
-    if getSchool(request.session) != object.school:
-        raise SuspiciousOperation(
-            "This " + type(object)
-            + " belongs to a school to which you are not logged in to.")
+    if get_school(request.session) != object.school:
+        raise SuspiciousOperation("This " + type(object) + " belongs to a school to which you are not logged in to.")
     return object
 
 
@@ -136,7 +129,6 @@ class EditSchool(PermissionRequiredMixin, UpdateView):
     success_url = '/'
 
     def get_object(self):
-        if isAdminMode(self.request.session):
-            raise SuspiciousOperation(
-                "You are in administrator mode and cannot edit school info.")
-        return getSchool(self.request.session)
+        if is_admin_mode(self.request.session):
+            raise SuspiciousOperation("You are in administrator mode and cannot edit school info.")
+        return get_school(self.request.session)

@@ -10,9 +10,7 @@ class User(AbstractUser):
         return self.last_name + ", " + self.first_name
 
     def is_school_member(self, school_pk):
-        if int(school_pk) in list(self.schools.values_list('pk', flat=True)):
-            return True
-        return False
+        return (int(school_pk) in list(self.schools.values_list('pk', flat=True)))
 
 
 class Descriptor(models.Model):

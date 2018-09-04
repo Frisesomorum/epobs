@@ -1,24 +1,23 @@
-from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView
 from core.views import DeletionFormMixin, SessionRecentsMixin
-from schools.views import getSchool, CheckSchoolContextMixin
+from schools.views import get_school, CheckSchoolContextMixin
 from ..models import Employee
 from finance.models import EmployeeAccount
 
 
-class list(PermissionRequiredMixin, ListView):
+class List(PermissionRequiredMixin, ListView):
     permission_required = 'personnel.view_employee'
     model = Employee
     template_name = 'personnel/employees/list.html'
 
     def get_queryset(self):
-        return Employee.objects.filter(school=getSchool(self.request.session))
+        return Employee.objects.filter(school=get_school(self.request.session))
 
 
-class add(PermissionRequiredMixin, SessionRecentsMixin, CreateView):
+class Add(PermissionRequiredMixin, SessionRecentsMixin, CreateView):
     permission_required = 'personnel.add_employee'
     model = Employee
     fields = ('first_name', 'last_name', 'date_of_birth', 'email',
@@ -28,15 +27,15 @@ class add(PermissionRequiredMixin, SessionRecentsMixin, CreateView):
 
     def form_valid(self, form):
         employee = form.save(commit=False)
-        employee.school = getSchool(self.request.session)
+        employee.school = get_school(self.request.session)
         employee.save()
         self.add_object_to_session(employee.pk)
-        account = EmployeeAccount.objects.create(employee=employee)
+        EmployeeAccount.objects.create(employee=employee)
         # Return the user to this page with a fresh form
         return HttpResponseRedirect(self.request.path_info)
 
 
-class edit(
+class Edit(
         PermissionRequiredMixin, CheckSchoolContextMixin,
         DeletionFormMixin, UpdateView):
     permission_required = 'personnel.change_employee'

@@ -1,17 +1,17 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from tablib import Dataset
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView
 from core.views import DeletionFormMixin, SessionRecentsMixin
-from schools.views import getSchool, CheckSchoolContextMixin
+from schools.views import get_school, CheckSchoolContextMixin
 from .models import Student
 from .resources import StudentResource
 from finance.models import StudentAccount
 
 
-class add(PermissionRequiredMixin, SessionRecentsMixin, CreateView):
+class Add(PermissionRequiredMixin, SessionRecentsMixin, CreateView):
     permission_required = 'students.add_student'
     model = Student
     fields = ('first_name', 'last_name', 'date_of_birth', 'email')
@@ -20,16 +20,16 @@ class add(PermissionRequiredMixin, SessionRecentsMixin, CreateView):
 
     def form_valid(self, form):
         student = form.save(commit=False)
-        student.school = getSchool(self.request.session)
+        student.school = get_school(self.request.session)
         student.save()
         self.add_object_to_session(student.pk)
         # Create the linked payment account
-        account = StudentAccount.objects.create(student=student)
+        StudentAccount.objects.create(student=student)
         # Return the user to this page with a fresh form
         return HttpResponseRedirect(self.request.path_info)
 
 
-class edit(
+class Edit(
         PermissionRequiredMixin, CheckSchoolContextMixin,
         DeletionFormMixin, UpdateView):
     permission_required = 'students.change_student'
@@ -39,21 +39,20 @@ class edit(
     success_url = '/students/'
 
 
-class list(PermissionRequiredMixin, ListView):
+class List(PermissionRequiredMixin, ListView):
     permission_required = 'students.view_student'
     model = Student
     template_name = 'student/list.html'
 
     def get_queryset(self):
-        return Student.objects.filter(school=getSchool(self.request.session))
+        return Student.objects.filter(school=get_school(self.request.session))
 
     def post(self, request, **kwargs):
         if 'export' in request.POST:
             student_resource = StudentResource()
             dataset = student_resource.export()
             response = HttpResponse(dataset.csv, content_type='text/csv')
-            response['Content-Disposition'] = (
-                'attachment; filename="students.csv"')
+            response['Content-Disposition'] = 'attachment; filename="students.csv"'
             return response
         elif 'import' in request.POST:
             # TODO: nicer error handling
@@ -62,8 +61,7 @@ class list(PermissionRequiredMixin, ListView):
             new_students = request.FILES['import_students']
             # TODO: shouldn't need to hardcode 'utf-8' or 'csv' here.
             # Is the tablib detect_format code working correctly?
-            imported_data = dataset.load(
-                new_students.read().decode('utf-8'), format='csv')
+            dataset.load(new_students.read().decode('utf-8'), format='csv')
             # Test the data import
             result = student_resource.import_data(dataset, dry_run=True)
             if not result.has_errors():

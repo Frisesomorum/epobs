@@ -1,6 +1,5 @@
 import datetime
 from django.db import models, OperationalError
-from django.core.exceptions import PermissionDenied
 import core.models as coreModels
 from schools.models import School
 from students.models import Student
@@ -19,10 +18,10 @@ class Category(coreModels.Descriptor):
     class Meta:
         abstract = True
 
-    def totalForTerm(self, term):
+    def total_for_term(self, term):
         return NotImplemented
 
-    def totalYTD(self, year):
+    def total_YTD(self, year):
         return NotImplemented
 
 
@@ -63,16 +62,16 @@ class Term(models.Model):
             return self.name
         return str(self.start) + " - " + str(self.end)
 
-    def revenueBudgets(self):
+    def revenue_budgets(self):
         return NotImplemented
 
-    def expenseBudgets(self):
+    def expense_budgets(self):
         return NotImplemented
 
-    def revenuesCollected(self):
+    def revenues_collected(self):
         return NotImplemented
 
-    def expensesPaid(self):
+    def expenses_paid(self):
         return NotImplemented
 
 
@@ -104,10 +103,10 @@ class Payee(models.Model):
     class Meta:
         abstract = True
 
-    def balanceDue(self):
+    def balance_due(self):
         return NotImplemented
 
-    def amountPaid(self):
+    def amount_paid(self):
         return NotImplemented
 
 
@@ -132,10 +131,10 @@ class StudentAccount(models.Model):
         return str(self.student)
 
     @property
-    def balanceDue(self):
+    def balance_due(self):
         return NotImplemented
 
-    def nextPayment(self):
+    def next_payment(self):
         return NotImplemented
 
 
@@ -157,16 +156,19 @@ class Transaction(models.Model):
         return "payment of {0} on {1}".format(self.amount, self.created.date())
 
 
+APPROVAL_STATUS_DRAFT = 'D'
+APPROVAL_STATUS_SUBMITTED = 'S'
+APPROVAL_STATUS_APPROVED = 'A'
 APPROVAL_STATUS_CHOICES = (
-    ('D', 'Draft'),
-    ('S', 'Submitted'),
-    ('A', 'Approved')
+    (APPROVAL_STATUS_DRAFT, 'Draft'),
+    (APPROVAL_STATUS_SUBMITTED, 'Submitted'),
+    (APPROVAL_STATUS_APPROVED, 'Approved')
 )
 
 
 class RequiresApproval(models.Model):
     approval_status = models.CharField(
-        max_length=1, choices=APPROVAL_STATUS_CHOICES, default='D')
+        max_length=1, choices=APPROVAL_STATUS_CHOICES, default=APPROVAL_STATUS_DRAFT)
     date_submitted = models.DateField(blank=True, null=True)
     submitted_by = models.ForeignKey(
         coreModels.User, on_delete=models.PROTECT, blank=True, null=True,
@@ -179,36 +181,28 @@ class RequiresApproval(models.Model):
     class Meta:
         abstract = True
 
-    def submitForApproval(self, user):
-        if self.approval_status != 'D':
-            raise OperationalError(
-                "This transaction is not in 'draft' status"
-                + " and cannot be submitted for approval.")
-        self.approval_status = 'S'
+    def submit_for_approval(self, user):
+        if self.approval_status != APPROVAL_STATUS_DRAFT:
+            raise OperationalError("This transaction is not in 'draft' status and cannot be submitted for approval.")
+        self.approval_status = APPROVAL_STATUS_SUBMITTED
         self.submitted_by = user
         self.date_submitted = datetime.date.today()
         self.save()
 
-    def unsubmitForApproval(self):
-        if self.approval_status != 'S':
-            raise OperationalError(
-                "This transaction is not in 'submitted' status"
-                + " and cannot be reverted to draft.")
-        self.approval_status = 'D'
+    def unsubmit_for_approval(self):
+        if self.approval_status != APPROVAL_STATUS_SUBMITTED:
+            raise OperationalError("This transaction is not in 'submitted' status and cannot be reverted to draft.")
+        self.approval_status = APPROVAL_STATUS_DRAFT
         self.submitted_by = None
         self.date_submitted = None
         self.save()
 
     def approve(self, user):
-        if self.approval_status != 'S':
-            raise OperationalError(
-                "This transaction is not in 'submitted' status"
-                + " and cannot be approved.")
+        if self.approval_status != APPROVAL_STATUS_SUBMITTED:
+            raise OperationalError("This transaction is not in 'submitted' status and cannot be approved.")
         if self.submitted_by == user:
-            raise OperationalError(
-                "The same user cannot both submit and approve"
-                + " the same transaction.")
-        self.approval_status = 'A'
+            raise OperationalError("The same user cannot both submit and approve the same transaction.")
+        self.approval_status = APPROVAL_STATUS_APPROVED
         self.approved_by = user
         self.date_approved = datetime.date.today()
         self.save()
@@ -232,17 +226,12 @@ class AdmitsCorrections:
 
     def verify_can_be_corrected(self):
         if self.has_correction:
-            raise OperationalError(
-                "This transaction already has a corrective journal entry"
-                + " attached to it.")
+            raise OperationalError("This transaction already has a corrective journal entry attached to it.")
         if self.is_reversal:
+            raise OperationalError("This transaction reverses an erroneous transaction and cannot be revised.")
+        if isinstance(self, RequiresApproval) and self.approval_status != APPROVAL_STATUS_APPROVED:
             raise OperationalError(
-                "This transaction reverses an erroneous transaction"
-                + " and cannot be revised.")
-        if isinstance(self, RequiresApproval) and self.approval_status != 'A':
-            raise OperationalError(
-                "This transaction is not yet approved."
-                + " If you need to make changes, revert the status to draft.")
+                "This transaction is not yet approved. If you need to make changes, revert the status to draft.")
 
 
 class ExpenseInfo(Transaction):
