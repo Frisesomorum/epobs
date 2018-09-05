@@ -1,9 +1,10 @@
 from django.shortcuts import redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse_lazy
+from django.http import HttpResponse
 from tablib import Dataset
 from core.views import DeletionFormMixin, SessionRecentsMixin
 from schools.views import (
-    SchooledListView, SchooledCreateView, SchooledUpdateView, get_school, )
+    SchooledListView, SchooledCreateView, SchooledUpdateView, )
 from .models import Student
 from .resources import StudentResource
 
@@ -11,7 +12,7 @@ from .resources import StudentResource
 class List(SchooledListView):
     permission_required = 'students.view_student'
     model = Student
-    template_name = 'student/list.html'
+    template_name = 'students/list.html'
 
     def post(self, request, **kwargs):
         if 'export' in request.POST:
@@ -33,30 +34,27 @@ class List(SchooledListView):
             if not result.has_errors():
                 # Actually import now
                 student_resource.import_data(dataset, dry_run=False)
-            return redirect('list_students')
+            return redirect('student-list')
         else:
             return super().post(request, **kwargs)
 
 
-class Add(SessionRecentsMixin, SchooledCreateView):
+class Create(SessionRecentsMixin, SchooledCreateView):
     permission_required = 'students.add_student'
     model = Student
     fields = ('first_name', 'last_name', 'date_of_birth', 'email')
-    template_name = 'student/add.html'
-    success_url = '/students/'
+    template_name = 'students/create.html'
+    success_url = reverse_lazy('student-create')
 
     def form_valid(self, form):
-        student = form.save(commit=False)
-        student.school = get_school(self.request.session)
-        student.save()
-        self.add_object_to_session(student.pk)
-        # Return the user to this page with a fresh form
-        return HttpResponseRedirect(self.request.path_info)
+        http_response = super().form_valid(form)
+        self.add_object_to_session(self.object.pk)
+        return http_response
 
 
 class Edit(DeletionFormMixin, SchooledUpdateView):
     permission_required = 'students.change_student'
     model = Student
     fields = ('first_name', 'last_name', 'date_of_birth', 'email')
-    template_name = 'student/edit.html'
-    success_url = '/students/'
+    template_name = 'students/edit.html'
+    success_url = reverse_lazy('student-list')

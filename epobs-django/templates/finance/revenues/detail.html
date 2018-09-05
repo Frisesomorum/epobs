@@ -17,21 +17,21 @@
     {% else %}
       This transaction is in the process of being corrected by a
     {% endif %}
-    <a href="{% url 'view_revenue_cje' revenue.corrected_by_cje.pk %}">journal entry</a>.
+    <a href="{% url 'revenue-cje-detail' revenue.corrected_by_cje.pk %}">journal entry</a>.
   </div>
   {% endif %}
 
   {% if revenue.reversal_for_cje %}
   <div class="alert alert-light">
     This transaction reverses an error in
-    <a href="{% url 'view_revenue' revenue.reversal_for_cje.correction_to.pk %}">{{ revenue.reversal_for_cje.correction_to }}</a>.
+    <a href="{% url 'revenue-detail' revenue.reversal_for_cje.correction_to.pk %}">{{ revenue.reversal_for_cje.correction_to }}</a>.
   </div>
   {% endif %}
 
   {% if revenue.restatement_for_cje %}
   <div class="alert alert-light">
     This transaction replaces
-    <a href="{% url 'view_revenue' revenue.restatement_for_cje.correction_to.pk %}">{{ revenue.restatement_for_cje.correction_to }}</a>.
+    <a href="{% url 'revenue-detail' revenue.restatement_for_cje.correction_to.pk %}">{{ revenue.restatement_for_cje.correction_to }}</a>.
   </div>
   {% endif %}
 
@@ -44,6 +44,6 @@
   </table>
 
   {% if perms.finance.add_revenuecorrectivejournalentry and not revenue.corrected_by_cje and not revenue.reversal_for_cje %}
-    <a href="{% url 'add_revenue_cje' revenue.pk %}"><span class="btn btn-secondary">Revise using journal entry</span></a>
+    <a href="{% url 'revenue-cje-create' revenue.pk %}"><span class="btn btn-secondary">Revise using journal entry</span></a>
   {% endif %}
 {% endblock %}

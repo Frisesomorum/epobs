@@ -13,12 +13,12 @@
 {% block content %}
 
   <div class="alert alert-light">
-    This journal entry is a correction to <a href="{% url 'view_revenue' revenuecje.correction_to.pk %}">{{ revenuecje.correction_to }}</a>.
+    This journal entry is a correction to <a href="{% url 'revenue-detail' revenuecje.correction_to.pk %}">{{ revenuecje.correction_to }}</a>.
 
     {% if revenuecje.approval_status == 'A' %}
       It was resolved in revenues
-      {% if revenuecje.reversed_in %}<a href="{% url 'view_revenue' revenuecje.reversed_in.pk %}">{{ revenuecje.reversed_in }}</a> and{% endif %}
-      <a href="{% url 'view_revenue' revenuecje.restated_in.pk %}">{{ revenuecje.restated_in }}</a>.
+      {% if revenuecje.reversed_in %}<a href="{% url 'revenue-detail' revenuecje.reversed_in.pk %}">{{ revenuecje.reversed_in }}</a> and{% endif %}
+      <a href="{% url 'revenue-detail' revenuecje.restated_in.pk %}">{{ revenuecje.restated_in }}</a>.
     {% endif %}
   </div>
 
@@ -50,14 +50,14 @@
   </table>
 
   {% if revenuecje.approval_status == 'S' and perms.finance.approve_revenuecorrectivejournalentry and user != revenuecje.submitted_by %}
-    <a href="{% url 'approve_revenue_cje' revenuecje.pk %}"><span class="btn btn-secondary">Approve</span></a>
+    <a href="{% url 'revenue-cje-approve' revenuecje.pk %}"><span class="btn btn-secondary">Approve</span></a>
   {% endif %}
   {% if revenuecje.approval_status == 'S' and perms.finance.change_revenuecorrectivejournalentry %}
-    <a href="{% url 'unsubmit_revenue_cje' revenuecje.pk %}"><span class="btn btn-secondary">Revert to draft</span></a>
+    <a href="{% url 'revenue-cje-unsubmit' revenuecje.pk %}"><span class="btn btn-secondary">Revert to draft</span></a>
   {% endif %}
   {% if revenuecje.approval_status == 'D' and perms.finance.change_revenuecorrectivejournalentry %}
-    <a href="{% url 'submit_revenue_cje' revenuecje.pk %}"><span class="btn btn-secondary">Submit for Approval</span></a>
-    <a href="{% url 'edit_revenue_cje' revenuecje.pk %}"><span class="btn btn-secondary">Edit</span></a>
+    <a href="{% url 'revenue-cje-submit' revenuecje.pk %}"><span class="btn btn-secondary">Submit for Approval</span></a>
+    <a href="{% url 'revenue-cje-edit' revenuecje.pk %}"><span class="btn btn-secondary">Edit</span></a>
   {% endif %}
 
 {% endblock %}

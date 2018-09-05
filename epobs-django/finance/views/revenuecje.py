@@ -1,6 +1,6 @@
 from django import forms
 from django.shortcuts import redirect
-from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
 from django.contrib.auth.decorators import permission_required
 from core.views import DeletionFormMixin
 from schools.views import (
@@ -27,12 +27,12 @@ class Detail(SchooledDetailView):
     context_object_name = 'revenuecje'
 
 
-class Add(SchooledCreateView):
+class Create(SchooledCreateView):
     permission_required = 'finance.add_revenuecorrectivejournalentry'
     model = RevenueCorrectiveJournalEntry
     form_class = RevenueCjeForm
-    template_name = 'finance/revenues/cje/add.html'
-    success_url = '/finance/revenues/'
+    template_name = 'finance/revenues/cje/create.html'
+    success_url = reverse_lazy('revenue-list')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -57,12 +57,9 @@ class Add(SchooledCreateView):
         return initial
 
     def form_valid(self, form):
-        revenuecje = form.save(commit=False)
-        revenuecje.created_by = self.request.user
-        revenuecje.school = get_school(self.request.session)
-        revenuecje.correction_to = self.get_context_data()['correcting_revenue']
-        revenuecje.save()
-        return HttpResponseRedirect(self.success_url)
+        form.instance.correction_to = self.get_context_data()['correcting_revenue']
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
 
 
 class Edit(DeletionFormMixin, SchooledUpdateView):
@@ -70,7 +67,7 @@ class Edit(DeletionFormMixin, SchooledUpdateView):
     model = RevenueCorrectiveJournalEntry
     form_class = RevenueCjeForm
     template_name = 'finance/revenues/cje/edit.html'
-    success_url = '/finance/revenues/'
+    success_url = reverse_lazy('revenue-list')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -83,7 +80,7 @@ def submit_for_approval(request, pk):
     revenuecje = get_school_object_or_404(
         request, RevenueCorrectiveJournalEntry, pk=pk)
     revenuecje.submit_for_approval(request.user)
-    return redirect('list_revenues')
+    return redirect('revenue-list')
 
 
 @permission_required('finance.change_revenuecorrectivejournalentry')
@@ -91,7 +88,7 @@ def unsubmit_for_approval(request, pk):
     revenuecje = get_school_object_or_404(
         request, RevenueCorrectiveJournalEntry, pk=pk)
     revenuecje.unsubmit_for_approval()
-    return redirect('list_revenues')
+    return redirect('revenue-list')
 
 
 @permission_required('finance.approve_revenuecorrectivejournalentry')
@@ -99,4 +96,4 @@ def approve(request, pk):
     revenuecje = get_school_object_or_404(
         request, RevenueCorrectiveJournalEntry, pk=pk)
     revenuecje.approve_and_finalize(request.user)
-    return redirect('list_revenues')
+    return redirect('revenue-list')

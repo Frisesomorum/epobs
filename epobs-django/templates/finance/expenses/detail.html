@@ -17,21 +17,21 @@
     {% else %}
       This transaction is in the process of being corrected by a
     {% endif %}
-    <a href="{% url 'view_expense_cje' expense.corrected_by_cje.pk %}">journal entry</a>.
+    <a href="{% url 'expense-cje-detail' expense.corrected_by_cje.pk %}">journal entry</a>.
   </div>
   {% endif %}
 
   {% if expense.reversal_for_cje %}
   <div class="alert alert-light">
     This transaction reverses an error in
-    <a href="{% url 'view_expense' expense.reversal_for_cje.correction_to.pk %}">{{ expense.reversal_for_cje.correction_to }}</a>.
+    <a href="{% url 'expense-detail' expense.reversal_for_cje.correction_to.pk %}">{{ expense.reversal_for_cje.correction_to }}</a>.
   </div>
   {% endif %}
 
   {% if expense.restatement_for_cje %}
   <div class="alert alert-light">
     This transaction replaces
-    <a href="{% url 'view_expense' expense.restatement_for_cje.correction_to.pk %}">{{ expense.restatement_for_cje.correction_to }}</a>.
+    <a href="{% url 'expense-detail' expense.restatement_for_cje.correction_to.pk %}">{{ expense.restatement_for_cje.correction_to }}</a>.
   </div>
   {% endif %}
 
@@ -50,16 +50,16 @@
   </table>
 
   {% if expense.approval_status == 'S' and perms.finance.approve_expensetransaction and user != expense.submitted_by %}
-    <a href="{% url 'approve_expense' expense.pk %}"><span class="btn btn-secondary">Approve</span></a>
+    <a href="{% url 'expense-approve' expense.pk %}"><span class="btn btn-secondary">Approve</span></a>
   {% endif %}
   {% if expense.approval_status == 'S' and perms.finance.change_expensetransaction %}
-    <a href="{% url 'unsubmit_expense' expense.pk %}"><span class="btn btn-secondary">Revert to draft</span></a>
+    <a href="{% url 'expense-unsubmit' expense.pk %}"><span class="btn btn-secondary">Revert to draft</span></a>
   {% endif %}
   {% if expense.approval_status == 'D' and perms.finance.change_expensetransaction %}
-    <a href="{% url 'submit_expense' expense.pk %}"><span class="btn btn-secondary">Submit for Approval</span></a>
-    <a href="{% url 'edit_expense' expense.pk %}"><span class="btn btn-secondary">Edit</span></a>
+    <a href="{% url 'expense-submit' expense.pk %}"><span class="btn btn-secondary">Submit for Approval</span></a>
+    <a href="{% url 'expense-edit' expense.pk %}"><span class="btn btn-secondary">Edit</span></a>
   {% endif %}
   {% if expense.approval_status == 'A' and perms.finance.add_expensecorrectivejournalentry and not expense.corrected_by_cje and not expense.reversal_for_cje %}
-    <a href="{% url 'add_expense_cje' expense.pk %}"><span class="btn btn-secondary">Revise using journal entry</span></a>
+    <a href="{% url 'expense-cje-create' expense.pk %}"><span class="btn btn-secondary">Revise using journal entry</span></a>
   {% endif %}
 {% endblock %}

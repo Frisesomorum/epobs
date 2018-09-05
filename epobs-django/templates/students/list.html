@@ -21,7 +21,7 @@
       {% endif %}
     </form>
     {% if perms.students.add_student %}
-    <a href="{% url 'add_students' %}" class="btn btn-secondary"><i class="fas fa-plus-square"></i> Add Students...</a>
+    <a href="{% url 'student-create' %}" class="btn btn-secondary"><i class="fas fa-plus-square"></i> Add Students...</a>
     {% endif %}
   </div>
 
@@ -44,7 +44,7 @@
           <td>{{ student.date_of_birth }}</td>
           <td>{{ student.email }}</td>
           <td>{{ student.studentaccount.balance_due }}</td>
-          {% if perms.students.change_student %}<td><a href="{% url 'edit_students' student.pk %}"><i class="fas fa-pencil-alt"></i></a></td>{% endif %}
+          {% if perms.students.change_student %}<td><a href="{% url 'student-edit' student.pk %}"><i class="fas fa-pencil-alt"></i></a></td>{% endif %}
         </tr>
       {% endfor %}
     </tbody>

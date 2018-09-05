@@ -1,6 +1,6 @@
 from django import forms
 from django.shortcuts import redirect
-from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
 from django.contrib.auth.decorators import permission_required
 from core.views import DeletionFormMixin, SessionRecentsMixin
 from schools.views import (
@@ -44,12 +44,12 @@ class ExpenseForm(forms.ModelForm):
         self.fields['supplier'].queryset = self.fields['supplier'].queryset.filter(supplier__school=school)
 
 
-class Add(SessionRecentsMixin, SchooledCreateView):
+class Create(SessionRecentsMixin, SchooledCreateView):
     permission_required = 'finance.add_expensetransaction'
     model = ExpenseTransaction
     form_class = ExpenseForm
-    template_name = 'finance/expenses/add.html'
-    success_url = '/finance/expenses/'
+    template_name = 'finance/expenses/create.html'
+    success_url = reverse_lazy('expense-create')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -57,13 +57,10 @@ class Add(SessionRecentsMixin, SchooledCreateView):
         return kwargs
 
     def form_valid(self, form):
-        transaction = form.save(commit=False)
-        transaction.created_by = self.request.user
-        transaction.school = get_school(self.request.session)
-        transaction.save()
-        self.add_object_to_session(transaction.pk)
-        # Return the user to this page with a fresh form
-        return HttpResponseRedirect(self.request.path_info)
+        form.instance.created_by = self.request.user
+        http_response = super().form_valid(form)
+        self.add_object_to_session(self.object.pk)
+        return http_response
 
 
 class Edit(DeletionFormMixin, SchooledUpdateView):
@@ -71,7 +68,7 @@ class Edit(DeletionFormMixin, SchooledUpdateView):
     model = ExpenseTransaction
     form_class = ExpenseForm
     template_name = 'finance/expenses/edit.html'
-    success_url = '/finance/expenses/'
+    success_url = reverse_lazy('expense-list')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -83,18 +80,18 @@ class Edit(DeletionFormMixin, SchooledUpdateView):
 def submit_for_approval(request, pk):
     expense = get_school_object_or_404(request, ExpenseTransaction, pk=pk)
     expense.submit_for_approval(request.user)
-    return redirect('list_expenses')
+    return redirect('expense-list')
 
 
 @permission_required('finance.change_expensetransaction')
 def unsubmit_for_approval(request, pk):
     expense = get_school_object_or_404(request, ExpenseTransaction, pk=pk)
     expense.unsubmit_for_approval()
-    return redirect('list_expenses')
+    return redirect('expense-list')
 
 
 @permission_required('finance.approve_expensetransaction')
 def approve(request, pk):
     expense = get_school_object_or_404(request, ExpenseTransaction, pk=pk)
     expense.approve(request.user)
-    return redirect('list_expenses')
+    return redirect('expense-list')

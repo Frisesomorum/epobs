@@ -36,7 +36,7 @@
             <td>{{ student.last_name }}</td>
             <td>{{ student.date_of_birth }}</td>
             <td>{{ student.email }}</td>
-            <td><a href="{% url 'edit_students' student.pk %}"><i class="fas fa-pencil-alt"></i></a></td>
+            <td><a href="{% url 'student-edit' student.pk %}"><i class="fas fa-pencil-alt"></i></a></td>
           </tr>
         {% endfor %}
       </tbody>

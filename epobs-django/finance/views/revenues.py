@@ -1,5 +1,5 @@
 from django import forms
-from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
 from core.views import SessionRecentsMixin
 from schools.views import (
     SchooledListView, SchooledDetailView, SchooledCreateView, get_school,)
@@ -38,12 +38,12 @@ class Detail(SchooledDetailView):
     context_object_name = 'revenue'
 
 
-class Add(SessionRecentsMixin, SchooledCreateView):
+class Create(SessionRecentsMixin, SchooledCreateView):
     permission_required = 'finance.add_revenuetransaction'
     model = RevenueTransaction
     form_class = RevenueForm
-    template_name = 'finance/revenues/add.html'
-    success_url = '/finance/revenues/'
+    template_name = 'finance/revenues/create.html'
+    success_url = reverse_lazy('revenue-create')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -51,10 +51,7 @@ class Add(SessionRecentsMixin, SchooledCreateView):
         return kwargs
 
     def form_valid(self, form):
-        transaction = form.save(commit=False)
-        transaction.created_by = self.request.user
-        transaction.school = get_school(self.request.session)
-        transaction.save()
-        self.add_object_to_session(transaction.pk)
-        # Return the user to this page with a fresh form
-        return HttpResponseRedirect(self.request.path_info)
+        form.instance.created_by = self.request.user
+        http_response = super().form_valid(form)
+        self.add_object_to_session(self.object.pk)
+        return http_response

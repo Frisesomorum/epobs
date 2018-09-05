@@ -1,11 +1,12 @@
 from django.forms import inlineformset_factory
 from django.shortcuts import redirect
-from django.http.response import HttpResponseRedirect
+from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic.edit import UpdateView
 from core.views import DeletionFormMixin
 from schools.views import (
-    SchooledListView, SchooledCreateView, SchooledUpdateView, get_school,)
+    SchooledListView, SchooledCreateView, SchooledUpdateView, )
 from ..models import Term, ExpenseBudgetItem, RevenueBudgetItem, ExpenseLedgerAccount, RevenueLedgerAccount
 
 
@@ -20,13 +21,7 @@ class Create(SchooledCreateView):
     model = Term
     fields = ('name', 'start', 'end')
     template_name = 'finance/terms/create.html'
-    success_url = '/finance/terms/'
-
-    def form_valid(self, form):
-        term = form.save(commit=False)
-        term.school = get_school(self.request.session)
-        term.save()
-        return HttpResponseRedirect(self.success_url)
+    success_url = reverse_lazy('term-list')
 
 
 class Edit(DeletionFormMixin, SchooledUpdateView):
@@ -34,7 +29,7 @@ class Edit(DeletionFormMixin, SchooledUpdateView):
     model = Term
     fields = ('name', 'start', 'end')
     template_name = 'finance/terms/edit.html'
-    success_url = '/finance/terms/'
+    success_url = reverse_lazy('term-list')
 
 
 ExpenseBudgetFormSet = inlineformset_factory(
@@ -50,7 +45,7 @@ class EditBudget(PermissionRequiredMixin, UpdateView):
         'finance.change_expensebudgetitem', 'finance.change_revenuebudgetitem')
     model = Term
     template_name = 'finance/terms/budget.html'
-    success_url = '/finance/terms/'
+    success_url = reverse_lazy('term-list')
     fields = '__all__'
 
     def get_context_data(self, **kwargs):

@@ -2,11 +2,11 @@
 
 {% load static %}
 
-{% block title %}EPOBS - Add Employees{% endblock %}
+{% block title %}EPOBS - Add Suppliers{% endblock %}
 
 {% block breadcrumb %}
   <li class="breadcrumb-item">Personnel</li>
-  <li class="breadcrumb-item">Employees</li>
+  <li class="breadcrumb-item">Suppliers</li>
   <li class="breadcrumb-item">Add</li>
 {% endblock %}
 
@@ -18,8 +18,8 @@
     <input type="submit" name="save" value="Save" />
   </form>
 
-  {% if recent_employee_list|length > 0 %}
-    <h3>{{ user }}'s recently added employees</h3>
+  {% if recent_supplier_list|length > 0 %}
+    <h3>{{ user }}'s recently added suppliers</h3>
     <table class="table table-striped table-sm">
       <thead>
         <tr>
@@ -28,10 +28,10 @@
         </tr>
       </thead>
       <tbody>
-        {% for employee in recent_employee_list %}
+        {% for supplier in recent_supplier_list %}
           <tr>
-            <td>{{ employee }}</td>
-            <td><a href="{% url 'edit_employee' employee.pk %}"><i class="fas fa-pencil-alt"></i></a></td>
+            <td>{{ supplier.name }}</td>
+            <td><a href="{% url 'supplier-edit' supplier.pk %}"><i class="fas fa-pencil-alt"></i></a></td>
           </tr>
         {% endfor %}
       </tbody>

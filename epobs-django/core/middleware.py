@@ -5,8 +5,13 @@ from re import compile
 
 
 class LoginRequiredMiddleware:
-    login_exempt_urls = [compile(settings.LOGIN_URL.lstrip('/'))]
-    school_context_exempt_urls = [compile('logout/'), compile('selectschool/')]
+    login_exempt_urls = [
+        compile(reverse(settings.LOGIN_URL).lstrip('/')),
+        ]
+    school_context_exempt_urls = [
+        compile(reverse('logout').lstrip('/')),
+        compile(reverse('school-select').lstrip('/')),
+        ]
 
     def __init__(self, get_response):
         self.get_response = get_response
@@ -20,5 +25,5 @@ class LoginRequiredMiddleware:
         elif 'school' not in request.session.keys():
             path = request.path_info.lstrip('/')
             if not any(m.match(path) for m in self.school_context_exempt_urls):
-                return HttpResponseRedirect(reverse('select_school'))
+                return HttpResponseRedirect(reverse('school-select'))
         return self.get_response(request)

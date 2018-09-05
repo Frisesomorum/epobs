@@ -12,7 +12,7 @@
 {% block content %}
   {% if perms.finance.add_term %}
   <div class="form-group">
-    <a href="{% url 'create_term' %}" class="btn btn-secondary"><i class="fas fa-plus-square"></i> Create New...</a>
+    <a href="{% url 'term-create' %}" class="btn btn-secondary"><i class="fas fa-plus-square"></i> Create New...</a>
   </div>
   {% endif %}
 
@@ -33,8 +33,8 @@
           <td>{{ term.name }}</td>
           <td>{{ term.start }}</td>
           <td>{{ term.end }}</td>
-          <td><a href="{% url 'edit_budget' term.pk %}"><i class="fas fa-file-invoice-dollar"></i></a></td>
-          {% if perms.finance.change_term %}<td><a href="{% url 'edit_term' term.pk %}"><i class="fas fa-pencil-alt"></i></a></td>{% endif %}
+          <td><a href="{% url 'budget-edit' term.pk %}"><i class="fas fa-file-invoice-dollar"></i></a></td>
+          {% if perms.finance.change_term %}<td><a href="{% url 'term-edit' term.pk %}"><i class="fas fa-pencil-alt"></i></a></td>{% endif %}
         </tr>
       {% endfor %}
     </tbody>

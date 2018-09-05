@@ -1,7 +1,7 @@
-from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
 from core.views import DeletionFormMixin, SessionRecentsMixin
 from schools.views import (
-    SchooledListView, SchooledCreateView, SchooledUpdateView, get_school, )
+    SchooledListView, SchooledCreateView, SchooledUpdateView, )
 from ..models import Employee
 
 
@@ -11,21 +11,18 @@ class List(SchooledListView):
     template_name = 'personnel/employees/list.html'
 
 
-class Add(SessionRecentsMixin, SchooledCreateView):
+class Create(SessionRecentsMixin, SchooledCreateView):
     permission_required = 'personnel.add_employee'
     model = Employee
     fields = ('first_name', 'last_name', 'date_of_birth', 'email',
               'date_hired', 'date_terminated')
-    template_name = 'personnel/employees/add.html'
-    success_url = '/personnel/employees/'
+    template_name = 'personnel/employees/create.html'
+    success_url = reverse_lazy('employee-create')
 
     def form_valid(self, form):
-        employee = form.save(commit=False)
-        employee.school = get_school(self.request.session)
-        employee.save()
-        self.add_object_to_session(employee.pk)
-        # Return the user to this page with a fresh form
-        return HttpResponseRedirect(self.request.path_info)
+        http_response = super().form_valid(form)
+        self.add_object_to_session(self.object.pk)
+        return http_response
 
 
 class Edit(DeletionFormMixin, SchooledUpdateView):
@@ -34,4 +31,4 @@ class Edit(DeletionFormMixin, SchooledUpdateView):
     fields = ('first_name', 'last_name', 'date_of_birth', 'email',
               'date_hired', 'date_terminated')
     template_name = 'personnel/employees/edit.html'
-    success_url = '/personnel/employees/'
+    success_url = reverse_lazy('employee-list')

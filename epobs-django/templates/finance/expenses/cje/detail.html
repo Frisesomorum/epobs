@@ -13,12 +13,12 @@
 {% block content %}
 
   <div class="alert alert-light">
-    This journal entry is a correction to <a href="{% url 'view_expense' expensecje.correction_to.pk %}">{{ expensecje.correction_to }}</a>.
+    This journal entry is a correction to <a href="{% url 'expense-detail' expensecje.correction_to.pk %}">{{ expensecje.correction_to }}</a>.
 
     {% if expensecje.approval_status == 'A' %}
       It was resolved in expenses
-      {% if expensecje.reversed_in %}<a href="{% url 'view_expense' expensecje.reversed_in.pk %}">{{ expensecje.reversed_in }}</a> and{% endif %}
-      <a href="{% url 'view_expense' expensecje.restated_in.pk %}">{{ expensecje.restated_in }}</a>.
+      {% if expensecje.reversed_in %}<a href="{% url 'expense-detail' expensecje.reversed_in.pk %}">{{ expensecje.reversed_in }}</a> and{% endif %}
+      <a href="{% url 'expense-detail' expensecje.restated_in.pk %}">{{ expensecje.restated_in }}</a>.
     {% endif %}
   </div>
 
@@ -50,14 +50,14 @@
   </table>
 
   {% if expensecje.approval_status == 'S' and perms.finance.approve_expensecorrectivejournalentry and user != expensecje.submitted_by %}
-    <a href="{% url 'approve_expense_cje' expensecje.pk %}"><span class="btn btn-secondary">Approve</span></a>
+    <a href="{% url 'expense-cje-approve' expensecje.pk %}"><span class="btn btn-secondary">Approve</span></a>
   {% endif %}
   {% if expensecje.approval_status == 'S' and perms.finance.change_expensecorrectivejournalentry %}
-    <a href="{% url 'unsubmit_expense_cje' expensecje.pk %}"><span class="btn btn-secondary">Revert to draft</span></a>
+    <a href="{% url 'expense-cje-unsubmit' expensecje.pk %}"><span class="btn btn-secondary">Revert to draft</span></a>
   {% endif %}
   {% if expensecje.approval_status == 'D' and perms.finance.change_expensecorrectivejournalentry %}
-    <a href="{% url 'submit_expense_cje' expensecje.pk %}"><span class="btn btn-secondary">Submit for Approval</span></a>
-    <a href="{% url 'edit_expense_cje' expensecje.pk %}"><span class="btn btn-secondary">Edit</span></a>
+    <a href="{% url 'expense-cje-submit' expensecje.pk %}"><span class="btn btn-secondary">Submit for Approval</span></a>
+    <a href="{% url 'expense-cje-edit' expensecje.pk %}"><span class="btn btn-secondary">Edit</span></a>
   {% endif %}
 
 {% endblock %}

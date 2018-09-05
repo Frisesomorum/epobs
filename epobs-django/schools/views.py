@@ -1,6 +1,7 @@
 from django import forms
 from django.core.exceptions import PermissionDenied, SuspiciousOperation
 from django.shortcuts import redirect, get_object_or_404
+from django.urls import reverse_lazy
 from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMixin
 from django.views.generic import FormView
 from django.views.generic.list import ListView
@@ -32,8 +33,8 @@ class SelectSchoolForm(forms.Form):
 
 class SelectSchool(FormView):
     form_class = SelectSchoolForm
-    template_name = 'select_school.html'
-    success_url = '/'
+    template_name = 'schools/select.html'
+    success_url = reverse_lazy('index')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -57,7 +58,7 @@ class SelectSchool(FormView):
         if len(schools) == 0:
             if context['is_admin']:
                 set_admin_mode(self.request.session)
-                return redirect('/admin/')
+                return redirect('admin:index')
             else:
                 raise PermissionDenied("You do not have membership in any schools.")
         # If user is not admin and belongs to exactly one school,
@@ -75,7 +76,7 @@ class SelectSchool(FormView):
         if selection == 'admin':
             if user.is_staff:
                 set_admin_mode(self.request.session)
-                return redirect('/admin/')
+                return redirect('admin:index')
             else:
                 raise PermissionDenied("You are not an admin of this site.")
         if user.is_school_member(selection):
@@ -125,7 +126,9 @@ class SchooledListView(PermissionRequiredMixin, ListView):
 
 
 class SchooledCreateView(PermissionRequiredMixin, CreateView):
-    pass
+    def form_valid(self, form):
+        form.instance.school = get_school(self.request.session)
+        return super().form_valid(form)
 
 
 class SchooledDetailView(PermissionRequiredMixin, UserPassesTestMixin, DetailView):
@@ -148,8 +151,8 @@ class EditSchool(PermissionRequiredMixin, UpdateView):
     permission_required = 'schools.change_school'
     model = School
     fields = '__all__'
-    template_name = 'edit_school.html'
-    success_url = '/'
+    template_name = 'schools/edit.html'
+    success_url = reverse_lazy('index')
 
     def get_object(self):
         if is_admin_mode(self.request.session):

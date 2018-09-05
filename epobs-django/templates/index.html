@@ -8,8 +8,8 @@
   <div class="container">
     <h1>Dashboard (mockup)</h1>
     <ul>
-      {% if perms.finance.approve_expensetransaction %}<li>There are N <a href="{% url 'list_expenses' %}">expenses</a> waiting for approval.</li>{% endif %}
-      {% if perms.students.view_student %}<li>There are M <a href="{% url 'list_students' %}">students</a> with outstanding fees.</li>{% endif %}
+      {% if perms.finance.approve_expensetransaction %}<li>There are N <a href="{% url 'expense-list' %}">expenses</a> waiting for approval.</li>{% endif %}
+      {% if perms.students.view_student %}<li>There are M <a href="{% url 'student-list' %}">students</a> with outstanding fees.</li>{% endif %}
       <li><a href="#reports">H%</a> of the current term's budget has been used.</li>
     </ul>
     <h3>What's New</h3>

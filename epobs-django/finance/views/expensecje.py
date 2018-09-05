@@ -1,6 +1,6 @@
 from django import forms
 from django.shortcuts import redirect
-from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
 from django.contrib.auth.decorators import permission_required
 from core.views import DeletionFormMixin
 from schools.views import (
@@ -28,12 +28,12 @@ class Detail(SchooledDetailView):
     context_object_name = 'expensecje'
 
 
-class Add(SchooledCreateView):
+class Create(SchooledCreateView):
     permission_required = 'finance.add_expensecorrectivejournalentry'
     model = ExpenseCorrectiveJournalEntry
     form_class = ExpenseCjeForm
-    template_name = 'finance/expenses/cje/add.html'
-    success_url = '/finance/expenses/'
+    template_name = 'finance/expenses/cje/create.html'
+    success_url = reverse_lazy('expense-list')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -59,12 +59,9 @@ class Add(SchooledCreateView):
         return initial
 
     def form_valid(self, form):
-        expensecje = form.save(commit=False)
-        expensecje.created_by = self.request.user
-        expensecje.school = get_school(self.request.session)
-        expensecje.correction_to = self.get_context_data()['correcting_expense']
-        expensecje.save()
-        return HttpResponseRedirect(self.success_url)
+        form.instance.correction_to = self.get_context_data()['correcting_expense']
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
 
 
 class Edit(DeletionFormMixin, SchooledUpdateView):
@@ -72,7 +69,7 @@ class Edit(DeletionFormMixin, SchooledUpdateView):
     model = ExpenseCorrectiveJournalEntry
     form_class = ExpenseCjeForm
     template_name = 'finance/expenses/cje/edit.html'
-    success_url = '/finance/expenses/'
+    success_url = reverse_lazy('expense-list')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -85,7 +82,7 @@ def submit_for_approval(request, pk):
     expensecje = get_school_object_or_404(
         request, ExpenseCorrectiveJournalEntry, pk=pk)
     expensecje.submit_for_approval(request.user)
-    return redirect('list_expenses')
+    return redirect('expense-list')
 
 
 @permission_required('finance.change_expensecorrectivejournalentry')
@@ -93,7 +90,7 @@ def unsubmit_for_approval(request, pk):
     expensecje = get_school_object_or_404(
         request, ExpenseCorrectiveJournalEntry, pk=pk)
     expensecje.unsubmit_for_approval()
-    return redirect('list_expenses')
+    return redirect('expense-list')
 
 
 @permission_required('finance.approve_expensecorrectivejournalentry')
@@ -101,4 +98,4 @@ def approve(request, pk):
     expensecje = get_school_object_or_404(
         request, ExpenseCorrectiveJournalEntry, pk=pk)
     expensecje.approve_and_finalize(request.user)
-    return redirect('list_expenses')
+    return redirect('expense-list')

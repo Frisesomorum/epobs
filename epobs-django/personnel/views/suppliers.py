@@ -1,7 +1,7 @@
-from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
 from core.views import DeletionFormMixin, SessionRecentsMixin
 from schools.views import (
-    SchooledListView, SchooledCreateView, SchooledUpdateView, get_school, )
+    SchooledListView, SchooledCreateView, SchooledUpdateView, )
 from ..models import Supplier
 
 
@@ -11,20 +11,17 @@ class List(SchooledListView):
     template_name = 'personnel/suppliers/list.html'
 
 
-class Add(SessionRecentsMixin, SchooledCreateView):
+class Create(SessionRecentsMixin, SchooledCreateView):
     permission_required = 'personnel.add_supplier'
     model = Supplier
     fields = ('name', 'date_hired', 'date_terminated')
-    template_name = 'personnel/suppliers/add.html'
-    success_url = '/personnel/suppliers/'
+    template_name = 'personnel/suppliers/create.html'
+    success_url = reverse_lazy('supplier-create')
 
     def form_valid(self, form):
-        supplier = form.save(commit=False)
-        supplier.school = get_school(self.request.session)
-        supplier.save()
-        self.add_object_to_session(supplier.pk)
-        # Return the user to this page with a fresh form
-        return HttpResponseRedirect(self.request.path_info)
+        http_response = super().form_valid(form)
+        self.add_object_to_session(self.object.pk)
+        return http_response
 
 
 class Edit(DeletionFormMixin, SchooledUpdateView):
@@ -32,4 +29,4 @@ class Edit(DeletionFormMixin, SchooledUpdateView):
     model = Supplier
     fields = ('name', 'date_hired', 'date_terminated')
     template_name = 'personnel/suppliers/edit.html'
-    success_url = '/personnel/suppliers/'
+    success_url = reverse_lazy('supplier-list')
