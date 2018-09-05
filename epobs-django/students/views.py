@@ -8,7 +8,6 @@ from core.views import DeletionFormMixin, SessionRecentsMixin
 from schools.views import get_school, CheckSchoolContextMixin
 from .models import Student
 from .resources import StudentResource
-from finance.models import StudentAccount
 
 
 class Add(PermissionRequiredMixin, SessionRecentsMixin, CreateView):
@@ -23,8 +22,6 @@ class Add(PermissionRequiredMixin, SessionRecentsMixin, CreateView):
         student.school = get_school(self.request.session)
         student.save()
         self.add_object_to_session(student.pk)
-        # Create the linked payment account
-        StudentAccount.objects.create(student=student)
         # Return the user to this page with a fresh form
         return HttpResponseRedirect(self.request.path_info)
 

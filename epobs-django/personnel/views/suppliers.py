@@ -5,7 +5,6 @@ from django.views.generic.edit import CreateView, UpdateView
 from core.views import DeletionFormMixin, SessionRecentsMixin
 from schools.views import get_school, CheckSchoolContextMixin
 from ..models import Supplier
-from finance.models import SupplierAccount
 
 
 class List(PermissionRequiredMixin, ListView):
@@ -29,7 +28,6 @@ class Add(PermissionRequiredMixin, SessionRecentsMixin, CreateView):
         supplier.school = get_school(self.request.session)
         supplier.save()
         self.add_object_to_session(supplier.pk)
-        SupplierAccount.objects.create(supplier=supplier)
         # Return the user to this page with a fresh form
         return HttpResponseRedirect(self.request.path_info)
 

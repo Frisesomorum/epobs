@@ -40,11 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'widget_tweaks',
     'import_export',
+
     'core',
     'schools',
-    'finance',
     'students',
     'personnel',
+    'finance.apps.FinanceConfig',
 
     'debug_toolbar',
 ]
