@@ -1,48 +1,17 @@
 from django.shortcuts import redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from tablib import Dataset
-from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView, UpdateView
 from core.views import DeletionFormMixin, SessionRecentsMixin
-from schools.views import get_school, CheckSchoolContextMixin
+from schools.views import (
+    SchooledListView, SchooledCreateView, SchooledUpdateView, get_school, )
 from .models import Student
 from .resources import StudentResource
 
 
-class Add(PermissionRequiredMixin, SessionRecentsMixin, CreateView):
-    permission_required = 'students.add_student'
-    model = Student
-    fields = ('first_name', 'last_name', 'date_of_birth', 'email')
-    template_name = 'student/add.html'
-    success_url = '/students/'
-
-    def form_valid(self, form):
-        student = form.save(commit=False)
-        student.school = get_school(self.request.session)
-        student.save()
-        self.add_object_to_session(student.pk)
-        # Return the user to this page with a fresh form
-        return HttpResponseRedirect(self.request.path_info)
-
-
-class Edit(
-        PermissionRequiredMixin, CheckSchoolContextMixin,
-        DeletionFormMixin, UpdateView):
-    permission_required = 'students.change_student'
-    model = Student
-    fields = ('first_name', 'last_name', 'date_of_birth', 'email')
-    template_name = 'student/edit.html'
-    success_url = '/students/'
-
-
-class List(PermissionRequiredMixin, ListView):
+class List(SchooledListView):
     permission_required = 'students.view_student'
     model = Student
     template_name = 'student/list.html'
-
-    def get_queryset(self):
-        return Student.objects.filter(school=get_school(self.request.session))
 
     def post(self, request, **kwargs):
         if 'export' in request.POST:
@@ -67,3 +36,27 @@ class List(PermissionRequiredMixin, ListView):
             return redirect('list_students')
         else:
             return super().post(request, **kwargs)
+
+
+class Add(SessionRecentsMixin, SchooledCreateView):
+    permission_required = 'students.add_student'
+    model = Student
+    fields = ('first_name', 'last_name', 'date_of_birth', 'email')
+    template_name = 'student/add.html'
+    success_url = '/students/'
+
+    def form_valid(self, form):
+        student = form.save(commit=False)
+        student.school = get_school(self.request.session)
+        student.save()
+        self.add_object_to_session(student.pk)
+        # Return the user to this page with a fresh form
+        return HttpResponseRedirect(self.request.path_info)
+
+
+class Edit(DeletionFormMixin, SchooledUpdateView):
+    permission_required = 'students.change_student'
+    model = Student
+    fields = ('first_name', 'last_name', 'date_of_birth', 'email')
+    template_name = 'student/edit.html'
+    success_url = '/students/'

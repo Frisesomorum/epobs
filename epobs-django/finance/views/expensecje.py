@@ -1,13 +1,11 @@
 from django import forms
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
-from django.db import OperationalError
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.decorators import permission_required
-from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView
 from core.views import DeletionFormMixin
-from schools.views import get_school, get_school_object_or_404, CheckSchoolContextMixin
+from schools.views import (
+    SchooledDetailView, SchooledCreateView, SchooledUpdateView,
+    get_school, get_school_object_or_404, )
 from ..models import ExpenseTransaction, ExpenseCorrectiveJournalEntry
 
 
@@ -23,14 +21,14 @@ class ExpenseCjeForm(forms.ModelForm):
         self.fields['supplier'].queryset = self.fields['supplier'].queryset.filter(supplier__school=school)
 
 
-class Detail(PermissionRequiredMixin, CheckSchoolContextMixin, DetailView):
+class Detail(SchooledDetailView):
     permission_required = 'finance.view_expensecorrectivejournalentry'
     model = ExpenseCorrectiveJournalEntry
     template_name = 'finance/expenses/cje/detail.html'
     context_object_name = 'expensecje'
 
 
-class Add(PermissionRequiredMixin, CreateView):
+class Add(SchooledCreateView):
     permission_required = 'finance.add_expensecorrectivejournalentry'
     model = ExpenseCorrectiveJournalEntry
     form_class = ExpenseCjeForm
@@ -51,7 +49,7 @@ class Add(PermissionRequiredMixin, CreateView):
         return super().get_context_data(**context)
 
     def get_initial(self):
-        initial = super(CreateView, self).get_initial().copy()
+        initial = super().get_initial().copy()
         correcting_expense = get_school_object_or_404(
             self.request, ExpenseTransaction, pk=self.kwargs['expense_pk'])
         initial['ledger_account'] = correcting_expense.ledger_account
@@ -69,9 +67,7 @@ class Add(PermissionRequiredMixin, CreateView):
         return HttpResponseRedirect(self.success_url)
 
 
-class Edit(
-        PermissionRequiredMixin, CheckSchoolContextMixin,
-        DeletionFormMixin, UpdateView):
+class Edit(DeletionFormMixin, SchooledUpdateView):
     permission_required = 'finance.change_expensecorrectivejournalentry'
     model = ExpenseCorrectiveJournalEntry
     form_class = ExpenseCjeForm
@@ -82,12 +78,6 @@ class Edit(
         kwargs = super().get_form_kwargs()
         kwargs['school'] = get_school(self.request.session)
         return kwargs
-
-    def render_to_response(self, context, **kwargs):
-        expensecje = self.get_object()
-        if expensecje.approval_status != 'D':
-            raise OperationalError("This transaction is not in 'draft' status and cannot be edited.")
-        return super().render_to_response(context, **kwargs)
 
 
 @permission_required('finance.change_expensecorrectivejournalentry')
@@ -110,43 +100,5 @@ def unsubmit_for_approval(request, pk):
 def approve(request, pk):
     expensecje = get_school_object_or_404(
         request, ExpenseCorrectiveJournalEntry, pk=pk)
-    user = request.user
-    expensecje.approve(user)
-    correcting_expense = expensecje.correction_to
-
-    reversal_expense = ExpenseTransaction(
-        ledger_account=correcting_expense.ledger_account,
-        employee=correcting_expense.employee,
-        supplier=correcting_expense.supplier,
-        amount=-correcting_expense.amount,
-        school=correcting_expense.school,
-        created_by=user,
-        approval_status='A',
-        date_submitted=expensecje.date_submitted,
-        submitted_by=expensecje.submitted_by,
-        date_approved=expensecje.date_approved,
-        approved_by=expensecje.approved_by,
-        notes=expensecje.notes,
-        )
-    reversal_expense.save()
-    expensecje.reversed_in = reversal_expense
-
-    restatement_expense = ExpenseTransaction(
-        ledger_account=expensecje.ledger_account,
-        employee=expensecje.employee,
-        supplier=expensecje.supplier,
-        amount=expensecje.amount,
-        school=expensecje.school,
-        created_by=user,
-        approval_status='A',
-        date_submitted=expensecje.date_submitted,
-        submitted_by=expensecje.submitted_by,
-        date_approved=expensecje.date_approved,
-        approved_by=expensecje.approved_by,
-        notes=expensecje.notes,
-        )
-    restatement_expense.save()
-    expensecje.restated_in = restatement_expense
-
-    expensecje.save()
+    expensecje.approve_and_finalize(request.user)
     return redirect('list_expenses')

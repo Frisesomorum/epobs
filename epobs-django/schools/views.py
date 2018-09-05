@@ -3,8 +3,11 @@ from django.core.exceptions import PermissionDenied, SuspiciousOperation
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMixin
 from django.views.generic import FormView
-from django.views.generic.edit import UpdateView
+from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, UpdateView
 from .models import School
+from finance.models import RequiresApproval
 
 
 class SelectSchoolForm(forms.Form):
@@ -109,16 +112,36 @@ def get_school(session):
     return school
 
 
-class CheckSchoolContextMixin(UserPassesTestMixin):
-    def test_func(self):
-        return (get_school(self.request.session) == self.get_object().school)
-
-
 def get_school_object_or_404(request, klass, **kwargs):
     object = get_object_or_404(klass, **kwargs)
     if get_school(request.session) != object.school:
         raise SuspiciousOperation("This " + type(object) + " belongs to a school to which you are not logged in to.")
     return object
+
+
+class SchooledListView(PermissionRequiredMixin, ListView):
+    def get_queryset(self):
+        return self.model.objects.filter(school=get_school(self.request.session))
+
+
+class SchooledCreateView(PermissionRequiredMixin, CreateView):
+    pass
+
+
+class SchooledDetailView(PermissionRequiredMixin, UserPassesTestMixin, DetailView):
+    def test_func(self):
+        return (get_school(self.request.session) == self.get_object().school)
+
+
+class SchooledUpdateView(PermissionRequiredMixin, UserPassesTestMixin, UpdateView):
+    def test_func(self):
+        return (get_school(self.request.session) == self.get_object().school)
+
+    def render_to_response(self, context, **kwargs):
+        object = self.get_object()
+        if isinstance(object, RequiresApproval):
+            object.verify_can_be_edited()
+        return super().render_to_response(context, **kwargs)
 
 
 class EditSchool(PermissionRequiredMixin, UpdateView):

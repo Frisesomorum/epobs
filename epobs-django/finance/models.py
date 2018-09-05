@@ -181,6 +181,10 @@ class RequiresApproval(models.Model):
     class Meta:
         abstract = True
 
+    def verify_can_be_edited(self):
+        if self.approval_status != APPROVAL_STATUS_DRAFT:
+            raise OperationalError("This transaction is not in 'draft' status and cannot be edited.")
+
     def submit_for_approval(self, user):
         if self.approval_status != APPROVAL_STATUS_DRAFT:
             raise OperationalError("This transaction is not in 'draft' status and cannot be submitted for approval.")
@@ -197,7 +201,7 @@ class RequiresApproval(models.Model):
         self.date_submitted = None
         self.save()
 
-    def approve(self, user):
+    def approve(self, user, commit=True):
         if self.approval_status != APPROVAL_STATUS_SUBMITTED:
             raise OperationalError("This transaction is not in 'submitted' status and cannot be approved.")
         if self.submitted_by == user:
@@ -205,7 +209,8 @@ class RequiresApproval(models.Model):
         self.approval_status = APPROVAL_STATUS_APPROVED
         self.approved_by = user
         self.date_approved = datetime.date.today()
-        self.save()
+        if commit:
+            self.save()
 
 
 class AdmitsCorrections:
@@ -284,6 +289,45 @@ class ExpenseCorrectiveJournalEntry(RequiresApproval, ExpenseInfo):
              "Can approve expense corrective journal entries"),
         )
 
+    def create_reversal_expense(self, user):
+        correcting_expense = self.correction_to
+        return ExpenseTransaction.objects.create(
+            ledger_account=correcting_expense.ledger_account,
+            employee=correcting_expense.employee,
+            supplier=correcting_expense.supplier,
+            amount=-correcting_expense.amount,
+            school=correcting_expense.school,
+            created_by=user,
+            approval_status=APPROVAL_STATUS_APPROVED,
+            date_submitted=self.date_submitted,
+            submitted_by=self.submitted_by,
+            date_approved=self.date_approved,
+            approved_by=self.approved_by,
+            notes=self.notes,
+            )
+
+    def create_restatement_expense(self, user):
+        return ExpenseTransaction.objects.create(
+            ledger_account=self.ledger_account,
+            employee=self.employee,
+            supplier=self.supplier,
+            amount=self.amount,
+            school=self.school,
+            created_by=user,
+            approval_status=APPROVAL_STATUS_APPROVED,
+            date_submitted=self.date_submitted,
+            submitted_by=self.submitted_by,
+            date_approved=self.date_approved,
+            approved_by=self.approved_by,
+            notes=self.notes,
+            )
+
+    def approve_and_finalize(self, user):
+        self.approve(user, commit=False)
+        self.reversed_in = self.create_reversal_expense(user)
+        self.restated_in = self.create_restatement_expense(user)
+        self.save()
+
 
 class RevenueInfo(Transaction):
     ledger_account = models.ForeignKey(
@@ -317,3 +361,30 @@ class RevenueCorrectiveJournalEntry(RequiresApproval, RevenueInfo):
             ("approve_revenuecorrectivejournalentry",
              "Can approve revenue corrective journal entries"),
         )
+
+    def create_reversal_revenue(self, user):
+        correcting_revenue = self.correction_to
+        return RevenueTransaction.objects.create(
+            ledger_account=correcting_revenue.ledger_account,
+            student=correcting_revenue.student,
+            amount=-correcting_revenue.amount,
+            school=correcting_revenue.school,
+            created_by=user,
+            notes=self.notes,
+            )
+
+    def create_restatement_revenue(self, user):
+        return RevenueTransaction.objects.create(
+            ledger_account=self.ledger_account,
+            student=self.student,
+            amount=self.amount,
+            school=self.school,
+            created_by=user,
+            notes=self.notes,
+            )
+
+    def approve_and_finalize(self, user):
+        self.approve(user, commit=False)
+        self.reversed_in = self.create_reversal_revenue(user)
+        self.restated_in = self.create_restatement_revenue(user)
+        self.save()

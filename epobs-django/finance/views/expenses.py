@@ -1,33 +1,29 @@
 from django import forms
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
-from django.db import OperationalError
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.decorators import permission_required
-from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView
 from core.views import DeletionFormMixin, SessionRecentsMixin
-from schools.views import get_school, get_school_object_or_404, CheckSchoolContextMixin
-from ..models import ExpenseTransaction, ExpenseCorrectiveJournalEntry
+from schools.views import (
+    SchooledListView, SchooledDetailView, SchooledCreateView, SchooledUpdateView,
+    get_school, get_school_object_or_404,)
+from ..models import (
+    ExpenseTransaction, ExpenseCorrectiveJournalEntry, APPROVAL_STATUS_APPROVED,)
 
 
-class List(PermissionRequiredMixin, ListView):
+class List(SchooledListView):
     permission_required = 'finance.view_expensetransaction'
     model = ExpenseTransaction
     template_name = 'finance/expenses/list.html'
 
-    def get_queryset(self):
-        return ExpenseTransaction.objects.filter(school=get_school(self.request.session))
-
     def get_context_data(self, **kwargs):
         context = {}
         context['cje_list'] = ExpenseCorrectiveJournalEntry.objects.filter(
-            school=get_school(self.request.session)).exclude(approval_status='A')
+            school=get_school(self.request.session)
+            ).exclude(approval_status=APPROVAL_STATUS_APPROVED)
         return super().get_context_data(**context)
 
 
-class Detail(PermissionRequiredMixin, CheckSchoolContextMixin, DetailView):
+class Detail(SchooledDetailView):
     permission_required = 'finance.view_expensetransaction'
     model = ExpenseTransaction
     template_name = 'finance/expenses/detail.html'
@@ -48,7 +44,7 @@ class ExpenseForm(forms.ModelForm):
         self.fields['supplier'].queryset = self.fields['supplier'].queryset.filter(supplier__school=school)
 
 
-class Add(PermissionRequiredMixin, SessionRecentsMixin, CreateView):
+class Add(SessionRecentsMixin, SchooledCreateView):
     permission_required = 'finance.add_expensetransaction'
     model = ExpenseTransaction
     form_class = ExpenseForm
@@ -70,9 +66,7 @@ class Add(PermissionRequiredMixin, SessionRecentsMixin, CreateView):
         return HttpResponseRedirect(self.request.path_info)
 
 
-class Edit(
-        PermissionRequiredMixin, CheckSchoolContextMixin,
-        DeletionFormMixin, UpdateView):
+class Edit(DeletionFormMixin, SchooledUpdateView):
     permission_required = 'finance.change_expensetransaction'
     model = ExpenseTransaction
     form_class = ExpenseForm
@@ -83,12 +77,6 @@ class Edit(
         kwargs = super().get_form_kwargs()
         kwargs['school'] = get_school(self.request.session)
         return kwargs
-
-    def render_to_response(self, context, **kwargs):
-        expense = self.get_object()
-        if expense.approval_status != 'D':
-            raise OperationalError("This transaction is not in 'draft' status and cannot be edited.")
-        return super().render_to_response(context, **kwargs)
 
 
 @permission_required('finance.change_expensetransaction')

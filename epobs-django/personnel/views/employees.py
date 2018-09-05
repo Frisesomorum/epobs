@@ -1,22 +1,17 @@
 from django.http import HttpResponseRedirect
-from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView, UpdateView
 from core.views import DeletionFormMixin, SessionRecentsMixin
-from schools.views import get_school, CheckSchoolContextMixin
+from schools.views import (
+    SchooledListView, SchooledCreateView, SchooledUpdateView, get_school, )
 from ..models import Employee
 
 
-class List(PermissionRequiredMixin, ListView):
+class List(SchooledListView):
     permission_required = 'personnel.view_employee'
     model = Employee
     template_name = 'personnel/employees/list.html'
 
-    def get_queryset(self):
-        return Employee.objects.filter(school=get_school(self.request.session))
 
-
-class Add(PermissionRequiredMixin, SessionRecentsMixin, CreateView):
+class Add(SessionRecentsMixin, SchooledCreateView):
     permission_required = 'personnel.add_employee'
     model = Employee
     fields = ('first_name', 'last_name', 'date_of_birth', 'email',
@@ -33,9 +28,7 @@ class Add(PermissionRequiredMixin, SessionRecentsMixin, CreateView):
         return HttpResponseRedirect(self.request.path_info)
 
 
-class Edit(
-        PermissionRequiredMixin, CheckSchoolContextMixin,
-        DeletionFormMixin, UpdateView):
+class Edit(DeletionFormMixin, SchooledUpdateView):
     permission_required = 'personnel.change_employee'
     model = Employee
     fields = ('first_name', 'last_name', 'date_of_birth', 'email',

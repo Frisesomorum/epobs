@@ -1,24 +1,21 @@
 from django.forms import inlineformset_factory
 from django.shortcuts import redirect
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http.response import HttpResponseRedirect
-from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView, UpdateView
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.views.generic.edit import UpdateView
 from core.views import DeletionFormMixin
-from schools.views import get_school, CheckSchoolContextMixin
+from schools.views import (
+    SchooledListView, SchooledCreateView, SchooledUpdateView, get_school,)
 from ..models import Term, ExpenseBudgetItem, RevenueBudgetItem, ExpenseLedgerAccount, RevenueLedgerAccount
 
 
-class List(PermissionRequiredMixin, ListView):
+class List(SchooledListView):
     permission_required = 'finance.view_term'
     model = Term
     template_name = 'finance/terms/list.html'
 
-    def get_queryset(self):
-        return Term.objects.filter(school=get_school(self.request.session))
 
-
-class Create(PermissionRequiredMixin, CreateView):
+class Create(SchooledCreateView):
     permission_required = 'finance.add_term'
     model = Term
     fields = ('name', 'start', 'end')
@@ -32,9 +29,7 @@ class Create(PermissionRequiredMixin, CreateView):
         return HttpResponseRedirect(self.success_url)
 
 
-class Edit(
-        PermissionRequiredMixin, CheckSchoolContextMixin,
-        DeletionFormMixin, UpdateView):
+class Edit(DeletionFormMixin, SchooledUpdateView):
     permission_required = 'finance.change_term'
     model = Term
     fields = ('name', 'start', 'end')
