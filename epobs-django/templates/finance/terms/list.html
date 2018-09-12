@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block content %}
-  {% if perms.finance.add_term %}
+  {% if school_perms.finance.add_term %}
   <div class="form-group">
     <a href="{% url 'term-create' %}" class="btn btn-secondary"><i class="fas fa-plus-square"></i> Create New...</a>
   </div>
@@ -24,7 +24,7 @@
         <th>Start</th>
         <th>End</th>
         <th>Budget</th>
-        {% if perms.finance.change_term %}<th>Edit</th>{% endif %}
+        {% if school_perms.finance.change_term %}<th>Edit</th>{% endif %}
       </tr>
     </thead>
     <tbody>
@@ -34,7 +34,7 @@
           <td>{{ term.start }}</td>
           <td>{{ term.end }}</td>
           <td><a href="{% url 'budget-edit' term.pk %}"><i class="fas fa-file-invoice-dollar"></i></a></td>
-          {% if perms.finance.change_term %}<td><a href="{% url 'term-edit' term.pk %}"><i class="fas fa-pencil-alt"></i></a></td>{% endif %}
+          {% if school_perms.finance.change_term %}<td><a href="{% url 'term-edit' term.pk %}"><i class="fas fa-pencil-alt"></i></a></td>{% endif %}
         </tr>
       {% endfor %}
     </tbody>

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}EPOBS - Expense Summary{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item">Reports</li>
+  <li class="breadcrumb-item">Expense Summary</li>
+{% endblock %}
+
+{% block content %}
+  <table class="table table-striped table-sm small table-hover">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Fund</th>
+        <th>Ledger Account</th>
+        <th>Annual Budget</th>
+        <th>Period Actual</th>
+        <th>YTD Actual</th>
+        <th>Budget Balance</th>
+        <th>Percent Used</th>
+        <th>Estimated Budget</th>
+        <th>Estimated Remaining</th>
+        <th>Estimated Percent Used</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for report_item in object_list %}
+        <tr>
+          <td></td>
+          <td>{{ report_item.fund }}</td>
+          <td>{{ report_item.ledger_account }}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

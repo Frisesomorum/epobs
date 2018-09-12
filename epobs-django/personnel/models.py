@@ -1,6 +1,6 @@
 from django.db import models
 from core.models import Person
-from schools.models import School
+from schoolauth.models import School
 
 
 class Employee(Person):

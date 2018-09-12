@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block content %}
-  {% if perms.finance.add_revenuetransaction %}
+  {% if school_perms.finance.add_revenuetransaction %}
   <div class="form-group">
     <a href="{% url 'revenue-create' %}" class="btn btn-secondary"><i class="fas fa-plus-square"></i> Add Revenues...</a>
   </div>
@@ -49,8 +49,8 @@
         <th>Amount</th>
         <th>Status</th>
         <th>View</th>
-        {% if perms.finance.change_revenuecorrectivejournalentry %}<th>Edit</th>{% endif %}
-        {% if perms.finance.approve_revenuecorrectivejournalentry %}<th>Approve</th>{% endif %}
+        {% if school_perms.finance.change_revenuecorrectivejournalentry %}<th>Edit</th>{% endif %}
+        {% if school_perms.finance.approve_revenuecorrectivejournalentry %}<th>Approve</th>{% endif %}
       </tr>
     </thead>
     <tbody>
@@ -61,12 +61,12 @@
           <td>{{ revenuecje.amount }}</td>
           <td>{{ revenuecje.get_approval_status_display }}</td>
           <td><a href="{% url 'revenue-cje-detail' revenuecje.pk %}"><i class="fas fa-file-invoice"></i></a></td>
-          {% if perms.finance.change_revenuecorrectivejournalentry %}<td>
+          {% if school_perms.finance.change_revenuecorrectivejournalentry %}<td>
             {% if revenuecje.approval_status == 'D' %}
               <a href="{% url 'revenue-cje-edit' revenuecje.pk %}"><i class="fas fa-pencil-alt"></i></a>
             {% endif %}
           </td>{% endif %}
-          {% if perms.finance.approve_revenuecorrectivejournalentry %}<td>
+          {% if school_perms.finance.approve_revenuecorrectivejournalentry %}<td>
             {% if revenuecje.approval_status == 'S' and user != revenuecje.submitted_by %}
               <a href="{% url 'revenue-cje-approve' revenuecje.pk %}"><i class="fas fa-check-double"></i></a>
             {% endif %}

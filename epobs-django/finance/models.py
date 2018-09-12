@@ -1,16 +1,16 @@
 import datetime
 from django.db import models, OperationalError
-import core.models as coreModels
-from schools.models import School
+from core.models import Descriptor
+from schoolauth.models import User, School
 from students.models import Student
 from personnel.models import Employee, Supplier
 
 
-class Fund(coreModels.Descriptor):
+class Fund(Descriptor):
     pass
 
 
-class Category(coreModels.Descriptor):
+class Category(Descriptor):
     fund = models.ForeignKey(
         Fund, on_delete=models.CASCADE,
         related_name='related_%(app_label)s_%(class)s')
@@ -33,7 +33,7 @@ class RevenueCategory(Category):
     pass
 
 
-class LedgerAccount(coreModels.Descriptor):
+class LedgerAccount(Descriptor):
     class Meta:
         abstract = True
 
@@ -145,7 +145,7 @@ class Transaction(models.Model):
     notes = models.TextField(max_length=4000, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
-        coreModels.User, on_delete=models.PROTECT,
+        User, on_delete=models.PROTECT,
         related_name='created_%(app_label)s_%(class)s')
     amount = models.DecimalField(max_digits=15, decimal_places=2, default=0)
 
@@ -171,11 +171,11 @@ class RequiresApproval(models.Model):
         max_length=1, choices=APPROVAL_STATUS_CHOICES, default=APPROVAL_STATUS_DRAFT)
     date_submitted = models.DateField(blank=True, null=True)
     submitted_by = models.ForeignKey(
-        coreModels.User, on_delete=models.PROTECT, blank=True, null=True,
+        User, on_delete=models.PROTECT, blank=True, null=True,
         related_name='submitted_%(app_label)s_%(class)s')
     date_approved = models.DateField(blank=True, null=True)
     approved_by = models.ForeignKey(
-        coreModels.User, on_delete=models.PROTECT, blank=True, null=True,
+        User, on_delete=models.PROTECT, blank=True, null=True,
         related_name='approved_%(app_label)s_%(class)s')
 
     class Meta:
@@ -214,9 +214,6 @@ class RequiresApproval(models.Model):
 
 
 class AdmitsCorrections:
-    class Meta:
-        abstract = True
-
     @property
     def has_correction(self):
         return hasattr(self, 'corrected_by_cje')

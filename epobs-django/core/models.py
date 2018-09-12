@@ -1,16 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
-from schools.models import School
-
-
-class User(AbstractUser):
-    schools = models.ManyToManyField(School, blank=True, related_name='users')
-
-    def __str__(self):
-        return self.last_name + ", " + self.first_name
-
-    def is_school_member(self, school_pk):
-        return (int(school_pk) in list(self.schools.values_list('pk', flat=True)))
 
 
 class Descriptor(models.Model):

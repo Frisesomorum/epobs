@@ -1,31 +1,25 @@
 [
 {
-  "model": "schools.school",
+  "model": "schoolauth.school",
   "pk": 1,
   "fields": {
     "name": "Epobs Polytechnic",
-    "location": "Seattle, WA, USA",
-    "admission_fee": "0.00",
-    "school_fee": "0.00",
-    "canteen_fee": "0.00"
+    "location": "Seattle, WA, USA"
   }
 },
 {
-  "model": "schools.school",
+  "model": "schoolauth.school",
   "pk": 2,
   "fields": {
     "name": "Adeshie Collections",
-    "location": "Nima",
-    "admission_fee": "0.00",
-    "school_fee": "0.00",
-    "canteen_fee": "0.00"
+    "location": "Nima"
   }
 },
 {
-  "model": "core.user",
+  "model": "schoolauth.user",
   "fields": {
     "password": "pbkdf2_sha256$120000$VTfLqsFzOhKU$Xcufu4sJugWo8ncXFUbzb7PjiUtz5RSXuEZJ5YcXZfk=",
-    "last_login": "2018-09-03T19:50:34.444Z",
+    "last_login": "2018-09-12T22:34:13.822Z",
     "is_superuser": true,
     "username": "admin",
     "first_name": "Thorin",
@@ -35,15 +29,14 @@
     "is_active": true,
     "date_joined": "2018-08-12T21:57:04Z",
     "groups": [],
-    "user_permissions": [],
-    "schools": []
+    "user_permissions": []
   }
 },
 {
-  "model": "core.user",
+  "model": "schoolauth.user",
   "fields": {
     "password": "pbkdf2_sha256$120000$fy4MLLdqP87W$rgTf7o2cSvnaYqQaDHzKFx8LV8cuzy4ZueldGfgwG1c=",
-    "last_login": "2018-09-03T19:50:45.061Z",
+    "last_login": "2018-09-12T12:49:12.172Z",
     "is_superuser": false,
     "username": "acct",
     "first_name": "Fili",
@@ -52,19 +45,12 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-08-12T21:58:45Z",
-    "groups": [
-      [
-        "Accountant"
-      ]
-    ],
-    "user_permissions": [],
-    "schools": [
-      1
-    ]
+    "groups": [],
+    "user_permissions": []
   }
 },
 {
-  "model": "core.user",
+  "model": "schoolauth.user",
   "fields": {
     "password": "pbkdf2_sha256$120000$2f4XjpJsUrhH$7Luy7C/dDATx5Esjis06ZXBT8bZ1Dr8qOuzWHQFi5ws=",
     "last_login": "2018-08-17T04:47:06Z",
@@ -76,22 +62,15 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-08-12T21:59:13Z",
-    "groups": [
-      [
-        "Bookkeeper"
-      ]
-    ],
-    "user_permissions": [],
-    "schools": [
-      1
-    ]
+    "groups": [],
+    "user_permissions": []
   }
 },
 {
-  "model": "core.user",
+  "model": "schoolauth.user",
   "fields": {
     "password": "pbkdf2_sha256$120000$N56KtIYx0QiE$FMKWNKb8XyqT80hV9y0OomF8O3MUA2P7NJYebNz3//g=",
-    "last_login": "2018-09-03T19:50:19.573Z",
+    "last_login": "2018-09-12T12:25:27.441Z",
     "is_superuser": false,
     "username": "acctbkpr",
     "first_name": "Ori",
@@ -100,23 +79,12 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-08-12T21:59:26Z",
-    "groups": [
-      [
-        "Bookkeeper"
-      ],
-      [
-        "Accountant"
-      ]
-    ],
-    "user_permissions": [],
-    "schools": [
-      1,
-      2
-    ]
+    "groups": [],
+    "user_permissions": []
   }
 },
 {
-  "model": "core.user",
+  "model": "schoolauth.user",
   "fields": {
     "password": "pbkdf2_sha256$120000$oz3sz9WL9QQQ$ieAvLHithfmTJPPbe1SPUwIEH0+SEtNVX0UGIRwWnTs=",
     "last_login": "2018-08-14T05:50:53Z",
@@ -129,14 +97,11 @@
     "is_active": true,
     "date_joined": "2018-08-14T05:23:40Z",
     "groups": [],
-    "user_permissions": [],
-    "schools": [
-      1
-    ]
+    "user_permissions": []
   }
 },
 {
-  "model": "core.user",
+  "model": "schoolauth.user",
   "fields": {
     "password": "pbkdf2_sha256$120000$aXYLjwkmAaql$KaMv9NKf5zW/v5wVdf07qud+C0UW+I4h18IZy5OX4d8=",
     "last_login": null,
@@ -148,22 +113,12 @@
     "is_staff": false,
     "is_active": false,
     "date_joined": "2018-08-14T05:48:42Z",
-    "groups": [
-      [
-        "Bookkeeper"
-      ],
-      [
-        "Accountant"
-      ]
-    ],
-    "user_permissions": [],
-    "schools": [
-      1
-    ]
+    "groups": [],
+    "user_permissions": []
   }
 },
 {
-  "model": "core.user",
+  "model": "schoolauth.user",
   "fields": {
     "password": "pbkdf2_sha256$120000$b1vnq0NSyVW3$YK7fKQp9L+Ws3pbjztoNDohIqgwNISE+qFOJSK1NAZ4=",
     "last_login": "2018-09-03T19:49:36.665Z",
@@ -176,17 +131,14 @@
     "is_active": true,
     "date_joined": "2018-09-02T19:30:46Z",
     "groups": [],
-    "user_permissions": [],
-    "schools": [
-      1
-    ]
+    "user_permissions": []
   }
 },
 {
-  "model": "core.user",
+  "model": "schoolauth.user",
   "fields": {
     "password": "pbkdf2_sha256$120000$IFhFgwGQobp6$GofJK0jJRtGplJht3csNSA8rd9Xxkv+K39RhMIRbZGg=",
-    "last_login": "2018-09-03T01:48:29.296Z",
+    "last_login": "2018-09-12T13:23:22.076Z",
     "is_superuser": false,
     "username": "stake",
     "first_name": "Kili",
@@ -196,11 +148,163 @@
     "is_active": true,
     "date_joined": "2018-09-03T00:55:59Z",
     "groups": [],
-    "user_permissions": [],
-    "schools": [
-      1,
-      2
+    "user_permissions": []
+  }
+},
+{
+  "model": "schoolauth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$120000$gQUvH9vAEfXt$y0rLDkLiWNQEKKW0HsXmEF8XZOehNW8W1PMdueHXNlY=",
+    "last_login": "2018-09-12T13:27:49.047Z",
+    "is_superuser": false,
+    "username": "super",
+    "first_name": "Dori",
+    "last_name": "Supierrez",
+    "email": "dori@epobs.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-09-12T12:19:12Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "schoolauth.userschoolmembership",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "acct"
+    ],
+    "school": 1,
+    "groups": [
+      [
+        "Accountant"
+      ]
     ]
+  }
+},
+{
+  "model": "schoolauth.userschoolmembership",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "acct"
+    ],
+    "school": 2,
+    "groups": []
+  }
+},
+{
+  "model": "schoolauth.userschoolmembership",
+  "pk": 3,
+  "fields": {
+    "user": [
+      "acctbkpr"
+    ],
+    "school": 1,
+    "groups": [
+      [
+        "Bookkeeper"
+      ],
+      [
+        "Accountant"
+      ]
+    ]
+  }
+},
+{
+  "model": "schoolauth.userschoolmembership",
+  "pk": 4,
+  "fields": {
+    "user": [
+      "bkpr"
+    ],
+    "school": 1,
+    "groups": [
+      [
+        "Bookkeeper"
+      ]
+    ]
+  }
+},
+{
+  "model": "schoolauth.userschoolmembership",
+  "pk": 5,
+  "fields": {
+    "user": [
+      "exuser"
+    ],
+    "school": 1,
+    "groups": [
+      [
+        "Bookkeeper"
+      ],
+      [
+        "Accountant"
+      ],
+      [
+        "School Superuser"
+      ]
+    ]
+  }
+},
+{
+  "model": "schoolauth.userschoolmembership",
+  "pk": 6,
+  "fields": {
+    "user": [
+      "staff"
+    ],
+    "school": 2,
+    "groups": []
+  }
+},
+{
+  "model": "schoolauth.userschoolmembership",
+  "pk": 7,
+  "fields": {
+    "user": [
+      "stake"
+    ],
+    "school": 1,
+    "groups": []
+  }
+},
+{
+  "model": "schoolauth.userschoolmembership",
+  "pk": 8,
+  "fields": {
+    "user": [
+      "stake"
+    ],
+    "school": 2,
+    "groups": []
+  }
+},
+{
+  "model": "schoolauth.userschoolmembership",
+  "pk": 9,
+  "fields": {
+    "user": [
+      "super"
+    ],
+    "school": 1,
+    "groups": [
+      [
+        "School Superuser"
+      ]
+    ]
+  }
+},
+{
+  "model": "schoolauth.userschoolmembership",
+  "pk": 10,
+  "fields": {
+    "user": [
+      "user"
+    ],
+    "school": 1,
+    "groups": []
   }
 }
 ]

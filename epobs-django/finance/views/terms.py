@@ -2,10 +2,8 @@ from django.forms import inlineformset_factory
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.views.generic.edit import UpdateView
 from core.views import DeletionFormMixin
-from schools.views import (
+from schoolauth.views import (
     SchooledListView, SchooledCreateView, SchooledUpdateView, )
 from ..models import Term, ExpenseBudgetItem, RevenueBudgetItem, ExpenseLedgerAccount, RevenueLedgerAccount
 
@@ -40,7 +38,7 @@ RevenueBudgetFormSet = inlineformset_factory(
     extra=0, can_delete=False)
 
 
-class EditBudget(PermissionRequiredMixin, UpdateView):
+class EditBudget(SchooledUpdateView):
     permission_required = (
         'finance.change_expensebudgetitem', 'finance.change_revenuebudgetitem')
     model = Term

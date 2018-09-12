@@ -41,8 +41,9 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'import_export',
 
+    'schoolauth',
     'core',
-    'schools',
+    'schools.apps.SchoolsConfig',
     'students',
     'personnel',
     'finance.apps.FinanceConfig',
@@ -61,7 +62,7 @@ MIDDLEWARE = [
 
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 
-    'core.middleware.LoginRequiredMiddleware'
+    'schoolauth.middleware.LoginRequiredMiddleware'
 ]
 
 ROOT_URLCONF = 'epobs.urls'
@@ -79,6 +80,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'schoolauth.context_processors.user_school_permissions'
             ],
         },
     },
@@ -138,7 +140,7 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'school-select'
 LOGOUT_REDIRECT_URL = 'login'
 
-AUTH_USER_MODEL = 'core.User'
+AUTH_USER_MODEL = 'schoolauth.User'
 
 
 # Static files (CSS, JavaScript, Images)

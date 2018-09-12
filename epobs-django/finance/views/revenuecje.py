@@ -1,9 +1,9 @@
 from django import forms
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.contrib.auth.decorators import permission_required
+from schoolauth.decorators import school_permission_required
 from core.views import DeletionFormMixin
-from schools.views import (
+from schoolauth.views import (
     SchooledDetailView, SchooledCreateView, SchooledUpdateView,
     get_school, get_school_object_or_404, )
 from ..models import RevenueTransaction, RevenueCorrectiveJournalEntry
@@ -75,7 +75,7 @@ class Edit(DeletionFormMixin, SchooledUpdateView):
         return kwargs
 
 
-@permission_required('finance.change_revenuecorrectivejournalentry')
+@school_permission_required('finance.change_revenuecorrectivejournalentry')
 def submit_for_approval(request, pk):
     revenuecje = get_school_object_or_404(
         request, RevenueCorrectiveJournalEntry, pk=pk)
@@ -83,7 +83,7 @@ def submit_for_approval(request, pk):
     return redirect('revenue-list')
 
 
-@permission_required('finance.change_revenuecorrectivejournalentry')
+@school_permission_required('finance.change_revenuecorrectivejournalentry')
 def unsubmit_for_approval(request, pk):
     revenuecje = get_school_object_or_404(
         request, RevenueCorrectiveJournalEntry, pk=pk)
@@ -91,7 +91,7 @@ def unsubmit_for_approval(request, pk):
     return redirect('revenue-list')
 
 
-@permission_required('finance.approve_revenuecorrectivejournalentry')
+@school_permission_required('finance.approve_revenuecorrectivejournalentry')
 def approve(request, pk):
     revenuecje = get_school_object_or_404(
         request, RevenueCorrectiveJournalEntry, pk=pk)

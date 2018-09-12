@@ -8,12 +8,13 @@
   <div class="container">
     <h1>Dashboard (mockup)</h1>
     <ul>
-      {% if perms.finance.approve_expensetransaction %}<li>There are N <a href="{% url 'expense-list' %}">expenses</a> waiting for approval.</li>{% endif %}
-      {% if perms.students.view_student %}<li>There are M <a href="{% url 'student-list' %}">students</a> with outstanding fees.</li>{% endif %}
-      <li><a href="#reports">H%</a> of the current term's budget has been used.</li>
+      {% if school_perms.finance.approve_expensetransaction %}<li>There are N <a href="{% url 'expense-list' %}">expenses</a> waiting for approval.</li>{% endif %}
+      {% if 'students.view_student' in school_perms %}<li>There are M <a href="{% url 'student-list' %}">students</a> with outstanding fees.</li>{% endif %}
+      <li><a href="{% url 'report-index' %}">H%</a> of the current term's budget has been used.</li>
     </ul>
     <h3>What's New</h3>
     <ul>
+      <li />9/12/18: Fixes to multi-school support; school superuser tools
       <li />9/3/18: Multi-school support; corrective journal entries for revenues
     </ul>
   </div>

@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block content %}
-  {% if perms.finance.add_expensetransaction %}
+  {% if school_perms.finance.add_expensetransaction %}
   <div class="form-group">
     <a href="{% url 'expense-create' %}" class="btn btn-secondary"><i class="fas fa-plus-square"></i> Add Expenses...</a>
   </div>
@@ -25,8 +25,8 @@
         <th>Amount</th>
         <th>Status</th>
         <th>View</th>
-        {% if perms.finance.change_expensetransaction %}<th>Edit</th>{% endif %}
-        {% if perms.finance.approve_expensetransaction %}<th>Approve</th>{% endif %}
+        {% if school_perms.finance.change_expensetransaction %}<th>Edit</th>{% endif %}
+        {% if school_perms.finance.approve_expensetransaction %}<th>Approve</th>{% endif %}
       </tr>
     </thead>
     <tbody>
@@ -38,12 +38,12 @@
           <td>{{ expense.amount }}</td>
           <td>{{ expense.get_approval_status_display }}</td>
           <td><a href="{% url 'expense-detail' expense.pk %}"><i class="fas fa-file-invoice"></i></a></td>
-          {% if perms.finance.change_expensetransaction %}<td>
+          {% if school_perms.finance.change_expensetransaction %}<td>
             {% if expense.approval_status == 'D' %}
               <a href="{% url 'expense-edit' expense.pk %}"><i class="fas fa-pencil-alt"></i></a>
             {% endif %}
           </td>{% endif %}
-          {% if perms.finance.approve_expensetransaction %}<td>
+          {% if school_perms.finance.approve_expensetransaction %}<td>
             {% if expense.approval_status == 'S' and user != expense.submitted_by %}
               <a href="{% url 'expense-approve' expense.pk %}"><i class="fas fa-check-double"></i></a>
             {% endif %}
@@ -63,8 +63,8 @@
         <th>Amount</th>
         <th>Status</th>
         <th>View</th>
-        {% if perms.finance.change_expensecorrectivejournalentry %}<th>Edit</th>{% endif %}
-        {% if perms.finance.approve_expensecorrectivejournalentry %}<th>Approve</th>{% endif %}
+        {% if school_perms.finance.change_expensecorrectivejournalentry %}<th>Edit</th>{% endif %}
+        {% if school_perms.finance.approve_expensecorrectivejournalentry %}<th>Approve</th>{% endif %}
       </tr>
     </thead>
     <tbody>
@@ -75,12 +75,12 @@
           <td>{{ expensecje.amount }}</td>
           <td>{{ expensecje.get_approval_status_display }}</td>
           <td><a href="{% url 'expense-cje-detail' expensecje.pk %}"><i class="fas fa-file-invoice"></i></a></td>
-          {% if perms.finance.change_expensecorrectivejournalentry %}<td>
+          {% if school_perms.finance.change_expensecorrectivejournalentry %}<td>
             {% if expensecje.approval_status == 'D' %}
               <a href="{% url 'expense-cje-edit' expensecje.pk %}"><i class="fas fa-pencil-alt"></i></a>
             {% endif %}
           </td>{% endif %}
-          {% if perms.finance.approve_expensecorrectivejournalentry %}<td>
+          {% if school_perms.finance.approve_expensecorrectivejournalentry %}<td>
             {% if expensecje.approval_status == 'S' and user != expensecje.submitted_by %}
               <a href="{% url 'expense-cje-approve' expensecje.pk %}"><i class="fas fa-check-double"></i></a>
             {% endif %}

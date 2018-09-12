@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from django.http import HttpResponse
 from tablib import Dataset
 from core.views import DeletionFormMixin, SessionRecentsMixin
-from schools.views import (
+from schoolauth.views import (
     SchooledListView, SchooledCreateView, SchooledUpdateView, )
 from .models import Student
 from .resources import StudentResource

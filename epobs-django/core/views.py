@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from schoolauth.views import get_school_pk
 
 
 def index_view(request):
@@ -39,8 +40,13 @@ class SessionRecentsMixin:
 
     @property
     def session_recents_key(self):
-        return 'recent_school' + self.request.session['school'] + '_' + self.model.__name__.lower() + '_list'
+        return (
+            'recent_school%s_%s_list' % (
+                str(get_school_pk(self.request.session)),
+                self.model.__name__.lower()
+            )
+        )
 
     @property
     def context_recents_key(self):
-        return 'recent_' + self.model.__name__.lower() + '_list'
+        return 'recent_%s_list' % self.model.__name__.lower()

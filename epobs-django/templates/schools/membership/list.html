@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}EPOBS - List School Members{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item">School</li>
+  <li class="breadcrumb-item">Members</li>
+  <li class="breadcrumb-item">List</li>
+{% endblock %}
+
+{% block content %}
+  {% if school_perms.schoolauth.add_userschoolmembership %}
+  <div class="form-group">
+    <a href="{% url 'user-create' %}" class="btn btn-secondary"><i class="fas fa-plus-square"></i> Create New User...</a>
+    <a href="{% url 'member-create' %}" class="btn btn-secondary"><i class="fas fa-plus-square"></i> Invite User...</a>
+  </div>
+  {% endif %}
+
+  <table class="table table-striped table-sm">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Roles</th>
+        {% if school_perms.schoolauth.change_userschoolmembership %}<th>Edit</th>{% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for membership in object_list %}
+        <tr>
+          <td>{{ membership.user }}</td>
+          <td>{{ membership.get_groups_display }}</td>
+          {% if school_perms.schoolauth.change_userschoolmembership %}
+            <td><a href="{% url 'member-edit' membership.pk %}"><i class="fas fa-pencil-alt"></i></a></td>{% endif %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

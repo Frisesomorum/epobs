@@ -1,9 +1,9 @@
 from django import forms
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.contrib.auth.decorators import permission_required
+from schoolauth.decorators import school_permission_required
 from core.views import DeletionFormMixin
-from schools.views import (
+from schoolauth.views import (
     SchooledDetailView, SchooledCreateView, SchooledUpdateView,
     get_school, get_school_object_or_404, )
 from ..models import ExpenseTransaction, ExpenseCorrectiveJournalEntry
@@ -77,7 +77,7 @@ class Edit(DeletionFormMixin, SchooledUpdateView):
         return kwargs
 
 
-@permission_required('finance.change_expensecorrectivejournalentry')
+@school_permission_required('finance.change_expensecorrectivejournalentry')
 def submit_for_approval(request, pk):
     expensecje = get_school_object_or_404(
         request, ExpenseCorrectiveJournalEntry, pk=pk)
@@ -85,7 +85,7 @@ def submit_for_approval(request, pk):
     return redirect('expense-list')
 
 
-@permission_required('finance.change_expensecorrectivejournalentry')
+@school_permission_required('finance.change_expensecorrectivejournalentry')
 def unsubmit_for_approval(request, pk):
     expensecje = get_school_object_or_404(
         request, ExpenseCorrectiveJournalEntry, pk=pk)
@@ -93,7 +93,7 @@ def unsubmit_for_approval(request, pk):
     return redirect('expense-list')
 
 
-@permission_required('finance.approve_expensecorrectivejournalentry')
+@school_permission_required('finance.approve_expensecorrectivejournalentry')
 def approve(request, pk):
     expensecje = get_school_object_or_404(
         request, ExpenseCorrectiveJournalEntry, pk=pk)

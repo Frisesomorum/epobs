@@ -1,9 +1,9 @@
 from django import forms
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.contrib.auth.decorators import permission_required
+from schoolauth.decorators import school_permission_required
 from core.views import DeletionFormMixin, SessionRecentsMixin
-from schools.views import (
+from schoolauth.views import (
     SchooledListView, SchooledDetailView, SchooledCreateView, SchooledUpdateView,
     get_school, get_school_object_or_404,)
 from ..models import (
@@ -76,21 +76,21 @@ class Edit(DeletionFormMixin, SchooledUpdateView):
         return kwargs
 
 
-@permission_required('finance.change_expensetransaction')
+@school_permission_required('finance.change_expensetransaction')
 def submit_for_approval(request, pk):
     expense = get_school_object_or_404(request, ExpenseTransaction, pk=pk)
     expense.submit_for_approval(request.user)
     return redirect('expense-list')
 
 
-@permission_required('finance.change_expensetransaction')
+@school_permission_required('finance.change_expensetransaction')
 def unsubmit_for_approval(request, pk):
     expense = get_school_object_or_404(request, ExpenseTransaction, pk=pk)
     expense.unsubmit_for_approval()
     return redirect('expense-list')
 
 
-@permission_required('finance.approve_expensetransaction')
+@school_permission_required('finance.approve_expensetransaction')
 def approve(request, pk):
     expense = get_school_object_or_404(request, ExpenseTransaction, pk=pk)
     expense.approve(request.user)

@@ -43,7 +43,7 @@
     {% if revenue.notes %}<tr><th>Notes:</th><td>{{ revenue.notes }}</td></tr>{% endif %}
   </table>
 
-  {% if perms.finance.add_revenuecorrectivejournalentry and not revenue.corrected_by_cje and not revenue.reversal_for_cje %}
+  {% if school_perms.finance.add_revenuecorrectivejournalentry and not revenue.corrected_by_cje and not revenue.reversal_for_cje %}
     <a href="{% url 'revenue-cje-create' revenue.pk %}"><span class="btn btn-secondary">Revise using journal entry</span></a>
   {% endif %}
 {% endblock %}

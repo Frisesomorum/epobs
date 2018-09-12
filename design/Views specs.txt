@@ -53,34 +53,26 @@ Expenditure Form
 	Below the entry fields is an abbreviated table listing the most recent 10[?] entries.
 
 Revenue Summary
-	%baseurl%/revSummary/
+	%baseurl%/reports/revenue-summary
 Expenditure Summary
-	%baseurl%/expSummary/
+	%baseurl%/reports/expense-summary
 Revenue and Expenditure Summary
-	%baseurl%/revExpSummary/
-Expenditure Category Summary
-	%baseurl%/expCatSummary/
+	%baseurl%/reports/summary
 	The summary reports may be accessed by any registered user, but are intended to be used by Accountants and Stakeholders.
-	These are read-only tables with the following columns:
-		Fund
-		Revenue Category
-		Ledger Account
-		Annual Budget
-		Period Actual
-		YTD Actual
+	The user begins by selecting one or more of the terms they have defined. (The terms may or may not be contiguous.) Then, they are presented with a read-only table with the following columns:
+		Category/Ledger Account
+			The name of either a category (for header rows), or a ledger account
+		Budget
+			The sum of the user-entered budget amounts for that ledger account (or category), for the selected period
+		Period Actual (to Date)
+			The sum of all expenses/revenues recorded against that ledger account (or category), for the selected period
 		Budget Balance
+			Budget minus Period Actual
 		% Budget Used
-		Est. Budget
-		Est'd. Remaining
-		% Est'd Used
-	The table will have header rows for each category. The table will initially be collapsed so that the user sees only the totals for each category. The user can click on a header row to expand and view/edit all of the individual ledger account values for that category. There will also be an 'expand all' toggle.
+			Period Actual divided by Budget
+	The table will have header rows for each category. The table will initially be collapsed so that the user sees only the totals for each category. The user can click on a header row to expand and view all of the individual ledger account values for that category. There will also be an 'expand all' toggle.
 	There is an 'Export' ['Download'?] button, which saves the displayed information to .csv or .xlsx.
 	Nice to have: drilldowns, visualizations
-
-Purchase Orders
-	%baseurl%/purchaseOrder/
-	To be used by Accountants and Bookkeepers only.
-	A form to add purchase orders to the database and edit existing purchase orders.
 
 Suppliers
 	%baseurl%/supplier/
@@ -91,7 +83,6 @@ Students
 	%baseurl%/student/
 	To be used by Accountants and Bookkeepers only.
 	A form to add students to the database and edit existing students.
-	Nice to have: ability to upload a picture
 
 The app will also include standard login/logout and user admin views. If an unregistered user tries to access any part of the app, they will be redirected to the login view.
 

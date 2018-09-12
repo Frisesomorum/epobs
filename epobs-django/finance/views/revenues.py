@@ -1,7 +1,7 @@
 from django import forms
 from django.urls import reverse_lazy
 from core.views import SessionRecentsMixin
-from schools.views import (
+from schoolauth.views import (
     SchooledListView, SchooledDetailView, SchooledCreateView, get_school,)
 from ..models import (
     RevenueTransaction, RevenueCorrectiveJournalEntry, APPROVAL_STATUS_APPROVED,)

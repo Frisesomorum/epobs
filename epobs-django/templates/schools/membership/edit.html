@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}EPOBS - Edit Membership{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item">School</li>
+  <li class="breadcrumb-item">Members</li>
+  <li class="breadcrumb-item">Edit</li>
+  <li class="breadcrumb-item">{{ userschoolmembership.user }}</li>
+{% endblock %}
+
+{% block content %}
+
+  <form method="post" class="mb-4" novalidate>
+    {% csrf_token %}
+    {% include 'includes/form.html' %}
+    <input type="submit" name="save" value="Save" />
+    {% if school_perms.schoolauth.delete_userschoolmembership %}<input type="submit" name="delete" value="Delete" />{% endif %}
+    <input type="submit" name="cancel" value="Cancel" />
+  </form>
+
+{% endblock %}

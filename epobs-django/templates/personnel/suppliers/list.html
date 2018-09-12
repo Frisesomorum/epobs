@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block content %}
-  {% if perms.personnel.add_supplier %}
+  {% if school_perms.personnel.add_supplier %}
   <div class="form-group">
     <a href="{% url 'supplier-create' %}" class="btn btn-secondary"><i class="fas fa-plus-square"></i> Add Suppliers...</a>
   </div>
@@ -21,14 +21,14 @@
     <thead>
       <tr>
         <th>Name</th>
-        {% if perms.personnel.change_supplier %}<th>Edit</th>{% endif %}
+        {% if school_perms.personnel.change_supplier %}<th>Edit</th>{% endif %}
       </tr>
     </thead>
     <tbody>
       {% for supplier in object_list %}
         <tr>
           <td>{{ supplier.name }}</td>
-          {% if perms.personnel.change_supplier %}<td><a href="{% url 'supplier-edit' supplier.pk %}"><i class="fas fa-pencil-alt"></i></a></td>{% endif %}
+          {% if school_perms.personnel.change_supplier %}<td><a href="{% url 'supplier-edit' supplier.pk %}"><i class="fas fa-pencil-alt"></i></a></td>{% endif %}
         </tr>
       {% endfor %}
     </tbody>

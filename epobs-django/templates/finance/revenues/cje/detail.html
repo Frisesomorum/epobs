@@ -49,13 +49,13 @@
       <td>{{ revenuecje.date_approved }} by {{ revenuecje.approved_by }}</td></tr>{% endif %}
   </table>
 
-  {% if revenuecje.approval_status == 'S' and perms.finance.approve_revenuecorrectivejournalentry and user != revenuecje.submitted_by %}
+  {% if revenuecje.approval_status == 'S' and school_perms.finance.approve_revenuecorrectivejournalentry and user != revenuecje.submitted_by %}
     <a href="{% url 'revenue-cje-approve' revenuecje.pk %}"><span class="btn btn-secondary">Approve</span></a>
   {% endif %}
-  {% if revenuecje.approval_status == 'S' and perms.finance.change_revenuecorrectivejournalentry %}
+  {% if revenuecje.approval_status == 'S' and school_perms.finance.change_revenuecorrectivejournalentry %}
     <a href="{% url 'revenue-cje-unsubmit' revenuecje.pk %}"><span class="btn btn-secondary">Revert to draft</span></a>
   {% endif %}
-  {% if revenuecje.approval_status == 'D' and perms.finance.change_revenuecorrectivejournalentry %}
+  {% if revenuecje.approval_status == 'D' and school_perms.finance.change_revenuecorrectivejournalentry %}
     <a href="{% url 'revenue-cje-submit' revenuecje.pk %}"><span class="btn btn-secondary">Submit for Approval</span></a>
     <a href="{% url 'revenue-cje-edit' revenuecje.pk %}"><span class="btn btn-secondary">Edit</span></a>
   {% endif %}

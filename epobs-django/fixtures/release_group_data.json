@@ -153,16 +153,6 @@
     "name": "Accountant",
     "permissions": [
       [
-        "change_school",
-        "schools",
-        "school"
-      ],
-      [
-        "view_school",
-        "schools",
-        "school"
-      ],
-      [
         "change_expensebudgetitem",
         "finance",
         "expensebudgetitem"
@@ -266,6 +256,64 @@
         "view_term",
         "finance",
         "term"
+      ],
+      [
+        "change_schoolprofile",
+        "schools",
+        "schoolprofile"
+      ],
+      [
+        "view_schoolprofile",
+        "schools",
+        "schoolprofile"
+      ]
+    ]
+  }
+},
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "School Superuser",
+    "permissions": [
+      [
+        "change_schoolprofile",
+        "schools",
+        "schoolprofile"
+      ],
+      [
+        "view_schoolprofile",
+        "schools",
+        "schoolprofile"
+      ],
+      [
+        "add_user",
+        "schoolauth",
+        "user"
+      ],
+      [
+        "view_user",
+        "schoolauth",
+        "user"
+      ],
+      [
+        "add_userschoolmembership",
+        "schoolauth",
+        "userschoolmembership"
+      ],
+      [
+        "change_userschoolmembership",
+        "schoolauth",
+        "userschoolmembership"
+      ],
+      [
+        "delete_userschoolmembership",
+        "schoolauth",
+        "userschoolmembership"
+      ],
+      [
+        "view_userschoolmembership",
+        "schoolauth",
+        "userschoolmembership"
       ]
     ]
   }
