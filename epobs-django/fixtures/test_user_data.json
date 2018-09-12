@@ -306,5 +306,23 @@
     "school": 1,
     "groups": []
   }
+},
+{
+  "model": "schoolauth.userschoolmembership",
+  "pk": 11,
+  "fields": {
+    "user": [
+      "acctbkpr"
+    ],
+    "school": 2,
+    "groups": [
+      [
+        "Bookkeeper"
+      ],
+      [
+        "Accountant"
+      ]
+    ]
+  }
 }
 ]
