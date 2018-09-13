@@ -50,6 +50,12 @@ class School(models.Model):
 
 
 class UserSchoolMembership(models.Model):
+    """
+    This is an attempt at using Django's permissions framework to define
+    multiple permission sets per user, depending on the currently selected
+    school. It more or less reimplements PermissionsMixin from
+    django.contrib.auth.models, but removes the user.
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='school_perms')
     school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='user_perms')
     groups = models.ManyToManyField(authModels.Group, blank=True, related_name="+")

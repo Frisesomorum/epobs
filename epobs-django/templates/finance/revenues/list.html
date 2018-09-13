@@ -1,6 +1,4 @@
-{% extends 'base.html' %}
-
-{% load static %}
+{% extends 'extends/datatable.html' %}
 
 {% block title %}EPOBS - List Revenues{% endblock %}
 
@@ -16,14 +14,14 @@
   </div>
   {% endif %}
 
-  <table class="table table-striped table-sm">
+  <table id="datatable" class="table table-striped table-sm">
     <thead>
       <tr>
-        <th>Date Paid</th>
-        <th>Student</th>
-        <th>Ledger Account</th>
-        <th>Amount</th>
-        <th>View</th>
+        <th class="datatable-column datatable-date">Date Paid</th>
+        <th class="datatable-column">Student</th>
+        <th class="datatable-column">Ledger Account</th>
+        <th class="datatable-column">Amount</th>
+        <th class="datatable-column datatable-nondata">View</th>
       </tr>
     </thead>
     <tbody>
@@ -41,16 +39,18 @@
 
   {% if cje_list|length > 0 %}
   <h4>Outstanding Corrective Journal Entries</h4>
-  <table class="table table-striped table-sm">
+  <table id="datatable-secondary" class="table table-striped table-sm">
     <thead>
       <tr>
-        <th>Student</th>
-        <th>Ledger Account</th>
-        <th>Amount</th>
-        <th>Status</th>
-        <th>View</th>
-        {% if school_perms.finance.change_revenuecorrectivejournalentry %}<th>Edit</th>{% endif %}
-        {% if school_perms.finance.approve_revenuecorrectivejournalentry %}<th>Approve</th>{% endif %}
+        <th class="datatable-column">Student</th>
+        <th class="datatable-column">Ledger Account</th>
+        <th class="datatable-column">Amount</th>
+        <th class="datatable-column">Status</th>
+        <th class="datatable-column datatable-nondata">View</th>
+        {% if school_perms.finance.change_revenuecorrectivejournalentry %}
+          <th class="datatable-column datatable-nondata">Edit</th>{% endif %}
+        {% if school_perms.finance.approve_revenuecorrectivejournalentry %}
+          <th class="datatable-column datatable-nondata">Approve</th>{% endif %}
       </tr>
     </thead>
     <tbody>

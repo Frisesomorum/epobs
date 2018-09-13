@@ -1,6 +1,5 @@
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.http import HttpResponse
 from tablib import Dataset
 from core.views import DeletionFormMixin, SessionRecentsMixin
 from schoolauth.views import (
@@ -15,13 +14,7 @@ class List(SchooledListView):
     template_name = 'students/list.html'
 
     def post(self, request, **kwargs):
-        if 'export' in request.POST:
-            student_resource = StudentResource()
-            dataset = student_resource.export()
-            response = HttpResponse(dataset.csv, content_type='text/csv')
-            response['Content-Disposition'] = 'attachment; filename="students.csv"'
-            return response
-        elif 'import' in request.POST:
+        if 'import' in request.POST:
             # TODO: nicer error handling
             student_resource = StudentResource()
             dataset = Dataset()

@@ -1,6 +1,4 @@
-{% extends 'base.html' %}
-
-{% load static %}
+{% extends 'extends/datatable.html' %}
 
 {% block title %}EPOBS - List Students{% endblock %}
 
@@ -10,30 +8,26 @@
 {% endblock %}
 
 {% block content %}
+  {% if school_perms.students.add_student %}
   <div class="form-group">
     <form method="post" class="mb-4" enctype="multipart/form-data">
       {% csrf_token %}
-      <input type="submit" name="export" value="Export" />
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      {% if school_perms.students.add_student %}
       <input type="submit" name="import" value="Import" />
       <input type="file" name="import_students">
-      {% endif %}
     </form>
-    {% if school_perms.students.add_student %}
     <a href="{% url 'student-create' %}" class="btn btn-secondary"><i class="fas fa-plus-square"></i> Add Students...</a>
-    {% endif %}
   </div>
+  {% endif %}
 
-  <table id="students" class="table table-striped table-sm">
+  <table id="datatable" class="table table-striped table-sm">
     <thead>
       <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Date of Birth</th>
-        <th>Email</th>
-        <th>Balance Due</th>
-        {% if school_perms.students.change_student %}<th>Edit</th>{% endif %}
+        <th class="datatable-column">First Name</th>
+        <th class="datatable-column">Last Name</th>
+        <th class="datatable-column datatable-date">Date of Birth</th>
+        <th class="datatable-column">Email</th>
+        <th class="datatable-column">Balance Due</th>
+        {% if school_perms.students.change_student %}<th class="datatable-column datatable-nondata">Edit</th>{% endif %}
       </tr>
     </thead>
     <tbody>
@@ -49,23 +43,4 @@
       {% endfor %}
     </tbody>
   </table>
-{% endblock %}
-
-{% block script %}
-<script src="{% static 'DataTables/datatables.min.js' %}"></script>
-<script>
-  $(document).ready(function() {
-    $('#students').DataTable( {
-      "columns": [
-        null,
-        null,
-        { "type": "date" },
-        null,
-        null,
-        { "orderable": false }
-      ],
-      "pageLength": 50,
-    });
-  } );
-</script>
 {% endblock %}

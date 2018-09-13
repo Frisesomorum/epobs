@@ -1,6 +1,4 @@
-{% extends 'base.html' %}
-
-{% load static %}
+{% extends 'extends/datatable.html' %}
 
 {% block title %}EPOBS - List Terms{% endblock %}
 
@@ -16,15 +14,14 @@
   </div>
   {% endif %}
 
-  <!-- TODO: display discontiguity and overlap errors -->
-  <table class="table table-striped table-sm">
+  <table id="datatable" class="table table-striped table-sm">
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Start</th>
-        <th>End</th>
-        <th>Budget</th>
-        {% if school_perms.finance.change_term %}<th>Edit</th>{% endif %}
+        <th class="datatable-column">Name</th>
+        <th class="datatable-column datatable-date">Start</th>
+        <th class="datatable-column datatable-date">End</th>
+        <th class="datatable-column datatable-nondata">Budget</th>
+        {% if school_perms.finance.change_term %}<th class="datatable-column datatable-nondata">Edit</th>{% endif %}
       </tr>
     </thead>
     <tbody>

@@ -4,13 +4,14 @@
   <head>
     <meta charset="utf-8">
     <title>{% block title %}EPOBS{% endblock %}</title>
-    <link href="https://fonts.googleapis.com/css?family=Encode+Sans+Condensed" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'css/app.css' %}">
-    <link rel="stylesheet" href="{% static 'DataTables/datatables.min.css' %}">
-	{% block stylesheet %}{% endblock %}
+    {% block stylesheets %}
+      <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Encode+Sans+Condensed">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+      <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/app.css' %}">
+    {% endblock %}
   </head>
+
   <body>
     {% block body %}
       <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
@@ -66,10 +67,12 @@
         {% endblock %}
       </div>
     {% endblock body %}
-    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
-    <script src="{% static 'js/popper.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    {% block script %}
-    {% endblock script %}
+
+    {% block scripts %}
+      <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+      <script src="{% static 'js/popper.min.js' %}"></script>
+      <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    {% endblock %}
+
   </body>
 </html>
