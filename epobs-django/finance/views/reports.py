@@ -32,7 +32,7 @@ class SelectPeriodForm(forms.Form):
 
 
 class SelectPeriod(FormView):
-    template_name = 'reports/select_period.html'
+    template_name = 'reports/period_select.html'
     form_class = SelectPeriodForm
 
     def get_form_kwargs(self):
