@@ -18,9 +18,15 @@ class List(SchooledListView):
     def get_context_data(self, **kwargs):
         context = {}
         context['cje_list'] = ExpenseCorrectiveJournalEntry.objects.filter(
-            school=get_school(self.request.session)
-            ).exclude(approval_status=APPROVAL_STATUS_APPROVED)
+            school=get_school(self.request.session)).exclude(
+            approval_status=APPROVAL_STATUS_APPROVED).filter(
+            correction_to__in=self.get_queryset())
         return super().get_context_data(**context)
+
+
+class Drilldown(List):
+    def get_queryset(self):
+        return super().get_queryset().filter(ledger_account=self.kwargs['ledger_account'])
 
 
 class Detail(SchooledDetailView):

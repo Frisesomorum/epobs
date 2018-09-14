@@ -47,6 +47,8 @@ urlpatterns = [
     re_path(r'budgets/(?P<pk>\d+)/$', termViews.EditBudget.as_view(), name='budget-edit'),
 
     re_path(r'expenses/$', expenseViews.List.as_view(), name='expense-list'),
+    re_path(r'expenses/drilldown/(?P<ledger_account>\d+)/$', expenseViews.Drilldown.as_view(),
+            name='expense-drilldown'),
     re_path(r'expenses/(?P<pk>\d+)/$', expenseViews.Detail.as_view(), name='expense-detail'),
     re_path(r'expenses/new/$', expenseViews.Create.as_view(), name='expense-create'),
     re_path(r'expenses/(?P<pk>\d+)/edit/$', expenseViews.Edit.as_view(), name='expense-edit'),
@@ -63,6 +65,8 @@ urlpatterns = [
     re_path(r'expenses/cje/(?P<pk>\d+)/approve/$', expenseCjeViews.approve, name='expense-cje-approve'),
 
     re_path(r'revenues/$', revenueViews.List.as_view(), name='revenue-list'),
+    re_path(r'revenues/drilldown/(?P<ledger_account>\d+)/$', revenueViews.Drilldown.as_view(),
+            name='revenue-drilldown'),
     re_path(r'revenues/(?P<pk>\d+)/$', revenueViews.Detail.as_view(), name='revenue-detail'),
     re_path(r'revenues/new/$', revenueViews.Create.as_view(), name='revenue-create'),
 
@@ -75,7 +79,12 @@ urlpatterns = [
     re_path(r'revenues/cje/(?P<pk>\d+)/approve/$', revenueCjeViews.approve, name='revenue-cje-approve'),
 
     re_path(r'reports/index/$', reportViews.index_view, name='report-index'),
+    re_path(r'reports/select-period/(?P<next>[\w-]+)$', reportViews.SelectPeriod.as_view(),
+            name='report-select-period'),
     re_path(r'reports/expense-summary/$', reportViews.ExpenseSummary.as_view(), name='report-expense-summary'),
+    re_path(r'reports/revenue-summary/$', reportViews.RevenueSummary.as_view(), name='report-revenue-summary'),
+    re_path(r'reports/expense-revenue-summary/$', reportViews.ExpenseRevenueSummary.as_view(),
+            name='report-expense-revenue-summary'),
 ]
 
 if settings.DEBUG:

@@ -10,6 +10,7 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
   <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.2/b-flash-1.5.2/b-html5-1.5.2/b-print-1.5.2/datatables.min.js"></script>
+
   <script language="javascript" type="text/javascript">
     $(document).ready(function() {
       $('#datatable').DataTable( {
@@ -18,23 +19,71 @@
           { targets: 'datatable-nondata', orderable: false, width:"1px", autoWidth: false }
         ],
         pageLength: 50,
-        dom: "Bftp",
+        dom: "ftpB",
         buttons: [
-          "excel", "pdf", "csv", "copy", "print",
+          { extend: 'excel', className: 'btn-sm' },
+          { extend: 'pdf', className: 'btn-sm' },
+          { extend: 'csv', className: 'btn-sm' },
+          { extend: 'copy', className: 'btn-sm' },
+          { extend: 'print', className: 'btn-sm' },
         ]
       });
     } );
+
     $(document).ready(function() {
       $('#datatable-secondary').DataTable( {
         columnDefs: [
           { targets: 'datatable-nondata', orderable: false, width:"1px", autoWidth: false }
         ],
         paging: false,
-        dom: "Bft",
+        dom: "ftB",
         buttons: [
-          "excel", "pdf", "csv", "copy", "print",
+          { extend: 'excel', className: 'btn-sm' },
+          { extend: 'pdf', className: 'btn-sm' },
+          { extend: 'csv', className: 'btn-sm' },
+          { extend: 'copy', className: 'btn-sm' },
+          { extend: 'print', className: 'btn-sm' },
         ]
       });
     } );
+
+    $(document).ready(function() {
+      $('table.datatable-report').DataTable( {
+        columnDefs: [
+          { targets: 'datatable-nondata', width:"1px", autoWidth: false }
+        ],
+        ordering: false,
+        paging: false,
+        dom: "tB",
+        buttons: [
+          { extend: 'excel', className: 'btn-sm' },
+          { extend: 'pdf', className: 'btn-sm' },
+          { extend: 'csv', className: 'btn-sm' },
+          { extend: 'copy', className: 'btn-sm' },
+          { extend: 'print', className: 'btn-sm' },
+        ]
+      });
+    } );
+
+    $('table.datatable-report tbody').on('click', 'td.report-summary-toggle', function () {
+        var parentId = this.id;
+        var category = parentId.slice(parentId.lastIndexOf("-")+1);
+        var childClass = 'report-child-row-' + category;
+        var childRows = document.getElementsByClassName(childClass);
+        if ( this.classList.contains('collapsed') ) {
+          for (var i = 0; i < childRows.length; i++){
+            childRows[i].style.display = 'table-row';
+          }
+          this.innerHTML = '<i class="fas fa-angle-down"></i>';
+        }
+        else {
+          for (var i = 0; i < childRows.length; i++){
+            childRows[i].style.display = 'none';
+          }
+          this.innerHTML = '<i class="fas fa-angle-right"></i>';
+        }
+        this.classList.toggle('collapsed');
+    } );
   </script>
+
 {% endblock %}

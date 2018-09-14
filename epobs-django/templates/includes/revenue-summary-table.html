@@ -1,0 +1,24 @@
+<table class="datatable-report table table-striped table-sm small table-hover">
+  <thead>
+    <tr>
+      <th class="datatable-column">Ledger Account</th>
+      <th class="datatable-column">Budget</th>
+      <th class="datatable-column">Period Actual</th>
+      <th class="datatable-column">Budget Balance</th>
+      <th class="datatable-column">Percent Used</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for report_item in revenue_report_list %}
+      <tr>
+        <td>
+          <a href="{% url 'revenue-drilldown' ledger_account=report_item.ledger_account.pk %}">{{ report_item }}</a>
+        </td>
+        <td>{{ report_item.period_budget }}</td>
+        <td>{{ report_item.period_actual }}</td>
+        <td>{{ report_item.budget_balance }}</td>
+        <td>{{ report_item.percent_used }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

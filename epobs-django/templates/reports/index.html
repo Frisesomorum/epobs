@@ -1,5 +1,7 @@
 {% extends 'extends/base.html' %}
 
+{% block title %}EPOBS - Reports{% endblock %}
+
 {% block breadcrumb %}
   <li class="breadcrumb-item">Reports</li>
   <li class="breadcrumb-item">Index</li>
@@ -8,9 +10,9 @@
 {% block content %}
   <div class="container">
     <ul>
-      <li><a href="#">Expense Summary</a></li>
-      <li><a href="#">Revenue Summary</a></li>
-      <li><a href="#">Expense and Revenue Summary</a></li>
+      <li><a href="{% url 'report-expense-summary' %}">Expense Summary</a></li>
+      <li><a href="{% url 'report-revenue-summary' %}">Revenue Summary</a></li>
+      <li><a href="{% url 'report-expense-revenue-summary' %}">Expense and Revenue Summary</a></li>
     </ul>
   </div>
 {% endblock content %}

@@ -33,7 +33,7 @@ class SelectSchoolForm(forms.Form):
 
 class SelectSchool(FormView):
     form_class = SelectSchoolForm
-    template_name = 'schools/select.html'
+    template_name = 'school_select.html'
     success_url = reverse_lazy('index')
 
     def get_context_data(self, **kwargs):
@@ -86,12 +86,14 @@ class SelectSchool(FormView):
 
 
 def set_admin_mode(session):
+    clear_school_session_data(session)
     session['school_pk'] = 'admin'
     # session['school'] = None
     session['school_name'] = "(Administrator Mode)"
 
 
 def set_school(session, school_pk):
+    clear_school_session_data(session)
     session['school_pk'] = school_pk
     school = School.objects.get(pk=school_pk)
     # session['school'] = school
@@ -130,6 +132,23 @@ def get_school_object_or_404(request, klass, **kwargs):
     if get_school(request.session) != object.school:
         raise SuspiciousOperation("This " + type(object) + " belongs to a school to which you are not logged in to.")
     return object
+
+
+def register_school_session_data(session, key):
+    try:
+        session['school_data'].append(key)
+    except KeyError:
+        session['school_data'] = [key]
+
+
+def clear_school_session_data(session):
+    if 'school_data' in session.keys():
+        for key in session['school_data']:
+            try:
+                del session[key]
+            except KeyError:
+                pass
+        del session['school_data']
 
 
 class SchoolPermissionMixin(PermissionRequiredMixin):

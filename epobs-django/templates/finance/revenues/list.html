@@ -18,6 +18,7 @@
     <thead>
       <tr>
         <th class="datatable-column datatable-date">Date Paid</th>
+        <th class="datatable-column">Term</th>
         <th class="datatable-column">Student</th>
         <th class="datatable-column">Ledger Account</th>
         <th class="datatable-column">Amount</th>
@@ -27,7 +28,8 @@
     <tbody>
       {% for revenue in object_list %}
         {% if revenue.corrected_by_cje %}<tr class="table-danger">{% else %}<tr>{% endif %}
-          <td>{{ revenue.created }}</td>
+          <td>{{ revenue.date }}</td>
+          <td>{{ revenue.term }}</td>
           <td>{{ revenue.student }}</td>
           <td>{{ revenue.ledger_account }}</td>
           <td>{{ revenue.amount }}</td>

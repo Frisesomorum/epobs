@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 from django.db import models, OperationalError
 from core.models import Descriptor
 from schoolauth.models import User, School
@@ -56,6 +57,9 @@ class Term(models.Model):
     name = models.CharField(max_length=255, blank=True)
     start = models.DateField()
     end = models.DateField()
+
+    class Meta:
+        ordering = ['start', 'end']
 
     def __str__(self):
         if len(self.name) > 0:
@@ -154,6 +158,33 @@ class Transaction(models.Model):
 
     def __str__(self):
         return "payment of {0} on {1}".format(self.amount, self.created.date())
+
+    @property
+    def date(self):
+        if isinstance(self, RequiresApproval):
+            return self.date_approved
+        return self.created.date()
+
+    @property
+    def term(self):
+        if self.date is None:
+            return None
+        for term in Term.objects.filter(school=self.school).all():
+            if term.start <= self.date and self.date <= term.end:
+                return term
+        return None
+
+    def include_in_report(self):
+        if (
+                isinstance(self, RequiresApproval)
+                and self.approval_status != APPROVAL_STATUS_APPROVED):
+            return False
+        if (
+                isinstance(self, AdmitsCorrections)
+                and hasattr(self, 'corrected_by_cje')
+                and self.corrected_by_cje.approval_status != APPROVAL_STATUS_APPROVED):
+            return False
+        return True
 
 
 APPROVAL_STATUS_DRAFT = 'D'
@@ -385,3 +416,91 @@ class RevenueCorrectiveJournalEntry(RequiresApproval, RevenueInfo):
         self.reversed_in = self.create_reversal_revenue(user)
         self.restated_in = self.create_restatement_revenue(user)
         self.save()
+
+
+class ReportItem(models.Model):
+    category = None
+    ledger_account = None
+    period = None
+    transaction_queryset = None
+    budget_items = None
+    period_budget = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+    period_actual = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+    budget_balance = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+    percent_used = models.DecimalField(max_digits=5, decimal_places=4, default=0)
+
+    class Meta:
+        abstract = True
+
+    def __init__(
+            self,
+            period=None, school=None, ledger_account=None,
+            category=None, report_item_list=None):
+        if category is None:
+            self.construct_line_item(period, school, ledger_account)
+        else:
+            self.construct_summary_item(category, report_item_list)
+
+    def construct_line_item(self, period, school, ledger_account):
+        if isinstance(ledger_account, ExpenseLedgerAccount):
+            transaction_model = ExpenseTransaction
+            budget_model = ExpenseBudgetItem
+        else:
+            transaction_model = RevenueTransaction
+            budget_model = RevenueBudgetItem
+        self.ledger_account = ledger_account
+        self.category = ledger_account.category
+        self.period = period
+        self.transaction_queryset = transaction_model.objects.filter(school=school, ledger_account=ledger_account)
+        self.budget_items = budget_model.objects.filter(term__in=period, ledger_account=ledger_account).all()
+        self.calc_all()
+
+    def construct_summary_item(self, category, report_item_list):
+        self.category = category
+        period_budget = 0
+        period_actual = 0
+        for report_item in report_item_list:
+            if (
+                    report_item.ledger_account is not None
+                    and report_item.ledger_account.category == category):
+                period_budget += report_item.period_budget
+                period_actual += report_item.period_actual
+        self.period_budget = period_budget
+        self.period_actual = period_actual
+        self.calc_budget_balance()
+        self.calc_percent_used()
+
+    def __str__(self):
+        if self.ledger_account is not None:
+            return str(self.ledger_account)
+        return str(self.category)
+
+    def calc_all(self):
+        self.calc_period_budget()
+        self.calc_period_actual()
+        self.calc_budget_balance()
+        self.calc_percent_used()
+
+    def calc_period_budget(self):
+        period_budget = 0
+        for budget in self.budget_items:
+            period_budget += budget.amount
+        self.period_budget = period_budget
+
+    def calc_period_actual(self):
+        period_actual = 0
+        for transaction in self.transaction_queryset.all():
+            if transaction.include_in_report():
+                term = transaction.term
+                if term is not None and term.pk in self.period:
+                    period_actual += transaction.amount
+        self.period_actual = period_actual
+
+    def calc_budget_balance(self):
+        self.budget_balance = self.period_budget - self.period_actual
+
+    def calc_percent_used(self):
+        if self.period_budget == 0:
+            self.percent_used = 0
+        else:
+            self.percent_used = ((self.period_actual / self.period_budget) // Decimal(0.001)) / 10

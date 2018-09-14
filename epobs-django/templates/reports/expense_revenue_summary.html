@@ -1,0 +1,20 @@
+{% extends 'extends/datatable.html' %}
+
+{% block title %}EPOBS - Expense &amp; Revenue Summary{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item">Reports</li>
+  <li class="breadcrumb-item">Expense &amp; Revenue Summary</li>
+{% endblock %}
+
+{% block content %}
+  <div align="center">
+    Reporting period:
+    <a href="{% url 'report-select-period' next='report-expense-revenue-summary' %}">{{ period }}</a>
+  </div>
+  <h2>Expenses</h2>
+  {% include 'includes/expense-summary-table.html' %}
+
+  <h2>Revenues</h2>
+  {% include 'includes/revenue-summary-table.html' %}
+{% endblock %}
