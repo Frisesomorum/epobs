@@ -1,7 +1,13 @@
 from django.db import models
 
 
+class DescriptorManager(models.Manager):
+    def get_by_natural_key(self, name):
+        return self.get(name=name)
+
+
 class Descriptor(models.Model):
+    objects = DescriptorManager()
     name = models.CharField(max_length=255, unique=True)
     abbreviation = models.CharField(max_length=15)
     description = models.TextField(max_length=4000, blank=True)
@@ -11,6 +17,15 @@ class Descriptor(models.Model):
 
     def __str__(self):
         return self.name
+
+    def natural_key(self):
+        return (self.name, )
+
+    def abbv(self):
+        if hasattr(self, 'abbreviation'):
+            return self.abbreviation
+        name = self.name
+        return (name[:13] + '..') if len(name) > 15 else name
 
 
 class Person(models.Model):
