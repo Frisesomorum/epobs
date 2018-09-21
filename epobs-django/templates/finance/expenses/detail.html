@@ -36,23 +36,26 @@
   {% endif %}
 
   <table class="table">
+    <tr><th>Category:</th><td>{{ expense.ledger_account.category }}</td></tr>
     <tr><th>Ledger Account:</th><td>{{ expense.ledger_account }}</td></tr>
     <tr><th>Payee:</th><td>{{ expense.payee }}</td></tr>
+    <tr><th>Quantity:</th><td>{{ expense.quantity }}</td></tr>
+    <tr><th>Cost per Unit:</th><td>{{ expense.unit_cost }}</td></tr>
+    {% if expense.discount > 0 %}<tr><th>Discount:</th><td>{{ expense.discount }}</td></tr>{% endif %}
+    {% if expense.tax > 0 %}<tr><th>Tax:</th><td>{{ expense.tax }}</td></tr>{% endif %}
     <tr><th>Amount:</th><td>{{ expense.amount }}</td></tr>
+    {% if expense.notes %}<tr><th>Notes:</th><td>{{ expense.notes }}</td></tr>{% endif %}
+    <tr><th/><td/></tr>
     <tr><th>Created:</th><td>{{ expense.created }} by {{ expense.created_by }}</td></tr>
     <tr><th>Status:</th><td>{{ expense.get_approval_status_display }}</td></tr>
-    {% if expense.approval_status == 'S' %}<tr><th>Submitted:</th><td>{{ expense.date_submitted }} by {{ expense.submitted_by }}</td></tr>{% endif %}
+    {% if expense.approval_status == 'P' %}<tr><th>Submitted for Approval:</th><td>{{ expense.date_submitted }} by {{ expense.submitted_by }}</td></tr>{% endif %}
     {% if expense.approval_status == 'A' %}<tr><th>Approved:</th><td>{{ expense.date_approved }} by {{ expense.approved_by }}</td></tr>{% endif %}
-    {% if expense.notes %}<tr><th>Notes:</th><td>{{ expense.notes }}</td></tr>{% endif %}
-    {% if expense.discount %}<tr><th>Discount:</th><td>{{ expense.discount }}</td></tr>{% endif %}
-    {% if expense.quantity %}<tr><th>Quantity:</th><td>{{ expense.quantity }}</td></tr>{% endif %}
-    {% if expense.unit_cost %}<tr><th>Cost:</th><td>{{ expense.unit_cost }}{% if expense.unit_cost %} per {{ expense.unit_of_measure }}{% endif %}</td></tr>{% endif %}
   </table>
 
-  {% if expense.approval_status == 'S' and school_perms.finance.approve_expensetransaction and user != expense.submitted_by %}
+  {% if expense.approval_status == 'P' and school_perms.finance.approve_expensetransaction and user != expense.submitted_by %}
     <a href="{% url 'expense-approve' expense.pk %}"><span class="btn btn-secondary">Approve</span></a>
   {% endif %}
-  {% if expense.approval_status == 'S' and school_perms.finance.change_expensetransaction %}
+  {% if expense.approval_status == 'P' and school_perms.finance.change_expensetransaction %}
     <a href="{% url 'expense-unsubmit' expense.pk %}"><span class="btn btn-secondary">Revert to draft</span></a>
   {% endif %}
   {% if expense.approval_status == 'D' and school_perms.finance.change_expensetransaction %}

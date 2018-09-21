@@ -15,7 +15,14 @@
   <form method="post" class="mb-4" novalidate>
     {% csrf_token %}
     {% include 'includes/form.html' %}
-    <input type="submit" name="save" value="Save" />
+    <div class="font-weight-bold">Total Amount: <label id="total-amount"></label></div>
+    <input type="submit" name="save" value="Save as Draft" />
+    <input type="submit" name="save-and-submit" value="Save and Submit for Approval" />
   </form>
 
+{% endblock %}
+
+{% block scripts %}
+  {{ block.super }}
+  {% include 'finance/expenses/script-total-amount.html' %}
 {% endblock %}

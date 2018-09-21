@@ -1,0 +1,34 @@
+{% extends 'extends/base.html' %}
+
+{% load static %}
+
+{% block title %}EPOBS - View Supplier{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item">Suppliers</li>
+  <li class="breadcrumb-item">View</li>
+  <li class="breadcrumb-item">{{ supplier }}</li>
+{% endblock %}
+
+{% block content %}
+
+  <table class="table">
+    <tr><th>Name:</th><td>{{ supplier.name }}</td></tr>
+    {% if supplier.payee.date_hired %}
+      <tr><th>Date Hired:</th><td>{{ supplier.payee.date_hired }}</td></tr>
+      {% if not supplier.payee.is_active %}
+        <tr><th>Date Terminated:</th><td>{{ supplier.payee.date_terminated }}</td></tr>
+      {% endif %}
+    {% endif %}
+  </table>
+
+  {% if supplier.payee.is_active %}
+    {% if school_perms.personnel.change_contract %}
+      <a href="{% url 'contract-terminate' supplier.payee.pk %}"><span class="btn btn-secondary">Terminate Contract</span></a>
+    {% endif %}
+  {% else %}
+    {% if school_perms.personnel.add_contract %}
+      <a href="{% url 'contract-start' supplier.payee.pk %}"><span class="btn btn-secondary">Start Contract</span></a>
+    {% endif %}
+  {% endif %}
+{% endblock %}

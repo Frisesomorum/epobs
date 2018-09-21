@@ -9,7 +9,7 @@ class DescriptorManager(models.Manager):
 class Descriptor(models.Model):
     objects = DescriptorManager()
     name = models.CharField(max_length=255, unique=True)
-    abbreviation = models.CharField(max_length=15)
+    abbreviation = models.CharField(max_length=15, blank=True)
     description = models.TextField(max_length=4000, blank=True)
 
     class Meta:

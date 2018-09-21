@@ -2,20 +2,19 @@ from django import forms
 from django.urls import reverse_lazy
 from core.views import SessionRecentsMixin
 from schoolauth.views import (
-    SchooledListView, SchooledDetailView, SchooledCreateView, get_school,)
+    SchooledListView, SchooledDetailView, SchooledCreateView, SchoolFormMixin, get_school,)
 from ..models import (
     RevenueTransaction, RevenueCorrectiveJournalEntry, APPROVAL_STATUS_APPROVED,)
 
 
-class RevenueForm(forms.ModelForm):
+class RevenueForm(SchoolFormMixin, forms.ModelForm):
     class Meta:
         model = RevenueTransaction
         fields = ('ledger_account', 'amount', 'student', 'notes')
 
     def __init__(self, *args, **kwargs):
-        school = kwargs.pop('school')
         super().__init__(*args, **kwargs)
-        self.fields['student'].queryset = self.fields['student'].queryset.filter(student__school=school)
+        self.fields['student'].queryset = self.fields['student'].queryset.filter(student__school=self.school)
 
 
 class List(SchooledListView):
@@ -50,11 +49,6 @@ class Create(SessionRecentsMixin, SchooledCreateView):
     form_class = RevenueForm
     template_name = 'finance/revenues/create.html'
     success_url = reverse_lazy('revenue-create')
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['school'] = get_school(self.request.session)
-        return kwargs
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user

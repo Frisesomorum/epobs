@@ -6,8 +6,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView
 from core.views import DeletionFormMixin
 from schoolauth.views import (
-    SchooledListView, SchooledCreateView, SchooledUpdateView, )
-from .models import SchoolProfile
+    SchooledListView, SchooledCreateView, SchooledUpdateView, SchoolFormMixin, )
+from .models import SchoolProfile, GraduatingClass
 from schoolauth.models import User, UserSchoolMembership
 from schoolauth.views import is_admin_mode, get_school
 
@@ -15,7 +15,7 @@ from schoolauth.views import is_admin_mode, get_school
 class Edit(SchooledUpdateView):
     permission_required = 'schools.change_schoolprofile'
     model = SchoolProfile
-    fields = ('school_fee', 'canteen_fee', 'admission_fee')
+    fields = ()
     template_name = 'schools/edit.html'
     success_url = reverse_lazy('index')
 
@@ -28,7 +28,9 @@ class Edit(SchooledUpdateView):
 class CreateUserForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
+        fields = (
+            'username', 'first_name', 'last_name', 'email',
+            'password1', 'password2', )
 
 
 class CreateUser(CreateView):
@@ -53,15 +55,15 @@ class ListMembership(SchooledListView):
     template_name = 'schools/membership/list.html'
 
 
-class CreateMembershipForm(forms.ModelForm):
+class CreateMembershipForm(SchoolFormMixin, forms.ModelForm):
     class Meta:
         model = UserSchoolMembership
         fields = ('user', 'groups')
 
     def __init__(self, *args, **kwargs):
-        school = kwargs.pop('school')
         super().__init__(*args, **kwargs)
-        self.fields['user'].queryset = self.fields['user'].queryset.exclude(school_perms__school=school)
+        self.fields['user'].queryset = self.fields[
+            'user'].queryset.exclude(school_perms__school=self.school)
 
 
 class CreateMembership(SchooledCreateView):
@@ -71,11 +73,6 @@ class CreateMembership(SchooledCreateView):
     template_name = 'schools/membership/create.html'
     success_url = reverse_lazy('member-list')
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['school'] = get_school(self.request.session)
-        return kwargs
-
 
 class EditMembership(DeletionFormMixin, SchooledUpdateView):
     permission_required = 'schoolauth.change_userschoolmembership'
@@ -83,3 +80,32 @@ class EditMembership(DeletionFormMixin, SchooledUpdateView):
     fields = ('groups',)
     template_name = 'schools/membership/edit.html'
     success_url = reverse_lazy('member-list')
+
+
+class ListClass(SchooledListView):
+    permission_required = 'schools.view_graduatingclass'
+    model = GraduatingClass
+    template_name = 'schools/classes/list.html'
+
+    def get_queryset(self):
+        return super().get_queryset().filter(graduated=False)
+
+
+class CreateClass(SchooledCreateView):
+    permission_required = 'schools.add_graduatingclass'
+    model = GraduatingClass
+    fields = (
+        'graduating_year', 'label', 'admission_fee', 'school_fee',
+        'canteen_fee', 'graduated')
+    template_name = 'schools/classes/create.html'
+    success_url = reverse_lazy('class-list')
+
+
+class EditClass(DeletionFormMixin, SchooledUpdateView):
+    permission_required = 'schools.change_graduatingclass'
+    model = GraduatingClass
+    fields = (
+        'graduating_year', 'label', 'admission_fee', 'school_fee',
+        'canteen_fee', 'graduated')
+    template_name = 'schools/classes/edit.html'
+    success_url = reverse_lazy('class-list')

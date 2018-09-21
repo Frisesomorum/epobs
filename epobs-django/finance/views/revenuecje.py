@@ -4,20 +4,19 @@ from django.urls import reverse_lazy
 from schoolauth.decorators import school_permission_required
 from core.views import DeletionFormMixin
 from schoolauth.views import (
-    SchooledDetailView, SchooledCreateView, SchooledUpdateView,
-    get_school, get_school_object_or_404, )
+    SchooledDetailView, SchoolFormMixin, get_school_object_or_404, )
 from ..models import RevenueTransaction, RevenueCorrectiveJournalEntry
+from .shared import RequiresApprovalCreateView, RequiresApprovalUpdateView
 
 
-class RevenueCjeForm(forms.ModelForm):
+class RevenueCjeForm(SchoolFormMixin, forms.ModelForm):
     class Meta:
         model = RevenueCorrectiveJournalEntry
         fields = ('ledger_account', 'amount', 'student', 'notes')
 
     def __init__(self, *args, **kwargs):
-        school = kwargs.pop('school')
         super().__init__(*args, **kwargs)
-        self.fields['student'].queryset = self.fields['student'].queryset.filter(student__school=school)
+        self.fields['student'].queryset = self.fields['student'].queryset.filter(student__school=self.school)
 
 
 class Detail(SchooledDetailView):
@@ -27,17 +26,12 @@ class Detail(SchooledDetailView):
     context_object_name = 'revenuecje'
 
 
-class Create(SchooledCreateView):
+class Create(RequiresApprovalCreateView):
     permission_required = 'finance.add_revenuecorrectivejournalentry'
     model = RevenueCorrectiveJournalEntry
     form_class = RevenueCjeForm
     template_name = 'finance/revenues/cje/create.html'
     success_url = reverse_lazy('revenue-list')
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['school'] = get_school(self.request.session)
-        return kwargs
 
     def get_context_data(self, **kwargs):
         context = {}
@@ -48,7 +42,7 @@ class Create(SchooledCreateView):
         return super().get_context_data(**context)
 
     def get_initial(self):
-        initial = super(SchooledCreateView, self).get_initial().copy()
+        initial = super().get_initial().copy()
         correcting_revenue = get_school_object_or_404(
             self.request, RevenueTransaction, pk=self.kwargs['revenue_pk'])
         initial['ledger_account'] = correcting_revenue.ledger_account
@@ -62,17 +56,12 @@ class Create(SchooledCreateView):
         return super().form_valid(form)
 
 
-class Edit(DeletionFormMixin, SchooledUpdateView):
+class Edit(DeletionFormMixin, RequiresApprovalUpdateView):
     permission_required = 'finance.change_revenuecorrectivejournalentry'
     model = RevenueCorrectiveJournalEntry
     form_class = RevenueCjeForm
     template_name = 'finance/revenues/cje/edit.html'
     success_url = reverse_lazy('revenue-list')
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['school'] = get_school(self.request.session)
-        return kwargs
 
 
 @school_permission_required('finance.change_revenuecorrectivejournalentry')

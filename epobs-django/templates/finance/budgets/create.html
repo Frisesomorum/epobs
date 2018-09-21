@@ -2,11 +2,11 @@
 
 {% load static %}
 
-{% block title %}EPOBS - Edit Term{% endblock %}
+{% block title %}EPOBS - Create Budget{% endblock %}
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item">Terms</li>
-  <li class="breadcrumb-item">Edit</li>
+  <li class="breadcrumb-item">Budgets</li>
+  <li class="breadcrumb-item">Create</li>
 {% endblock %}
 
 {% block content %}
@@ -15,8 +15,6 @@
     {% csrf_token %}
     {% include 'includes/form.html' %}
     <input type="submit" name="save" value="Save" />
-    {% if school_perms.finance.delete_term %}<input type="submit" name="delete" value="Delete" />{% endif %}
-    <input type="submit" name="cancel" value="Cancel" />
   </form>
 
 {% endblock %}

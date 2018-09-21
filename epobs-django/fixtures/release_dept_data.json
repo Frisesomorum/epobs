@@ -1,0 +1,10 @@
+[
+{
+  "model": "personnel.department",
+  "fields": {
+    "name": "Canteen",
+    "abbreviation": "",
+    "description": ""
+  }
+}
+]

@@ -1,24 +1,20 @@
-from django import forms
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from schoolauth.decorators import school_permission_required
 from core.views import DeletionFormMixin
 from schoolauth.views import (
-    SchooledDetailView, SchooledCreateView, SchooledUpdateView,
-    get_school, get_school_object_or_404, )
+    SchooledDetailView, get_school_object_or_404, )
 from ..models import ExpenseTransaction, ExpenseCorrectiveJournalEntry
+from .expenses import ExpenseForm
+from .shared import RequiresApprovalCreateView, RequiresApprovalUpdateView
 
 
-class ExpenseCjeForm(forms.ModelForm):
+class ExpenseCjeForm(ExpenseForm):
     class Meta:
         model = ExpenseCorrectiveJournalEntry
-        fields = ('ledger_account', 'amount', 'employee', 'supplier', 'notes')
-
-    def __init__(self, *args, **kwargs):
-        school = kwargs.pop('school')
-        super().__init__(*args, **kwargs)
-        self.fields['employee'].queryset = self.fields['employee'].queryset.filter(employee__school=school)
-        self.fields['supplier'].queryset = self.fields['supplier'].queryset.filter(supplier__school=school)
+        fields = (
+            'ledger_account', 'payee', 'quantity', 'unit_cost', 'discount',
+            'tax', 'notes', )
 
 
 class Detail(SchooledDetailView):
@@ -28,17 +24,12 @@ class Detail(SchooledDetailView):
     context_object_name = 'expensecje'
 
 
-class Create(SchooledCreateView):
+class Create(RequiresApprovalCreateView):
     permission_required = 'finance.add_expensecorrectivejournalentry'
     model = ExpenseCorrectiveJournalEntry
     form_class = ExpenseCjeForm
     template_name = 'finance/expenses/cje/create.html'
     success_url = reverse_lazy('expense-list')
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['school'] = get_school(self.request.session)
-        return kwargs
 
     def get_context_data(self, **kwargs):
         context = {}
@@ -53,9 +44,11 @@ class Create(SchooledCreateView):
         correcting_expense = get_school_object_or_404(
             self.request, ExpenseTransaction, pk=self.kwargs['expense_pk'])
         initial['ledger_account'] = correcting_expense.ledger_account
-        initial['employee'] = correcting_expense.employee
-        initial['supplier'] = correcting_expense.supplier
-        initial['amount'] = correcting_expense.amount
+        initial['payee'] = correcting_expense.payee
+        initial['quantity'] = correcting_expense.quantity
+        initial['unit_cost'] = correcting_expense.unit_cost
+        initial['discount'] = correcting_expense.discount
+        initial['tax'] = correcting_expense.tax
         return initial
 
     def form_valid(self, form):
@@ -64,17 +57,12 @@ class Create(SchooledCreateView):
         return super().form_valid(form)
 
 
-class Edit(DeletionFormMixin, SchooledUpdateView):
+class Edit(DeletionFormMixin, RequiresApprovalUpdateView):
     permission_required = 'finance.change_expensecorrectivejournalentry'
     model = ExpenseCorrectiveJournalEntry
     form_class = ExpenseCjeForm
     template_name = 'finance/expenses/cje/edit.html'
     success_url = reverse_lazy('expense-list')
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['school'] = get_school(self.request.session)
-        return kwargs
 
 
 @school_permission_required('finance.change_expensecorrectivejournalentry')

@@ -4,7 +4,7 @@ from django.db import models, OperationalError
 from core.models import Descriptor
 from schoolauth.models import User, School
 from students.models import Student
-from personnel.models import Employee, Supplier
+from personnel.models import Department, Payee
 
 
 class Fund(Descriptor):
@@ -19,15 +19,11 @@ class Category(Descriptor):
     class Meta:
         abstract = True
 
-    def total_for_term(self, term):
-        return NotImplemented
-
-    def total_YTD(self, year):
-        return NotImplemented
-
 
 class ExpenseCategory(Category):
-    pass
+    department = models.ForeignKey(
+        Department, on_delete=models.SET_NULL, null=True, blank=True,
+        related_name='expense_categories')
 
 
 class RevenueCategory(Category):
@@ -37,6 +33,10 @@ class RevenueCategory(Category):
 class LedgerAccount(Descriptor):
     class Meta:
         abstract = True
+
+    @property
+    def long_name(self):
+        return "%s - %s" % (str(self.category), str(self))
 
 
 class ExpenseLedgerAccount(LedgerAccount):
@@ -51,9 +51,9 @@ class RevenueLedgerAccount(LedgerAccount):
         related_name='ledger_accounts')
 
 
-class Term(models.Model):
+class BudgetPeriod(models.Model):
     school = models.ForeignKey(
-        School, on_delete=models.CASCADE, related_name='terms')
+        School, on_delete=models.CASCADE, related_name='budget_periods')
     name = models.CharField(max_length=255, blank=True)
     start = models.DateField()
     end = models.DateField()
@@ -66,31 +66,19 @@ class Term(models.Model):
             return self.name
         return str(self.start) + " - " + str(self.end)
 
-    def revenue_budgets(self):
-        return NotImplemented
-
-    def expense_budgets(self):
-        return NotImplemented
-
-    def revenues_collected(self):
-        return NotImplemented
-
-    def expenses_paid(self):
-        return NotImplemented
-
 
 class BudgetItem(models.Model):
     amount = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    term = models.ForeignKey(
-        Term, on_delete=models.CASCADE,
+    period = models.ForeignKey(
+        BudgetPeriod, on_delete=models.CASCADE,
         related_name='related_%(app_label)s_%(class)s')
 
     class Meta:
         abstract = True
-        unique_together = (('term', 'ledger_account'),)
+        unique_together = (('period', 'ledger_account'),)
 
     def __str__(self):
-        str(self.term) + " - " + str(self.ledger_account)
+        str(self.period) + " - " + str(self.ledger_account)
 
 
 class ExpenseBudgetItem(BudgetItem):
@@ -103,33 +91,25 @@ class RevenueBudgetItem(BudgetItem):
         RevenueLedgerAccount, on_delete=models.CASCADE, related_name='budget')
 
 
-class Payee(models.Model):
+class PayeeAccount(models.Model):
+    payee = models.OneToOneField(Payee, on_delete=models.CASCADE)
+
     class Meta:
-        abstract = True
-
-    def balance_due(self):
-        return NotImplemented
-
-    def amount_paid(self):
-        return NotImplemented
-
-
-class EmployeeAccount(Payee):
-    employee = models.OneToOneField(Employee, on_delete=models.CASCADE)
+        default_permissions = ()
 
     def __str__(self):
-        return str(self.employee)
+        return str(self.payee)
 
-
-class SupplierAccount(Payee):
-    supplier = models.OneToOneField(Supplier, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return str(self.supplier)
+    @property
+    def is_active(self):
+        return self.payee.is_active
 
 
 class StudentAccount(models.Model):
     student = models.OneToOneField(Student, on_delete=models.CASCADE)
+
+    class Meta:
+        default_permissions = ()
 
     def __str__(self):
         return str(self.student)
@@ -138,8 +118,9 @@ class StudentAccount(models.Model):
     def balance_due(self):
         return NotImplemented
 
-    def next_payment(self):
-        return NotImplemented
+    @property
+    def is_enrolled(self):
+        return self.student.is_enrolled
 
 
 class Transaction(models.Model):
@@ -166,12 +147,12 @@ class Transaction(models.Model):
         return self.created.date()
 
     @property
-    def term(self):
+    def budget_period(self):
         if self.date is None:
             return None
-        for term in Term.objects.filter(school=self.school).all():
-            if term.start <= self.date and self.date <= term.end:
-                return term
+        for period in BudgetPeriod.objects.filter(school=self.school).all():
+            if period.start <= self.date and self.date <= period.end:
+                return period
         return None
 
     def include_in_report(self):
@@ -188,11 +169,11 @@ class Transaction(models.Model):
 
 
 APPROVAL_STATUS_DRAFT = 'D'
-APPROVAL_STATUS_SUBMITTED = 'S'
+APPROVAL_STATUS_PENDING = 'P'
 APPROVAL_STATUS_APPROVED = 'A'
 APPROVAL_STATUS_CHOICES = (
     (APPROVAL_STATUS_DRAFT, 'Draft'),
-    (APPROVAL_STATUS_SUBMITTED, 'Submitted'),
+    (APPROVAL_STATUS_PENDING, 'Pending Approval'),
     (APPROVAL_STATUS_APPROVED, 'Approved')
 )
 
@@ -219,22 +200,22 @@ class RequiresApproval(models.Model):
     def submit_for_approval(self, user):
         if self.approval_status != APPROVAL_STATUS_DRAFT:
             raise OperationalError("This transaction is not in 'draft' status and cannot be submitted for approval.")
-        self.approval_status = APPROVAL_STATUS_SUBMITTED
+        self.approval_status = APPROVAL_STATUS_PENDING
         self.submitted_by = user
         self.date_submitted = datetime.date.today()
         self.save()
 
     def unsubmit_for_approval(self):
-        if self.approval_status != APPROVAL_STATUS_SUBMITTED:
-            raise OperationalError("This transaction is not in 'submitted' status and cannot be reverted to draft.")
+        if self.approval_status != APPROVAL_STATUS_PENDING:
+            raise OperationalError("This transaction is not in 'pending' status and cannot be reverted to draft.")
         self.approval_status = APPROVAL_STATUS_DRAFT
         self.submitted_by = None
         self.date_submitted = None
         self.save()
 
     def approve(self, user, commit=True):
-        if self.approval_status != APPROVAL_STATUS_SUBMITTED:
-            raise OperationalError("This transaction is not in 'submitted' status and cannot be approved.")
+        if self.approval_status != APPROVAL_STATUS_PENDING:
+            raise OperationalError("This transaction is not in 'pending' status and cannot be approved.")
         if self.submitted_by == user:
             raise OperationalError("The same user cannot both submit and approve the same transaction.")
         self.approval_status = APPROVAL_STATUS_APPROVED
@@ -271,29 +252,26 @@ class ExpenseInfo(Transaction):
     ledger_account = models.ForeignKey(
         ExpenseLedgerAccount, on_delete=models.CASCADE,
         related_name='related_%(app_label)s_%(class)s')
-    employee = models.ForeignKey(
-        EmployeeAccount, on_delete=models.CASCADE, blank=True, null=True,
+    payee = models.ForeignKey(
+        PayeeAccount, on_delete=models.CASCADE, blank=True, null=True,
         related_name='related_%(app_label)s_%(class)s')
-    supplier = models.ForeignKey(
-        SupplierAccount, on_delete=models.CASCADE, blank=True, null=True,
-        related_name='related_%(app_label)s_%(class)s')
+    quantity = models.DecimalField(max_digits=15, decimal_places=2, default=1)
+    unit_cost = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+    discount = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+    tax = models.DecimalField(max_digits=15, decimal_places=2, default=0)
 
     class Meta:
         abstract = True
 
-    @property
-    def payee(self):
-        if self.employee:
-            return self.employee
-        return self.supplier
+    def calc_amount(self):
+        self.amount = (self.quantity * self.unit_cost) - self.discount + self.tax
+
+    def save(self, *args, **kwargs):
+        self.calc_amount()
+        super().save(*args, **kwargs)
 
 
 class ExpenseTransaction(AdmitsCorrections, RequiresApproval, ExpenseInfo):
-    discount = models.FloatField(blank=True, null=True)
-    quantity = models.FloatField(blank=True, null=True)
-    unit_cost = models.FloatField(blank=True, null=True)
-    unit_of_measure = models.CharField(max_length=255, blank=True)
-
     class Meta:
         permissions = (
             ("approve_expensetransaction", "Can approve expenses"),
@@ -321,8 +299,11 @@ class ExpenseCorrectiveJournalEntry(RequiresApproval, ExpenseInfo):
         correcting_expense = self.correction_to
         return ExpenseTransaction.objects.create(
             ledger_account=correcting_expense.ledger_account,
-            employee=correcting_expense.employee,
-            supplier=correcting_expense.supplier,
+            payee=correcting_expense.payee,
+            quantity=-correcting_expense.quantity,
+            unit_cost=correcting_expense.unit_cost,
+            discount=-correcting_expense.discount,
+            tax=-correcting_expense.tax,
             amount=-correcting_expense.amount,
             school=correcting_expense.school,
             created_by=user,
@@ -337,8 +318,11 @@ class ExpenseCorrectiveJournalEntry(RequiresApproval, ExpenseInfo):
     def create_restatement_expense(self, user):
         return ExpenseTransaction.objects.create(
             ledger_account=self.ledger_account,
-            employee=self.employee,
-            supplier=self.supplier,
+            payee=self.payee,
+            quantity=self.quantity,
+            unit_cost=self.unit_cost,
+            discount=self.discount,
+            tax=self.tax,
             amount=self.amount,
             school=self.school,
             created_by=user,
@@ -436,7 +420,7 @@ class ReportItem(models.Model):
             self,
             period=None, school=None, ledger_account=None,
             category=None, report_item_list=None):
-        if category is None:
+        if ledger_account is not None:
             self.construct_line_item(period, school, ledger_account)
         else:
             self.construct_summary_item(category, report_item_list)
@@ -452,7 +436,7 @@ class ReportItem(models.Model):
         self.category = ledger_account.category
         self.period = period
         self.transaction_queryset = transaction_model.objects.filter(school=school, ledger_account=ledger_account)
-        self.budget_items = budget_model.objects.filter(term__in=period, ledger_account=ledger_account).all()
+        self.budget_items = budget_model.objects.filter(period__in=period, ledger_account=ledger_account).all()
         self.calc_all()
 
     def construct_summary_item(self, category, report_item_list):
@@ -461,8 +445,9 @@ class ReportItem(models.Model):
         period_actual = 0
         for report_item in report_item_list:
             if (
-                    report_item.ledger_account is not None
-                    and report_item.ledger_account.category == category):
+                    category is None or (
+                        report_item.ledger_account is not None
+                        and report_item.ledger_account.category == category)):
                 period_budget += report_item.period_budget
                 period_actual += report_item.period_actual
         self.period_budget = period_budget
@@ -473,7 +458,9 @@ class ReportItem(models.Model):
     def __str__(self):
         if self.ledger_account is not None:
             return str(self.ledger_account)
-        return str(self.category)
+        if self.category is not None:
+            return str(self.category)
+        return "Total"
 
     def calc_all(self):
         self.calc_period_budget()
@@ -491,8 +478,8 @@ class ReportItem(models.Model):
         period_actual = 0
         for transaction in self.transaction_queryset.all():
             if transaction.include_in_report():
-                term = transaction.term
-                if term is not None and term.pk in self.period:
+                period = transaction.budget_period
+                if period is not None and period.pk in self.period:
                     period_actual += transaction.amount
         self.period_actual = period_actual
 

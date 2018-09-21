@@ -1,0 +1,48 @@
+{% extends 'extends/datatable.html' %}
+
+{% block title %}EPOBS - List Classes{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item">School</li>
+  <li class="breadcrumb-item">Classes</li>
+  <li class="breadcrumb-item">List</li>
+{% endblock %}
+
+{% block content %}
+  {% if school_perms.schools.add_graduatingclass %}
+  <div class="form-group">
+    <a href="{% url 'class-create' %}" class="btn btn-secondary"><i class="fas fa-plus-square"></i> Create New Class...</a>
+  </div>
+  {% endif %}
+
+  <input type="checkbox" name="show-graduated">Show Graduated Classes</input>
+
+  <table id="datatable" class="table table-striped table-sm">
+    <thead>
+      <tr>
+        <th class="datatable-column">Class</th>
+        <th class="datatable-column">Graduating Year</th>
+        <th class="datatable-column">School Fee</th>
+        <th class="datatable-column">Admission Fee</th>
+        <th class="datatable-column">Canteen Fee</th>
+        {% if school_perms.schools.change_graduatingclass %}<th class="datatable-column datatable-nondata">Edit</th>{% endif %}
+        {% if school_perms.students.view_student %}<th class="datatable-column datatable-nondata">View Students</th>{% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for class in object_list %}
+        <tr>
+          <td>{{ class }}</td>
+          <td>{{ class.graduating_year }}</td>
+          <td>{{ class.school_fee }}</td>
+          <td>{{ class.admission_fee }}</td>
+          <td>{{ class.canteen_fee }}</td>
+          {% if school_perms.schools.change_graduatingclass %}<td>
+            <a href="{% url 'class-edit' class.pk %}"><i class="fas fa-pencil-alt"></i></a></td>{% endif %}
+          {% if school_perms.students.view_student %}<td>
+            <a href="#">(todo)</a></td>{% endif %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

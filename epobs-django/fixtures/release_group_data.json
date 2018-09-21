@@ -85,6 +85,16 @@
         "revenuetransaction"
       ],
       [
+        "add_contract",
+        "personnel",
+        "contract"
+      ],
+      [
+        "change_contract",
+        "personnel",
+        "contract"
+      ],
+      [
         "add_employee",
         "personnel",
         "employee"
@@ -152,6 +162,26 @@
   "fields": {
     "name": "Accountant",
     "permissions": [
+      [
+        "add_budgetperiod",
+        "finance",
+        "budgetperiod"
+      ],
+      [
+        "change_budgetperiod",
+        "finance",
+        "budgetperiod"
+      ],
+      [
+        "delete_budgetperiod",
+        "finance",
+        "budgetperiod"
+      ],
+      [
+        "view_budgetperiod",
+        "finance",
+        "budgetperiod"
+      ],
       [
         "change_expensebudgetitem",
         "finance",
@@ -238,24 +268,24 @@
         "revenuetransaction"
       ],
       [
-        "add_term",
-        "finance",
-        "term"
+        "add_graduatingclass",
+        "schools",
+        "graduatingclass"
       ],
       [
-        "change_term",
-        "finance",
-        "term"
+        "change_graduatingclass",
+        "schools",
+        "graduatingclass"
       ],
       [
-        "delete_term",
-        "finance",
-        "term"
+        "delete_graduatingclass",
+        "schools",
+        "graduatingclass"
       ],
       [
-        "view_term",
-        "finance",
-        "term"
+        "view_graduatingclass",
+        "schools",
+        "graduatingclass"
       ],
       [
         "change_schoolprofile",
@@ -275,16 +305,6 @@
   "fields": {
     "name": "School Superuser",
     "permissions": [
-      [
-        "change_schoolprofile",
-        "schools",
-        "schoolprofile"
-      ],
-      [
-        "view_schoolprofile",
-        "schools",
-        "schoolprofile"
-      ],
       [
         "add_user",
         "schoolauth",
@@ -314,6 +334,16 @@
         "view_userschoolmembership",
         "schoolauth",
         "userschoolmembership"
+      ],
+      [
+        "change_schoolprofile",
+        "schools",
+        "schoolprofile"
+      ],
+      [
+        "view_schoolprofile",
+        "schools",
+        "schoolprofile"
       ]
     ]
   }

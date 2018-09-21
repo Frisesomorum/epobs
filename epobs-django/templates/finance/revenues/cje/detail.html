@@ -43,16 +43,16 @@
       <td>{{ revenuecje.created }} by {{ revenuecje.created_by }}</td></tr>
     <tr><th>Status:</th>
       <td>{{ revenuecje.get_approval_status_display }}</td></tr>
-    {% if revenuecje.approval_status == 'S' %}<tr><th>Submitted:</th>
+    {% if revenuecje.approval_status == 'P' %}<tr><th>Submitted for Approval:</th>
       <td>{{ revenuecje.date_submitted }} by {{ revenuecje.submitted_by }}</td></tr>{% endif %}
     {% if revenuecje.approval_status == 'A' %}<tr><th>Approved:</th>
       <td>{{ revenuecje.date_approved }} by {{ revenuecje.approved_by }}</td></tr>{% endif %}
   </table>
 
-  {% if revenuecje.approval_status == 'S' and school_perms.finance.approve_revenuecorrectivejournalentry and user != revenuecje.submitted_by %}
+  {% if revenuecje.approval_status == 'P' and school_perms.finance.approve_revenuecorrectivejournalentry and user != revenuecje.submitted_by %}
     <a href="{% url 'revenue-cje-approve' revenuecje.pk %}"><span class="btn btn-secondary">Approve</span></a>
   {% endif %}
-  {% if revenuecje.approval_status == 'S' and school_perms.finance.change_revenuecorrectivejournalentry %}
+  {% if revenuecje.approval_status == 'P' and school_perms.finance.change_revenuecorrectivejournalentry %}
     <a href="{% url 'revenue-cje-unsubmit' revenuecje.pk %}"><span class="btn btn-secondary">Revert to draft</span></a>
   {% endif %}
   {% if revenuecje.approval_status == 'D' and school_perms.finance.change_revenuecorrectivejournalentry %}

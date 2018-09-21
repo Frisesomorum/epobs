@@ -1,0 +1,38 @@
+{% extends 'extends/base.html' %}
+
+{% load static %}
+
+{% block title %}EPOBS - View Employee{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item">Employees</li>
+  <li class="breadcrumb-item">View</li>
+  <li class="breadcrumb-item">{{ employee }}</li>
+{% endblock %}
+
+{% block content %}
+
+  <table class="table">
+    <tr><th>First Name:</th><td>{{ employee.first_name }}</td></tr>
+    <tr><th>Last Name:</th><td>{{ employee.last_name }}</td></tr>
+    <tr><th>Email:</th><td>{{ employee.email }}</td></tr>
+    <tr><th>Date of Birth:</th><td>{{ employee.date_of_birth }}</td></tr>
+    <tr><th>Department:</th><td>{{ employee.department }}</td></tr>
+    {% if employee.payee.date_hired %}
+      <tr><th>Date Hired:</th><td>{{ employee.payee.date_hired }}</td></tr>
+      {% if not employee.payee.is_active %}
+        <tr><th>Date Terminated:</th><td>{{ employee.payee.date_terminated }}</td></tr>
+      {% endif %}
+    {% endif %}
+  </table>
+
+  {% if employee.payee.is_active %}
+    {% if school_perms.personnel.change_contract %}
+      <a href="{% url 'contract-terminate' employee.payee.pk %}"><span class="btn btn-secondary">Terminate Contract</span></a>
+    {% endif %}
+  {% else %}
+    {% if school_perms.personnel.add_contract %}
+      <a href="{% url 'contract-start' employee.payee.pk %}"><span class="btn btn-secondary">Start Contract</span></a>
+    {% endif %}
+  {% endif %}
+{% endblock %}

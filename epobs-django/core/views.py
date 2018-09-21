@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.core.exceptions import ObjectDoesNotExist
 from schoolauth.views import get_school_pk
 
 
@@ -27,10 +28,20 @@ class SessionRecentsMixin:
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.session_recents_key in self.request.session:
-            context[self.context_recents_key] = [
-                self.model.objects.get(pk=pk)
-                for pk in self.request.session[self.session_recents_key]
-            ]
+            object_list = []
+            pk_list = []
+            for pk in self.request.session[self.session_recents_key]:
+                try:
+                    object = self.model.objects.get(pk=pk)
+                except ObjectDoesNotExist:
+                    continue
+                object_list.append(object)
+                pk_list.append(pk)
+            if len(pk_list) > 0:
+                context[self.context_recents_key] = object_list
+                self.request.session[self.session_recents_key] = pk_list
+            else:
+                del self.request.session[self.session_recents_key]
         return context
 
     def add_object_to_session(self, pk):

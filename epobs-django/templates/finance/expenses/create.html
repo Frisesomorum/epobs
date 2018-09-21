@@ -14,7 +14,9 @@
   <form method="post" class="mb-4" novalidate>
     {% csrf_token %}
     {% include 'includes/form.html' %}
-    <input type="submit" name="save" value="Save" />
+    <div class="font-weight-bold">Total Amount: <label id="total-amount"></label></div>
+    <input type="submit" name="save" value="Save as Draft" />
+    <input type="submit" name="save-and-submit" value="Save and Submit for Approval" />
   </form>
 
   {% if recent_expensetransaction_list|length > 0 %}
@@ -36,9 +38,17 @@
             <td>{{ expense.amount }}</td>
             <td>{% if expense.approval_status == 'D' %}<a href="{% url 'expense-edit' expense.pk %}"><i class="fas fa-pencil-alt"></i></a>{% endif %}</td>
           </tr>
+          {% if expense.approval_status != 'A' %}
+            {% include 'finance/expenses/expense-card.html' %}
+          {% endif %}
         {% endfor %}
       </tbody>
     </table>
   {% endif %}
 
+{% endblock %}
+
+{% block scripts %}
+  {{ block.super }}
+  {% include 'finance/expenses/script-total-amount.html' %}
 {% endblock %}

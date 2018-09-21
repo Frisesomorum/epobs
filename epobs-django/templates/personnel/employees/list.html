@@ -20,6 +20,9 @@
       <tr>
         <th class="datatable-column">Last Name</th>
         <th class="datatable-column">First Name</th>
+        <th class="datatable-column">Department</th>
+        <th class="datatable-column datatable-date">Date Hired</th>
+        <th class="datatable-column datatable-nondata">View</th>
         {% if school_perms.personnel.change_employee %}<th class="datatable-column datatable-nondata">Edit</th>{% endif %}
       </tr>
     </thead>
@@ -28,6 +31,9 @@
         <tr>
           <td>{{ employee.last_name }}</td>
           <td>{{ employee.first_name }}</td>
+          <td>{{ employee.department }}</td>
+          <td>{{ employee.payee.date_hired }}</td>
+          <td><a href="{% url 'employee-detail' employee.pk %}"><i class="fas fa-file-invoice"></i></a></td>
           {% if school_perms.personnel.change_employee %}<td><a href="{% url 'employee-edit' employee.pk %}"><i class="fas fa-pencil-alt"></i></a></td>{% endif %}
         </tr>
       {% endfor %}

@@ -2,8 +2,8 @@ from django import forms
 from django.shortcuts import render, redirect
 from django.urls import reverse, resolve
 from django.views.generic import TemplateView
-from django.views.generic.edit import FormView
-from schoolauth.views import get_school, register_school_session_data
+from schoolauth.views import (
+    SchooledFormView, SchoolFormMixin, get_school, register_school_session_data, )
 from .. import models
 
 
@@ -20,25 +20,17 @@ def get_report_period(session):
     return session.get('report_period', default=[])
 
 
-class SelectPeriodForm(forms.Form):
+class SelectPeriodForm(SchoolFormMixin, forms.Form):
     period = forms.ModelMultipleChoiceField(
-        queryset=models.Term.objects.all()
+        queryset=models.BudgetPeriod.objects.all()
         )
-
-    def __init__(self, *args, **kwargs):
-        school = kwargs.pop('school')
-        super().__init__(*args, **kwargs)
-        self.fields['period'].queryset = self.fields['period'].queryset.filter(school=school)
+    school_filter_fields = ('period', )
 
 
-class SelectPeriod(FormView):
+class SelectPeriod(SchooledFormView):
+    permission_required = ()
     template_name = 'reports/period_select.html'
     form_class = SelectPeriodForm
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['school'] = get_school(self.request.session)
-        return kwargs
 
     def dispatch(self, request, *args, **kwargs):
         success_url = reverse(kwargs.pop('next'))
@@ -69,7 +61,8 @@ class SummaryReport(TemplateView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
         context['period'] = ", ".join(
-            str(models.Term.objects.get(pk=term_pk)) for term_pk in self.period)
+            str(models.BudgetPeriod.objects.get(pk=period_pk))
+            for period_pk in self.period)
         school = get_school(self.request.session)
 
         if self.get_expenses:
@@ -81,13 +74,18 @@ class SummaryReport(TemplateView):
                 report_item_list.append(report_item)
 
             context['expense_report_list'] = []
+            category_summary_list = []
             for category in models.ExpenseCategory.objects.all():
                 report_item = models.ReportItem(
                     category=category, report_item_list=report_item_list)
+                category_summary_list.append(report_item)
                 context['expense_report_list'].append(report_item)
                 for report_item in report_item_list:
                     if report_item.ledger_account.category == category:
                         context['expense_report_list'].append(report_item)
+            total = models.ReportItem(
+                report_item_list=category_summary_list)
+            context['expense_report_list'].append(total)
 
         if self.get_revenues:
             context['revenue_report_list'] = []
@@ -96,6 +94,9 @@ class SummaryReport(TemplateView):
                     period=self.period, school=school,
                     ledger_account=ledger_account)
                 context['revenue_report_list'].append(report_item)
+            total = models.ReportItem(
+                report_item_list=context['revenue_report_list'])
+            context['revenue_report_list'].append(total)
 
         return context
 

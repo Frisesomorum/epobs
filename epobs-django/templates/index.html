@@ -10,10 +10,14 @@
     <ul>
       {% if school_perms.finance.approve_expensetransaction %}<li>There are N <a href="{% url 'expense-list' %}">expenses</a> waiting for approval.</li>{% endif %}
       {% if 'students.view_student' in school_perms %}<li>There are M <a href="{% url 'student-list' %}">students</a> with outstanding fees.</li>{% endif %}
-      <li><a href="{% url 'report-index' %}">H%</a> of the current term's budget has been used.</li>
+      <li><a href="{% url 'report-index' %}">H%</a> of the current budget has been used.</li>
     </ul>
     <h3>What's New</h3>
     <ul>
+      <li />9/21/18: Added: student graduation classes, employee departments, payee contracts.
+       Expense amounts are now calculated based on quantity, unit cost, discount, and tax.
+       Made some approval workflows more efficient. Added 'total' rows to reports.
+       Created details pages for students and payees. Renamed 'term' to 'period'.
       <li />9/14/18: Created reports; added export functionality to all tables
       <li />9/12/18: Fixes to multi-school support; school superuser tools
       <li />9/3/18: Multi-school support; corrective journal entries for revenues

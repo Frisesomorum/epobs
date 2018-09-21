@@ -8,7 +8,6 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from .models import School
-from finance.models import RequiresApproval
 
 
 class SelectSchoolForm(forms.Form):
@@ -151,6 +150,28 @@ def clear_school_session_data(session):
         del session['school_data']
 
 
+class SchoolFormMixin:
+    requires_school = True
+    school = None
+    school_filter_fields = ()
+
+    def __init__(self, *args, **kwargs):
+        self.school = kwargs.pop('school')
+        super().__init__(*args, **kwargs)
+        for field in self.school_filter_fields:
+            self.fields[field].queryset = (
+                self.fields[field].queryset.filter(school=self.school))
+
+
+class SchoolFormViewMixin:
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        form_class = self.get_form_class()
+        if hasattr(form_class, 'requires_school') and form_class.requires_school:
+            kwargs['school'] = get_school(self.request.session)
+        return kwargs
+
+
 class SchoolPermissionMixin(PermissionRequiredMixin):
     def has_permission(self):
         perms = self.get_permission_required()
@@ -166,7 +187,7 @@ class SchooledListView(SchoolPermissionMixin, ListView):
         return self.model.objects.filter(school=get_school(self.request.session))
 
 
-class SchooledCreateView(SchoolPermissionMixin, CreateView):
+class SchooledCreateView(SchoolPermissionMixin, SchoolFormViewMixin, CreateView):
     def form_valid(self, form):
         form.instance.school = get_school(self.request.session)
         return super().form_valid(form)
@@ -176,9 +197,14 @@ class SchooledDetailView(SchoolPermissionMixin, DetailView):
     pass
 
 
-class SchooledUpdateView(SchoolPermissionMixin, UpdateView):
-    def dispatch(self, request, *args, **kwargs):
-        object = self.get_object()
-        if isinstance(object, RequiresApproval):
-            object.verify_can_be_edited()
-        return super().dispatch(request, *args, **kwargs)
+class SchooledUpdateView(SchoolPermissionMixin, SchoolFormViewMixin, UpdateView):
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        form_class = self.get_form_class()
+        if hasattr(form_class, 'requires_school') and form_class.requires_school:
+            kwargs['school'] = get_school(self.request.session)
+        return kwargs
+
+
+class SchooledFormView(SchoolPermissionMixin, SchoolFormViewMixin, FormView):
+    pass

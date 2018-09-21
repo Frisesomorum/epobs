@@ -7,8 +7,9 @@ from schoolauth import views as schoolAuthViews
 from schools import views as schoolViews
 from personnel.views import employees as employeeViews
 from personnel.views import suppliers as supplierViews
+from personnel.views import payees as payeeViews
 from students import views as studentViews
-from finance.views import terms as termViews
+from finance.views import budgets as budgetViews
 from finance.views import expenses as expenseViews
 from finance.views import expensecje as expenseCjeViews
 from finance.views import revenues as revenueViews
@@ -30,21 +31,31 @@ urlpatterns = [
     re_path(r'school/membership/(?P<pk>\d+)/edit/$', schoolViews.EditMembership.as_view(), name='member-edit'),
 
     re_path(r'employees/$', employeeViews.List.as_view(), name='employee-list'),
+    re_path(r'employees/(?P<pk>\d+)/$', employeeViews.Detail.as_view(), name='employee-detail'),
     re_path(r'employees/new/$', employeeViews.Create.as_view(), name='employee-create'),
     re_path(r'employees/(?P<pk>\d+)/edit/$', employeeViews.Edit.as_view(), name='employee-edit'),
 
     re_path(r'suppliers/$', supplierViews.List.as_view(), name='supplier-list'),
+    re_path(r'suppliers/(?P<pk>\d+)/$', supplierViews.Detail.as_view(), name='supplier-detail'),
     re_path(r'suppliers/new/$', supplierViews.Create.as_view(), name='supplier-create'),
     re_path(r'suppliers/(?P<pk>\d+)/edit/$', supplierViews.Edit.as_view(), name='supplier-edit'),
 
+    re_path(r'payees/(?P<pk>\d+)/start-contract/$', payeeViews.start_contract, name='contract-start'),
+    re_path(r'payees/(?P<pk>\d+)/terminate-contract/$', payeeViews.terminate_contract, name='contract-terminate'),
+
+    re_path(r'classes/$', schoolViews.ListClass.as_view(), name='class-list'),
+    re_path(r'classes/new/$', schoolViews.CreateClass.as_view(), name='class-create'),
+    re_path(r'classes/(?P<pk>\d+)/edit/$', schoolViews.EditClass.as_view(), name='class-edit'),
+
     re_path(r'students/$', studentViews.List.as_view(), name='student-list'),
+    re_path(r'students/(?P<pk>\d+)/$', studentViews.Detail.as_view(), name='student-detail'),
     re_path(r'students/new/$', studentViews.Create.as_view(), name='student-create'),
     re_path(r'students/(?P<pk>\d+)/edit/$', studentViews.Edit.as_view(), name='student-edit'),
 
-    re_path(r'terms/$', termViews.List.as_view(), name='term-list'),
-    re_path(r'terms/new/$', termViews.Create.as_view(), name='term-create'),
-    re_path(r'terms/(?P<pk>\d+)/edit/$', termViews.Edit.as_view(), name='term-edit'),
-    re_path(r'budgets/(?P<pk>\d+)/$', termViews.EditBudget.as_view(), name='budget-edit'),
+    re_path(r'budgets/$', budgetViews.List.as_view(), name='budget-list'),
+    re_path(r'budgets/new/$', budgetViews.Create.as_view(), name='budget-create'),
+    re_path(r'budgets/(?P<pk>\d+)/edit/$', budgetViews.EditPeriod.as_view(), name='budget-period-edit'),
+    re_path(r'budgets/(?P<pk>\d+)/$', budgetViews.EditBudget.as_view(), name='budget-edit'),
 
     re_path(r'expenses/$', expenseViews.List.as_view(), name='expense-list'),
     re_path(r'expenses/drilldown/(?P<ledger_account>\d+)/$', expenseViews.Drilldown.as_view(),

@@ -1,7 +1,7 @@
 from django.urls import reverse_lazy
 from core.views import DeletionFormMixin, SessionRecentsMixin
 from schoolauth.views import (
-    SchooledListView, SchooledCreateView, SchooledUpdateView, )
+    SchooledListView, SchooledDetailView, SchooledCreateView, SchooledUpdateView, )
 from ..models import Supplier
 
 
@@ -11,10 +11,17 @@ class List(SchooledListView):
     template_name = 'personnel/suppliers/list.html'
 
 
+class Detail(SchooledDetailView):
+    permission_required = 'personnel.view_supplier'
+    model = Supplier
+    template_name = 'personnel/suppliers/detail.html'
+    context_object_name = 'supplier'
+
+
 class Create(SessionRecentsMixin, SchooledCreateView):
     permission_required = 'personnel.add_supplier'
     model = Supplier
-    fields = ('name', 'date_hired', 'date_terminated')
+    fields = ('name', )
     template_name = 'personnel/suppliers/create.html'
     success_url = reverse_lazy('supplier-create')
 
@@ -27,6 +34,6 @@ class Create(SessionRecentsMixin, SchooledCreateView):
 class Edit(DeletionFormMixin, SchooledUpdateView):
     permission_required = 'personnel.change_supplier'
     model = Supplier
-    fields = ('name', 'date_hired', 'date_terminated')
+    fields = ('name', )
     template_name = 'personnel/suppliers/edit.html'
     success_url = reverse_lazy('supplier-list')

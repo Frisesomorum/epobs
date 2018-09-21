@@ -14,11 +14,11 @@
   </div>
   {% endif %}
 
-  <table id="datatable" class="table table-striped table-sm">
+  <table id="datatable" class="table table-sm">
     <thead>
       <tr>
         <th class="datatable-column datatable-date">Date Paid</th>
-        <th class="datatable-column">Term</th>
+        <th class="datatable-column">Budget Period</th>
         <th class="datatable-column">Student</th>
         <th class="datatable-column">Ledger Account</th>
         <th class="datatable-column">Amount</th>
@@ -29,7 +29,7 @@
       {% for revenue in object_list %}
         {% if revenue.corrected_by_cje %}<tr class="table-danger">{% else %}<tr>{% endif %}
           <td>{{ revenue.date }}</td>
-          <td>{{ revenue.term }}</td>
+          <td>{{ revenue.budget_period }}</td>
           <td>{{ revenue.student }}</td>
           <td>{{ revenue.ledger_account }}</td>
           <td>{{ revenue.amount }}</td>
@@ -41,7 +41,7 @@
 
   {% if cje_list|length > 0 %}
   <h4>Outstanding Corrective Journal Entries</h4>
-  <table id="datatable-secondary" class="table table-striped table-sm">
+  <table id="datatable-secondary" class="table table-sm">
     <thead>
       <tr>
         <th class="datatable-column">Student</th>
@@ -51,8 +51,6 @@
         <th class="datatable-column datatable-nondata">View</th>
         {% if school_perms.finance.change_revenuecorrectivejournalentry %}
           <th class="datatable-column datatable-nondata">Edit</th>{% endif %}
-        {% if school_perms.finance.approve_revenuecorrectivejournalentry %}
-          <th class="datatable-column datatable-nondata">Approve</th>{% endif %}
       </tr>
     </thead>
     <tbody>
@@ -68,12 +66,27 @@
               <a href="{% url 'revenue-cje-edit' revenuecje.pk %}"><i class="fas fa-pencil-alt"></i></a>
             {% endif %}
           </td>{% endif %}
-          {% if school_perms.finance.approve_revenuecorrectivejournalentry %}<td>
-            {% if revenuecje.approval_status == 'S' and user != revenuecje.submitted_by %}
-              <a href="{% url 'revenue-cje-approve' revenuecje.pk %}"><i class="fas fa-check-double"></i></a>
-            {% endif %}
-          </td>{% endif %}
         </tr>
+
+        {% if revenuecje.approval_status != 'A' %}
+          <tr><td colspan="100%"><div class="card-body bg-light" style="width: 90%; padding-top: 0px; padding-bottom:5px; margin-bottom:20px;">
+            {% if revenuecje.approval_status == 'P' %}
+              {% if school_perms.finance.approve_revenuecorrectivejournalentry and user != revenuecje.submitted_by %}
+                <a href="{% url 'revenue-cje-approve' revenuecje.pk %}" class="btn btn-secondary" style="float: right; margin-top:10px;">
+                  Approve <i class="fas fa-check-double"></i></a>
+              {% endif %}
+            {% else %}
+              {% if school_perms.finance.change_revenuecorrectivejournalentry %}
+                <a href="{% url 'revenue-cje-submit' revenuecje.pk %}" class="btn btn-secondary" style="float: right; margin-top:10px;">
+                  Submit for Approval</a>
+              {% endif %}
+            {% endif %}
+            {% if revenuecje.notes %}<span class="font-weight-bold">Notes:</span> {{ revenuecje.notes }}<br/>{% endif %}
+            <span class="font-weight-bold">Created:</span> {{ revenuecje.created }} by {{ revenuecje.created_by }}
+            {% if revenuecje.approval_status == 'P' %}<br/><span class="font-weight-bold">Submitted for Approval:</span> {{ revenuecje.date_submitted }} by {{ revenuecje.submitted_by }}{% endif %}
+          </div></td></tr>
+        {% endif %}
+
       {% endfor %}
     </tbody>
   </table>

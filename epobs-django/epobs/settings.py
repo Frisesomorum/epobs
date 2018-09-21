@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'core',
     'schools.apps.SchoolsConfig',
     'students',
-    'personnel',
+    'personnel.apps.PersonnelConfig',
     'finance.apps.FinanceConfig',
 
     'debug_toolbar',
