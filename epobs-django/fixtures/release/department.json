@@ -1,0 +1,65 @@
+[
+    {
+        "pk": 1,
+        "model": "personnel.Department",
+        "fields": {
+            "name": "Administration",
+            "abbreviation": "",
+            "description": ""
+        }
+    },
+    {
+        "pk": 2,
+        "model": "personnel.Department",
+        "fields": {
+            "name": "Academics",
+            "abbreviation": "",
+            "description": ""
+        }
+    },
+    {
+        "pk": 3,
+        "model": "personnel.Department",
+        "fields": {
+            "name": "Teaching Staff",
+            "abbreviation": "",
+            "description": ""
+        }
+    },
+    {
+        "pk": 4,
+        "model": "personnel.Department",
+        "fields": {
+            "name": "Canteen",
+            "abbreviation": "",
+            "description": ""
+        }
+    },
+    {
+        "pk": 5,
+        "model": "personnel.Department",
+        "fields": {
+            "name": "Volunteer",
+            "abbreviation": "",
+            "description": ""
+        }
+    },
+    {
+        "pk": 6,
+        "model": "personnel.Department",
+        "fields": {
+            "name": "Transportation",
+            "abbreviation": "",
+            "description": ""
+        }
+    },
+    {
+        "pk": 7,
+        "model": "personnel.Department",
+        "fields": {
+            "name": "Other",
+            "abbreviation": "",
+            "description": ""
+        }
+    }
+]
