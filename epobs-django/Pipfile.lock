@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e98801b52182d8d34d328af8da87466637b23604737ec5b5c0ed09ee44c73d7e"
+            "sha256": "6bb8baf673b7aff86279e8573cfce3237d42bcc682f7d4e053d15ef13333db65"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -31,11 +31,11 @@
         },
         "django": {
             "hashes": [
-                "sha256:7f246078d5a546f63c28fc03ce71f4d7a23677ce42109219c24c9ffb28416137",
-                "sha256:ea50d85709708621d956187c6b61d9f9ce155007b496dd914fdb35db8d790aec"
+                "sha256:04f2e423f2e60943c02bd2959174b844f7d1bcd19eabb7f8e4282999958021fd",
+                "sha256:e1cc1cd6b658aa4e052f5f2b148bfda08091d7c3558529708342e37e4e33f72c"
             ],
             "index": "pypi",
-            "version": "==2.1"
+            "version": "==2.1.1"
         },
         "django-debug-toolbar": {
             "hashes": [
@@ -106,9 +106,9 @@
         },
         "openpyxl": {
             "hashes": [
-                "sha256:0f391b0035d7c98f25aad539726e8efc77eea250ff1a120ea7d264c03a16f5fe"
+                "sha256:022c0f3fa1e873cc0ba20651c54dd5e6276fc4ff150b4060723add4fc448645e"
             ],
-            "version": "==2.5.5"
+            "version": "==2.5.9"
         },
         "psycopg2": {
             "hashes": [
@@ -196,10 +196,10 @@
         },
         "whitenoise": {
             "hashes": [
-                "sha256:1e206c5adfb849942ddd057e599ac472ec1a85d56ae78a5ba24f243ea46a89c5",
-                "sha256:a6f86b011675b9730f69fd69d4f54c5697d6c7a90ab06f83f784d243d9fccc02"
+                "sha256:133a92ff0ab8fb9509f77d4f7d0de493eca19c6fea973f4195d4184f888f2e02",
+                "sha256:32b57d193478908a48acb66bf73e7a3c18679263e3e64bfebcfac1144a430039"
             ],
-            "version": "==4.0"
+            "version": "==4.1"
         },
         "xlrd": {
             "hashes": [
