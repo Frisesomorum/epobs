@@ -1,0 +1,90 @@
+{% extends 'extends/base.html' %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item">{{ model }}</li>
+  <li class="breadcrumb-item">Import</li>
+{% endblock %}
+
+{% block content %}
+
+{% if result %}
+  {% if result.has_errors %}
+    <h2>Error</h2>
+    <p>Some of the data in the file couldn't be processed:</p>
+    <ul>
+      {% for error in result.base_errors  %}
+      <li>
+        {{ error.error }}
+        <div class="traceback">{{ error.traceback|linebreaks }}</div>
+      </li>
+      {% endfor %}
+      {% for line, errors in result.row_errors %}
+        {% for error in errors %}
+          <li>
+            "Line number": {{ line }} - {{ error.error }}
+            <div><code>{{ error.row.values|join:", " }}</code></div>
+            <!-- TODO: Remove traceback from production build -->
+            <div class="traceback">{{ error.traceback|linebreaks }}</div>
+          </li>
+        {% endfor %}
+      {% endfor %}
+    </ul>
+    <p>No data has been imported.</p>
+
+  {% else %}
+
+    <h2>
+      Preview
+    </h2>
+    <p>
+      Below is a preview of data to be imported. If you are satisfied with the results, click 'Confirm import'.
+    </p>
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th>Change</th>
+          {% for field in result.diff_headers %}
+            <th>{{ field }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      {% for row in result.rows %}
+      <tr>
+        <td>
+          {% if row.import_type == 'new' %}
+            New
+          {% elif row.import_type == 'skip' %}
+            Skipped
+          {% elif row.import_type == 'delete' %}
+            Delete
+          {% elif row.import_type == 'update' %}
+            Update
+          {% endif %}
+        </td>
+        {% for field in row.diff %}
+        <td>
+          {{ field }}
+        </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </table>
+
+    <form method="POST">
+      {% csrf_token %}
+      {{ confirm_form.as_p }}
+      <div class="submit-row">
+        <input type="submit" class="default" name="confirm-import" value="Confirm import">
+      </div>
+    </form>
+
+  {% endif %}
+
+{% else %}
+
+  <h3>Error</h3>
+  <p>Couldn't find any data to import.</p>
+
+{% endif %}
+
+{% endblock %}

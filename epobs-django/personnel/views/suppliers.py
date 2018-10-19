@@ -21,7 +21,7 @@ class Detail(SchooledDetailView):
 class Create(SessionRecentsMixin, SchooledCreateView):
     permission_required = 'personnel.add_supplier'
     model = Supplier
-    fields = ('name', )
+    fields = ('name', 'external_id', )
     template_name = 'personnel/suppliers/create.html'
     success_url = reverse_lazy('supplier-create')
 
@@ -34,6 +34,6 @@ class Create(SessionRecentsMixin, SchooledCreateView):
 class Edit(DeletionFormMixin, SchooledUpdateView):
     permission_required = 'personnel.change_supplier'
     model = Supplier
-    fields = ('name', )
+    fields = ('name', 'external_id', )
     template_name = 'personnel/suppliers/edit.html'
     success_url = reverse_lazy('supplier-list')

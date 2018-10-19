@@ -4,7 +4,7 @@ from django.db import models, OperationalError
 from core.models import Descriptor
 from schoolauth.models import User, School
 from students.models import Student
-from personnel.models import Department, Payee
+from personnel import models as personnelModels
 
 
 class Fund(Descriptor):
@@ -22,7 +22,7 @@ class Category(Descriptor):
 
 class ExpenseCategory(Category):
     department = models.ForeignKey(
-        Department, on_delete=models.SET_NULL, null=True, blank=True,
+        personnelModels.Department, on_delete=models.SET_NULL, null=True, blank=True,
         related_name='expense_categories')
 
 
@@ -91,8 +91,21 @@ class RevenueBudgetItem(BudgetItem):
         RevenueLedgerAccount, on_delete=models.CASCADE, related_name='budget')
 
 
+class PayeeAccountManager(models.Manager):
+    def get_by_external_id(self, external_id, school):
+        payee_type = external_id[0]
+        payee_id = external_id[1:]
+        if payee_type == personnelModels.PAYEE_TYPE_EMPLOYEE:
+            return self.get(payee__employee__external_id=payee_id, payee__employee__school=school)
+        elif payee_type == personnelModels.PAYEE_TYPE_SUPPLIER:
+            return self.get(payee__supplier__external_id=payee_id, payee__supplier__school=school)
+        else:
+            return None
+
+
 class PayeeAccount(models.Model):
-    payee = models.OneToOneField(Payee, on_delete=models.CASCADE)
+    objects = PayeeAccountManager()
+    payee = models.OneToOneField(personnelModels.Payee, on_delete=models.CASCADE)
 
     class Meta:
         default_permissions = ()
@@ -100,12 +113,28 @@ class PayeeAccount(models.Model):
     def __str__(self):
         return str(self.payee)
 
+    @staticmethod
+    def school_filter_queryset(queryset, school):
+        return (
+            queryset.filter(payee__employee__school=school)
+            | queryset.filter(payee__supplier__school=school))
+
+    @property
+    def external_id(self):
+        return self.payee.external_id
+
     @property
     def is_active(self):
         return self.payee.is_active
 
 
+class StudentAccountManager(models.Manager):
+    def get_by_external_id(self, external_id, school):
+        return self.get(student__external_id=external_id, student__school=school)
+
+
 class StudentAccount(models.Model):
+    objects = StudentAccountManager()
     student = models.OneToOneField(Student, on_delete=models.CASCADE)
 
     class Meta:
@@ -113,6 +142,14 @@ class StudentAccount(models.Model):
 
     def __str__(self):
         return str(self.student)
+
+    @staticmethod
+    def school_filter_queryset(queryset, school):
+        return queryset.filter(student__school=school)
+
+    @property
+    def external_id(self):
+        return self.student.external_id
 
     @property
     def balance_due(self):

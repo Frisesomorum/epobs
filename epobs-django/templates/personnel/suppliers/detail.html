@@ -20,6 +20,7 @@
         <tr><th>Date Terminated:</th><td>{{ supplier.payee.date_terminated }}</td></tr>
       {% endif %}
     {% endif %}
+    <tr><th>ID:</th><td>{{ supplier.external_id }}</td></tr>
   </table>
 
   {% if supplier.payee.is_active %}

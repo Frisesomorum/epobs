@@ -4,7 +4,7 @@ from django.contrib.auth import models as authModels
 
 class User(authModels.AbstractUser):
     def __str__(self):
-        return self.last_name + ", " + self.first_name
+        return '{0}, {1} [{2}]'.format(self.last_name, self.first_name, self.username)
 
     def get_schools(self):
         return (
@@ -90,3 +90,42 @@ class UserSchoolMembership(models.Model):
 
     def get_groups_display(self):
         return ", ".join(group.name for group in self.groups.all())
+
+
+class SchoolExternalIdManager(models.Manager):
+    def get_by_external_id(self, external_id, school):
+        return self.get(external_id=external_id, school=school)
+
+
+class SchoolExternalId(models.Model):
+    objects = SchoolExternalIdManager()
+    external_id = models.CharField(max_length=31, unique=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+    @classmethod
+    def id_exists(cls, external_id):
+        cls.object.get(external_id)
+
+    def generate_external_id(self):
+        if len(self.external_id) > 0:
+            external_id = self.external_id
+        else:
+            external_id = self.default_external_id()
+        suffix = 1
+        while True:
+            if not type(self).objects.filter(external_id=external_id).exists():
+                break
+            elif type(self).objects.get(external_id=external_id) == self:
+                break
+            suffix += 1
+            external_id = '{0}{1}'.format(external_id, suffix)
+        return external_id
+
+    def default_external_id(self):
+        return NotImplemented
+
+    def save(self, *args, **kwargs):
+        self.external_id = self.generate_external_id()
+        super().save(*args, **kwargs)

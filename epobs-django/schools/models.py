@@ -14,7 +14,7 @@ class GraduatingClass(models.Model):
     school = models.ForeignKey(
         School, on_delete=models.CASCADE,
         related_name='graduating_classes')
-    graduating_year = models.SmallIntegerField(unique=True)
+    graduating_year = models.SmallIntegerField()
     label = models.CharField(max_length=255, blank=True)
     admission_fee = models.DecimalField(
         max_digits=15, decimal_places=2, default=0)
@@ -23,6 +23,9 @@ class GraduatingClass(models.Model):
     canteen_fee = models.DecimalField(
         max_digits=15, decimal_places=2, default=0)
     graduated = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('school', 'graduating_year')
 
     def __str__(self):
         if len(self.label) > 0:

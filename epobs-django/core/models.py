@@ -36,7 +36,6 @@ class Person(models.Model):
 
     class Meta:
         abstract = True
-        unique_together = (("first_name", "last_name", "date_of_birth"),)
 
     def __str__(self):
         return self.last_name + ', ' + self.first_name

@@ -22,7 +22,7 @@ class Create(SessionRecentsMixin, SchooledCreateView):
     permission_required = 'personnel.add_employee'
     model = Employee
     fields = ('first_name', 'last_name', 'date_of_birth', 'email',
-              'department', )
+              'department', 'external_id', )
     template_name = 'personnel/employees/create.html'
     success_url = reverse_lazy('employee-create')
 
@@ -36,6 +36,6 @@ class Edit(DeletionFormMixin, SchooledUpdateView):
     permission_required = 'personnel.change_employee'
     model = Employee
     fields = ('first_name', 'last_name', 'date_of_birth', 'email',
-              'department', )
+              'department', 'external_id', )
     template_name = 'personnel/employees/edit.html'
     success_url = reverse_lazy('employee-list')

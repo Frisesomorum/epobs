@@ -7,7 +7,8 @@ from schoolauth.views import (
     SchooledListView, SchooledDetailView,
     SchoolFormMixin, get_school, get_school_object_or_404,)
 from ..models import (
-    ExpenseTransaction, ExpenseCorrectiveJournalEntry, APPROVAL_STATUS_APPROVED,)
+    ExpenseTransaction, ExpenseCorrectiveJournalEntry, PayeeAccount,
+    APPROVAL_STATUS_APPROVED,)
 from .shared import RequiresApprovalCreateView, RequiresApprovalUpdateView
 
 
@@ -46,9 +47,8 @@ class ExpenseForm(SchoolFormMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['payee'].queryset = (
-            self.fields['payee'].queryset.filter(payee__employee__school=self.school)
-            | self.fields['payee'].queryset.filter(payee__supplier__school=self.school))
+        self.fields['payee'].queryset = PayeeAccount.school_filter_queryset(
+            self.fields['payee'].queryset, self.school)
         for field in ['quantity', 'unit_cost', 'discount', 'tax']:
             self.fields[field].widget.attrs.update({'class': 'amount-factor'})
 

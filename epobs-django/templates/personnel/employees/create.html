@@ -18,6 +18,8 @@
     <input type="submit" name="save" value="Save" />
   </form>
 
+  <a href="{% url 'import' 'employees' %}" class="btn btn-secondary">Import...</a>
+
   {% if recent_employee_list|length > 0 %}
     <h3>{{ user }}'s recently added employees</h3>
     <table class="table table-striped table-sm">

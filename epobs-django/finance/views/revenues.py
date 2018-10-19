@@ -4,7 +4,8 @@ from core.views import SessionRecentsMixin
 from schoolauth.views import (
     SchooledListView, SchooledDetailView, SchooledCreateView, SchoolFormMixin, get_school,)
 from ..models import (
-    RevenueTransaction, RevenueCorrectiveJournalEntry, APPROVAL_STATUS_APPROVED,)
+    RevenueTransaction, RevenueCorrectiveJournalEntry, StudentAccount,
+    APPROVAL_STATUS_APPROVED,)
 
 
 class RevenueForm(SchoolFormMixin, forms.ModelForm):
@@ -14,7 +15,8 @@ class RevenueForm(SchoolFormMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['student'].queryset = self.fields['student'].queryset.filter(student__school=self.school)
+        self.fields['student'].queryset = StudentAccount.school_filter_queryset(
+            self.fields['student'].queryset, self.school)
 
 
 class List(SchooledListView):

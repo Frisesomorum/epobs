@@ -26,5 +26,5 @@
 
 {% block scripts %}
   {{ block.super }}
-  {% include 'finance/expenses/script-total-amount.html' %}
+  <script src="{% static 'js/expenses.js' %}"></script>
 {% endblock %}

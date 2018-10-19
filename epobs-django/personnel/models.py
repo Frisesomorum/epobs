@@ -1,27 +1,33 @@
 import datetime
 from django.db import models
 from core.models import Person, Descriptor
-from schoolauth.models import School
+from schoolauth.models import School, SchoolExternalId
 
 
 class Department(Descriptor):
     pass
 
 
-class Employee(Person):
+class Employee(SchoolExternalId, Person):
     school = models.ForeignKey(
         School, on_delete=models.CASCADE, related_name='employees')
     department = models.ForeignKey(
         Department, on_delete=models.CASCADE, related_name='employees')
 
+    def default_external_id(self):
+        return '{0}{1}'.format(self.first_name[0], self.last_name[0:6]).lower()
 
-class Supplier(models.Model):
+
+class Supplier(SchoolExternalId):
     school = models.ForeignKey(
         School, on_delete=models.CASCADE, related_name='suppliers')
     name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.name
+
+    def default_external_id(self):
+        return self.name[0:12].lower()
 
 
 PAYEE_TYPE_EMPLOYEE = 'E'
@@ -43,7 +49,15 @@ class Payee(models.Model):
         default_permissions = ()
 
     def __str__(self):
-        return str(self.entity)
+        return '{0} [{1}]'.format(self.entity, self.external_id)
+
+    @property
+    def external_id(self):
+        if self.type == PAYEE_TYPE_EMPLOYEE:
+            return 'E{0}'.format(self.employee.external_id)
+        elif self.type == PAYEE_TYPE_SUPPLIER:
+            return 'S{0}'.format(self.supplier.external_id)
+        return None
 
     def set_entity(self, entity):
         if isinstance(entity, Employee):

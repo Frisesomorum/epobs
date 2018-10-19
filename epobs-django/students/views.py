@@ -1,13 +1,10 @@
 from django import forms
-from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from tablib import Dataset
 from core.views import DeletionFormMixin, SessionRecentsMixin
 from schoolauth.views import (
     SchooledListView, SchooledDetailView, SchooledCreateView,
     SchooledUpdateView, SchoolFormMixin, )
 from .models import Student
-from .resources import StudentResource
 
 
 class List(SchooledListView):
@@ -17,24 +14,6 @@ class List(SchooledListView):
 
     def get_queryset(self):
         return super().get_queryset().filter(is_enrolled=True)
-
-    def post(self, request, **kwargs):
-        if 'import' in request.POST:
-            # TODO: nicer error handling
-            student_resource = StudentResource()
-            dataset = Dataset()
-            new_students = request.FILES['import_students']
-            # TODO: shouldn't need to hardcode 'utf-8' or 'csv' here.
-            # Is the tablib detect_format code working correctly?
-            dataset.load(new_students.read().decode('utf-8'), format='csv')
-            # Test the data import
-            result = student_resource.import_data(dataset, dry_run=True)
-            if not result.has_errors():
-                # Actually import now
-                student_resource.import_data(dataset, dry_run=False)
-            return redirect('student-list')
-        else:
-            return super().post(request, **kwargs)
 
 
 class Detail(SchooledDetailView):
@@ -51,7 +30,7 @@ class StudentForm(SchoolFormMixin, forms.ModelForm):
         model = Student
         fields = (
             'first_name', 'last_name', 'date_of_birth', 'email',
-            'graduating_class', 'is_enrolled', )
+            'graduating_class', 'is_enrolled', 'external_id', )
 
 
 class Create(SessionRecentsMixin, SchooledCreateView):

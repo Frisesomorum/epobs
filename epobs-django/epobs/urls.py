@@ -24,6 +24,8 @@ urlpatterns = [
     re_path(r'logout/$', authViews.LogoutView.as_view(), name='logout'),
     re_path(r'selectschool/$', schoolAuthViews.SelectSchool.as_view(), name='school-select'),
 
+    re_path(r'(?P<model>[\w\.]+)/import/$', coreViews.ImportTool.as_view(), name='import'),
+
     re_path(r'school/$', schoolViews.Edit.as_view(), name='school-edit'),
     re_path(r'user/new$', schoolViews.CreateUser.as_view(), name='user-create'),
     re_path(r'school/membership/$', schoolViews.ListMembership.as_view(), name='member-list'),
