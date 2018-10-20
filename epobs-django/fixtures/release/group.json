@@ -268,17 +268,7 @@
         "revenuetransaction"
       ],
       [
-        "add_graduatingclass",
-        "schools",
-        "graduatingclass"
-      ],
-      [
         "change_graduatingclass",
-        "schools",
-        "graduatingclass"
-      ],
-      [
-        "delete_graduatingclass",
         "schools",
         "graduatingclass"
       ],

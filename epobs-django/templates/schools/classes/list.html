@@ -9,12 +9,6 @@
 {% endblock %}
 
 {% block content %}
-  {% if school_perms.schools.add_graduatingclass %}
-  <div class="form-group">
-    <a href="{% url 'class-create' %}" class="btn btn-secondary"><i class="fas fa-plus-square"></i> Create New Class...</a>
-  </div>
-  {% endif %}
-
   <input type="checkbox" name="show-graduated">Show Graduated Classes</input>
 
   <table id="datatable" class="table table-striped table-sm">

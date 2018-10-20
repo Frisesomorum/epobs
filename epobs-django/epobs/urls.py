@@ -46,7 +46,6 @@ urlpatterns = [
     re_path(r'payees/(?P<pk>\d+)/terminate-contract/$', payeeViews.terminate_contract, name='contract-terminate'),
 
     re_path(r'classes/$', schoolViews.ListClass.as_view(), name='class-list'),
-    re_path(r'classes/new/$', schoolViews.CreateClass.as_view(), name='class-create'),
     re_path(r'classes/(?P<pk>\d+)/edit/$', schoolViews.EditClass.as_view(), name='class-edit'),
 
     re_path(r'students/$', studentViews.List.as_view(), name='student-list'),

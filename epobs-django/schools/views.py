@@ -91,17 +91,7 @@ class ListClass(SchooledListView):
         return super().get_queryset().filter(graduated=False)
 
 
-class CreateClass(SchooledCreateView):
-    permission_required = 'schools.add_graduatingclass'
-    model = GraduatingClass
-    fields = (
-        'graduating_year', 'label', 'admission_fee', 'school_fee',
-        'canteen_fee', 'graduated')
-    template_name = 'schools/classes/create.html'
-    success_url = reverse_lazy('class-list')
-
-
-class EditClass(DeletionFormMixin, SchooledUpdateView):
+class EditClass(SchooledUpdateView):
     permission_required = 'schools.change_graduatingclass'
     model = GraduatingClass
     fields = (
