@@ -1,14 +1,23 @@
 from django.urls import reverse_lazy
 from core.views import DeletionFormMixin, SessionRecentsMixin
+from core.lib import QueryStringArg
 from schoolauth.views import (
     SchooledListView, SchooledDetailView, SchooledCreateView, SchooledUpdateView, )
-from ..models import Employee
+from ..models import Employee, Department
+
+
+EMPLOYEE_DEPARTMENT = QueryStringArg(
+    url_arg='department',
+    queryset_arg='department',
+    model=Department
+)
 
 
 class List(SchooledListView):
     permission_required = 'personnel.view_employee'
     model = Employee
     template_name = 'personnel/employees/list.html'
+    querystring_args = (EMPLOYEE_DEPARTMENT, )
 
 
 class Detail(SchooledDetailView):

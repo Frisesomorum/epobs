@@ -1,11 +1,12 @@
 from django import forms
 from django.urls import reverse_lazy
 from core.views import SessionRecentsMixin
+from core.lib import QueryStringArg
 from schoolauth.views import (
     SchooledListView, SchooledDetailView, SchooledCreateView, SchoolFormMixin, get_school,)
 from ..models import (
     RevenueTransaction, RevenueCorrectiveJournalEntry, StudentAccount,
-    APPROVAL_STATUS_APPROVED,)
+    RevenueLedgerAccount, RevenueCategory, APPROVAL_STATUS_APPROVED,)
 
 
 class RevenueForm(SchoolFormMixin, forms.ModelForm):
@@ -19,10 +20,30 @@ class RevenueForm(SchoolFormMixin, forms.ModelForm):
             self.fields['student'].queryset, self.school)
 
 
+REVENUE_LEDGER_ACCOUNT = QueryStringArg(
+    url_arg='ledger_account',
+    queryset_arg='ledger_account',
+    model=RevenueLedgerAccount
+)
+
+REVENUE_CATEGORY = QueryStringArg(
+    url_arg='category',
+    queryset_arg='ledger_account__category',
+    model=RevenueCategory
+)
+
+REVENUE_STUDENT = QueryStringArg(
+    url_arg='student',
+    queryset_arg='student',
+    model=StudentAccount
+)
+
+
 class List(SchooledListView):
     permission_required = 'finance.view_revenuetransaction'
     model = RevenueTransaction
     template_name = 'finance/revenues/list.html'
+    querystring_args = (REVENUE_LEDGER_ACCOUNT, REVENUE_CATEGORY, REVENUE_STUDENT, )
 
     def get_context_data(self, **kwargs):
         context = {}
@@ -31,11 +52,6 @@ class List(SchooledListView):
             approval_status=APPROVAL_STATUS_APPROVED).filter(
             correction_to__in=self.get_queryset())
         return super().get_context_data(**context)
-
-
-class Drilldown(List):
-    def get_queryset(self):
-        return super().get_queryset().filter(ledger_account=self.kwargs['ledger_account'])
 
 
 class Detail(SchooledDetailView):

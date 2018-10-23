@@ -5,6 +5,7 @@ from django.core.exceptions import SuspiciousOperation
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView
 from core.views import DeletionFormMixin
+from core.lib import QueryStringArg
 from schoolauth.views import (
     SchooledListView, SchooledCreateView, SchooledUpdateView, SchoolFormMixin, )
 from .models import SchoolProfile, GraduatingClass
@@ -82,13 +83,19 @@ class EditMembership(DeletionFormMixin, SchooledUpdateView):
     success_url = reverse_lazy('member-list')
 
 
+CLASS_IS_GRADUATED = QueryStringArg(
+    url_arg='graduated',
+    queryset_arg='graduated',
+    default=0,
+    type=bool
+)
+
+
 class ListClass(SchooledListView):
     permission_required = 'schools.view_graduatingclass'
     model = GraduatingClass
     template_name = 'schools/classes/list.html'
-
-    def get_queryset(self):
-        return super().get_queryset().filter(graduated=False)
+    querystring_args = (CLASS_IS_GRADUATED, )
 
 
 class EditClass(SchooledUpdateView):

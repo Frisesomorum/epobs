@@ -3,19 +3,45 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from schoolauth.decorators import school_permission_required
 from core.views import DeletionFormMixin, SessionRecentsMixin
+from core.lib import QueryStringArg
 from schoolauth.views import (
     SchooledListView, SchooledDetailView,
     SchoolFormMixin, get_school, get_school_object_or_404,)
 from ..models import (
     ExpenseTransaction, ExpenseCorrectiveJournalEntry, PayeeAccount,
-    APPROVAL_STATUS_APPROVED,)
+    ExpenseCategory, ExpenseLedgerAccount, APPROVAL_STATUS_APPROVED,)
 from .shared import RequiresApprovalCreateView, RequiresApprovalUpdateView
+
+
+EXPENSE_LEDGER_ACCOUNT = QueryStringArg(
+    url_arg='ledger_account',
+    queryset_arg='ledger_account',
+    model=ExpenseLedgerAccount
+)
+
+EXPENSE_CATEGORY = QueryStringArg(
+    url_arg='category',
+    queryset_arg='ledger_account__category',
+    model=ExpenseCategory
+)
+
+EXPENSE_APPROVAL_STATUS = QueryStringArg(
+    url_arg='approval_status',
+    queryset_arg='approval_status'
+)
+
+EXPENSE_PAYEE = QueryStringArg(
+    url_arg='payee',
+    queryset_arg='payee',
+    model=PayeeAccount
+)
 
 
 class List(SchooledListView):
     permission_required = 'finance.view_expensetransaction'
     model = ExpenseTransaction
     template_name = 'finance/expenses/list.html'
+    querystring_args = (EXPENSE_LEDGER_ACCOUNT, EXPENSE_CATEGORY, EXPENSE_APPROVAL_STATUS, EXPENSE_PAYEE, )
 
     def get_context_data(self, **kwargs):
         context = {}
@@ -24,11 +50,6 @@ class List(SchooledListView):
             approval_status=APPROVAL_STATUS_APPROVED).filter(
             correction_to__in=self.get_queryset())
         return super().get_context_data(**context)
-
-
-class Drilldown(List):
-    def get_queryset(self):
-        return super().get_queryset().filter(ledger_account=self.kwargs['ledger_account'])
 
 
 class Detail(SchooledDetailView):

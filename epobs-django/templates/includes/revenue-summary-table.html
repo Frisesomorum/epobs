@@ -12,8 +12,8 @@
     {% for report_item in revenue_report_list %}
       <tr>
         <td>
-          {% if school_perms.finance.view_revenuetransaction and report_item.ledger_account %}
-            <a href="{% url 'revenue-drilldown' ledger_account=report_item.ledger_account.pk %}">{{ report_item }}</a>
+          {% if school_perms.finance.view_revenuetransaction %}
+            <a href="{{ report_item.transaction_list_url }}">{{ report_item }}</a>
           {% else %}
             {{ report_item }}
           {% endif %}

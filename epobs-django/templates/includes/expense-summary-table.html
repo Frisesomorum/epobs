@@ -18,8 +18,8 @@
         {% else %}<td id="category-exp{{ report_item.category.pk }}" class="report-summary-toggle collapsed">
           <i class="fas fa-angle-right"></i></td>
         {% endif %}
-        <td>{% if report_item.ledger_account and school_perms.finance.view_expensetransaction %}
-          <a href="{% url 'expense-drilldown' ledger_account=report_item.ledger_account.pk %}">{{ report_item }}</a>
+        <td>{% if school_perms.finance.view_expensetransaction %}
+          <a href="{{ report_item.transaction_list_url }}">{{ report_item }}</a>
         {% else %}
           {{ report_item }}
         {% endif %}</td>

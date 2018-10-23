@@ -1,6 +1,7 @@
 import datetime
 from django.db import models
 from core.models import Person, Descriptor
+from core.lib import querystring_url
 from schoolauth.models import School, SchoolExternalId
 
 
@@ -110,6 +111,11 @@ class Payee(models.Model):
         if contract is None:
             return None
         return contract.date_terminated
+
+    @property
+    def expense_list_url(self):
+        params = {'payee': self.account.pk}
+        return querystring_url('expense-list', params)
 
 
 class Contract(models.Model):

@@ -59,8 +59,6 @@ urlpatterns = [
     re_path(r'budgets/(?P<pk>\d+)/$', budgetViews.EditBudget.as_view(), name='budget-edit'),
 
     re_path(r'expenses/$', expenseViews.List.as_view(), name='expense-list'),
-    re_path(r'expenses/drilldown/(?P<ledger_account>\d+)/$', expenseViews.Drilldown.as_view(),
-            name='expense-drilldown'),
     re_path(r'expenses/(?P<pk>\d+)/$', expenseViews.Detail.as_view(), name='expense-detail'),
     re_path(r'expenses/new/$', expenseViews.Create.as_view(), name='expense-create'),
     re_path(r'expenses/(?P<pk>\d+)/edit/$', expenseViews.Edit.as_view(), name='expense-edit'),
@@ -77,8 +75,6 @@ urlpatterns = [
     re_path(r'expenses/cje/(?P<pk>\d+)/approve/$', expenseCjeViews.approve, name='expense-cje-approve'),
 
     re_path(r'revenues/$', revenueViews.List.as_view(), name='revenue-list'),
-    re_path(r'revenues/drilldown/(?P<ledger_account>\d+)/$', revenueViews.Drilldown.as_view(),
-            name='revenue-drilldown'),
     re_path(r'revenues/(?P<pk>\d+)/$', revenueViews.Detail.as_view(), name='revenue-detail'),
     re_path(r'revenues/new/$', revenueViews.Create.as_view(), name='revenue-create'),
 

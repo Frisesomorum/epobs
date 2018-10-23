@@ -14,6 +14,15 @@
   </div>
   {% endif %}
 
+  <div class="alert alert-info">
+    {% if listview_filters %}
+      Showing students matching filters:
+      <br />{{ listview_filters }}
+    {% else %}
+      Showing all students
+    {% endif %}
+  </div>
+
   <table id="datatable" class="table table-striped table-sm">
     <thead>
       <tr>

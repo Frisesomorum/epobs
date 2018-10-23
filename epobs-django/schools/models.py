@@ -1,5 +1,6 @@
 import datetime
 from django.db import models
+from core.lib import querystring_url
 from schoolauth.models import School
 from core.models import SingletonModel
 
@@ -49,3 +50,8 @@ class GraduatingClass(models.Model):
         for n in range(SiteSettings.load().num_graduating_years):
             GraduatingClass.objects.get_or_create(
                 school=school, graduating_year=current_year+n)
+
+    @property
+    def student_list_url(self):
+        params = {'graduating_class': self.pk}
+        return querystring_url('student-list', params)

@@ -14,6 +14,15 @@
   </div>
   {% endif %}
 
+  <div class="alert alert-info">
+    {% if listview_filters %}
+      Showing revenues matching filters:
+      <br />{{ listview_filters }}
+    {% else %}
+      Showing all revenues
+    {% endif %}
+  </div>
+
   <table id="datatable" class="table table-sm">
     <thead>
       <tr>

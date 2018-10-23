@@ -32,4 +32,6 @@
       <a href="{% url 'contract-start' supplier.payee.pk %}"><span class="btn btn-secondary">Start Contract</span></a>
     {% endif %}
   {% endif %}
+  <a href="{{ supplier.payee.expense_list_url }}"><span class="btn btn-secondary">View payments</span></a>
+
 {% endblock %}

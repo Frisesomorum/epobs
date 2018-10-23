@@ -2,6 +2,7 @@ import datetime
 from decimal import Decimal
 from django.db import models, OperationalError
 from core.models import Descriptor
+from core.lib import querystring_url
 from schoolauth.models import User, School
 from students.models import Student
 from personnel import models as personnelModels
@@ -105,7 +106,7 @@ class PayeeAccountManager(models.Manager):
 
 class PayeeAccount(models.Model):
     objects = PayeeAccountManager()
-    payee = models.OneToOneField(personnelModels.Payee, on_delete=models.CASCADE)
+    payee = models.OneToOneField(personnelModels.Payee, on_delete=models.CASCADE, related_name='account')
 
     class Meta:
         default_permissions = ()
@@ -135,7 +136,7 @@ class StudentAccountManager(models.Manager):
 
 class StudentAccount(models.Model):
     objects = StudentAccountManager()
-    student = models.OneToOneField(Student, on_delete=models.CASCADE)
+    student = models.OneToOneField(Student, on_delete=models.CASCADE, related_name='account')
 
     class Meta:
         default_permissions = ()
@@ -528,3 +529,19 @@ class ReportItem(models.Model):
             self.percent_used = 0
         else:
             self.percent_used = ((self.period_actual / self.period_budget) // Decimal(0.001)) / 10
+
+    @property
+    def transaction_list_url(self):
+        if isinstance(self.ledger_account, ExpenseLedgerAccount):
+            params = {'ledger_account': self.ledger_account.pk}
+            return querystring_url('expense-list', params)
+        elif isinstance(self.ledger_account, RevenueLedgerAccount):
+            params = {'ledger_account': self.ledger_account.pk}
+            return querystring_url('revenue-list', params)
+        elif isinstance(self.category, ExpenseCategory):
+            params = {'category': self.category.pk}
+            return querystring_url('expense-list', params)
+        elif isinstance(self.category, RevenueCategory):
+            params = {'category': self.category.pk}
+            return querystring_url('revenue-list', params)
+        return '#'

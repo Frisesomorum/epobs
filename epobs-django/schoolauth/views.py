@@ -7,6 +7,7 @@ from django.views.generic import FormView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
+from core.lib import QueryStringParam
 from .models import School
 
 
@@ -183,8 +184,32 @@ class SchoolPermissionMixin(PermissionRequiredMixin):
 
 
 class SchooledListView(SchoolPermissionMixin, ListView):
+    querystring_args = ()
+    querystring_params = []
+
     def get_queryset(self):
-        return self.model.objects.filter(school=get_school(self.request.session))
+        filter_args = {'school': get_school(self.request.session)}
+        for param in self.querystring_params:
+            if not param.skip:
+                filter_args[param.argument.queryset_arg] = param.value
+        return self.model.objects.filter(**filter_args)
+
+    def get(self, request, *args, **kwargs):
+        self.querystring_params = []
+        for querystring_arg in self.querystring_args:
+            value = request.GET.get(querystring_arg.url_arg, default=querystring_arg.default)
+            if value is not None:
+                self.querystring_params.append(QueryStringParam(querystring_arg, value))
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        filter_list = []
+        for param in self.querystring_params:
+            if not param.skip:
+                filter_list.append(param.display)
+        context['listview_filters'] = '; '.join(filter_list)
+        return context
 
 
 class SchooledCreateView(SchoolPermissionMixin, SchoolFormViewMixin, CreateView):

@@ -1,5 +1,6 @@
 from django.db import models
 from core.models import Person
+from core.lib import querystring_url
 from schoolauth.models import School, SchoolExternalId
 from schools.models import GraduatingClass
 
@@ -16,3 +17,8 @@ class Student(SchoolExternalId, Person):
 
     def default_external_id(self):
         return '{0}{1}'.format(self.first_name[0], self.last_name[0:6]).lower()
+
+    @property
+    def revenue_list_url(self):
+        params = {'student': self.account.pk}
+        return querystring_url('revenue-list', params)

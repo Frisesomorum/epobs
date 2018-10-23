@@ -1,19 +1,34 @@
 from django import forms
 from django.urls import reverse_lazy
+from core.lib import QueryStringArg
 from core.views import DeletionFormMixin, SessionRecentsMixin
 from schoolauth.views import (
     SchooledListView, SchooledDetailView, SchooledCreateView,
     SchooledUpdateView, SchoolFormMixin, )
+from schools.models import GraduatingClass
 from .models import Student
+
+
+STUDENT_GRADUATING_CLASS = QueryStringArg(
+    url_arg='graduating_class',
+    queryset_arg='graduating_class',
+    model=GraduatingClass
+)
+
+STUDENT_IS_ENROLLED = QueryStringArg(
+    url_arg='is_enrolled',
+    queryset_arg='is_enrolled',
+    display_name='Enrolled',
+    default=1,
+    type=bool
+)
 
 
 class List(SchooledListView):
     permission_required = 'students.view_student'
     model = Student
     template_name = 'students/list.html'
-
-    def get_queryset(self):
-        return super().get_queryset().filter(is_enrolled=True)
+    querystring_args = (STUDENT_GRADUATING_CLASS, STUDENT_IS_ENROLLED, )
 
 
 class Detail(SchooledDetailView):
