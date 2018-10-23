@@ -1,9 +1,10 @@
 from django.urls import reverse_lazy
-from core.views import DeletionFormMixin, SessionRecentsMixin
+from core.views import DeletionFormMixin, SessionRecentsMixin, ImportTool
 from core.lib import QueryStringArg
 from schoolauth.views import (
     SchooledListView, SchooledDetailView, SchooledCreateView, SchooledUpdateView, )
 from ..models import Employee, Department
+from ..resources import EmployeeResource
 
 
 EMPLOYEE_DEPARTMENT = QueryStringArg(
@@ -47,4 +48,11 @@ class Edit(DeletionFormMixin, SchooledUpdateView):
     fields = ('first_name', 'last_name', 'date_of_birth', 'email',
               'department', 'external_id', )
     template_name = 'personnel/employees/edit.html'
+    success_url = reverse_lazy('employee-list')
+
+
+class Import(ImportTool):
+    permission_required = ('personnel.add_employee', 'personnel.change_employee', )
+    model = Employee
+    resource_class = EmployeeResource
     success_url = reverse_lazy('employee-list')

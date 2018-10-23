@@ -1,8 +1,9 @@
 from django.urls import reverse_lazy
-from core.views import DeletionFormMixin, SessionRecentsMixin
+from core.views import DeletionFormMixin, SessionRecentsMixin, ImportTool
 from schoolauth.views import (
     SchooledListView, SchooledDetailView, SchooledCreateView, SchooledUpdateView, )
 from ..models import Supplier
+from ..resources import SupplierResource
 
 
 class List(SchooledListView):
@@ -36,4 +37,11 @@ class Edit(DeletionFormMixin, SchooledUpdateView):
     model = Supplier
     fields = ('name', 'external_id', )
     template_name = 'personnel/suppliers/edit.html'
+    success_url = reverse_lazy('supplier-list')
+
+
+class Import(ImportTool):
+    permission_required = ('personnel.add_supplier', 'personnel.change_supplier', )
+    model = Supplier
+    resource_class = SupplierResource
     success_url = reverse_lazy('supplier-list')

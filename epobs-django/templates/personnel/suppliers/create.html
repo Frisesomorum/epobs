@@ -18,7 +18,7 @@
     <input type="submit" name="save" value="Save" />
   </form>
 
-  <a href="{% url 'import' 'suppliers' %}" class="btn btn-secondary">Import...</a>
+  <a href="{% url 'supplier-import' %}" class="btn btn-secondary">Import...</a>
 
   {% if recent_supplier_list|length > 0 %}
     <h3>{{ user }}'s recently added suppliers</h3>

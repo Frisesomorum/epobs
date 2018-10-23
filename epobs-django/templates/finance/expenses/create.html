@@ -19,7 +19,7 @@
     <input type="submit" name="save-and-submit" value="Save and Submit for Approval" />
   </form>
 
-  <a href="{% url 'import' 'expenses' %}" class="btn btn-secondary">Import...</a>
+  <a href="{% url 'expense-import' %}" class="btn btn-secondary">Import...</a>
 
   {% if recent_expensetransaction_list|length > 0 %}
     <h3>{{ user }}'s recently added expenses</h3>

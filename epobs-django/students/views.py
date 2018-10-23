@@ -1,12 +1,13 @@
 from django import forms
 from django.urls import reverse_lazy
 from core.lib import QueryStringArg
-from core.views import DeletionFormMixin, SessionRecentsMixin
+from core.views import DeletionFormMixin, SessionRecentsMixin, ImportTool
 from schoolauth.views import (
     SchooledListView, SchooledDetailView, SchooledCreateView,
     SchooledUpdateView, SchoolFormMixin, )
 from schools.models import GraduatingClass
 from .models import Student
+from .resources import StudentResource
 
 
 STUDENT_GRADUATING_CLASS = QueryStringArg(
@@ -66,4 +67,11 @@ class Edit(DeletionFormMixin, SchooledUpdateView):
     model = Student
     form_class = StudentForm
     template_name = 'students/edit.html'
+    success_url = reverse_lazy('student-list')
+
+
+class Import(ImportTool):
+    permission_required = ('students.add_student', 'students.change_student', )
+    model = Student
+    resource_class = StudentResource
     success_url = reverse_lazy('student-list')

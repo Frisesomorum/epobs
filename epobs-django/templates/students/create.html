@@ -15,7 +15,7 @@
     <input type="submit" name="save" value="Save" />
   </form>
 
-  <a href="{% url 'import' 'students' %}" class="btn btn-secondary">Import...</a>
+  <a href="{% url 'student-import' %}" class="btn btn-secondary">Import...</a>
 
   {% if recent_student_list|length > 0 %}
     <h3>{{ user }}'s recently added students</h3>

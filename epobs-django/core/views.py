@@ -3,12 +3,11 @@ from django.template.response import TemplateResponse
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import FormView
-from schoolauth.views import get_school_pk, get_school
+from schoolauth.views import SchoolPermissionMixin, get_school_pk, get_school
 from django.utils.encoding import force_text
 from import_export.forms import ImportForm, ConfirmImportForm
 from import_export.formats import base_formats
 from import_export.tmp_storages import TempFolderStorage
-from . import resources
 
 
 def index_view(request):
@@ -79,21 +78,13 @@ DEFAULT_FORMATS = (
 )
 
 
-class ImportTool(FormView):
+class ImportTool(SchoolPermissionMixin, FormView):
     formats = DEFAULT_FORMATS
     from_encoding = "utf-8"
     template_name = 'import_tool.html'
     form_class = ImportForm
     resource_class = None
     model = None
-    success_url = ''
-
-    def dispatch(self, request, *args, **kwargs):
-        model = self.kwargs['model']
-        self.resource_class = resources.get_resource_class(model)
-        self.model = self.resource_class._meta.model
-        self.success_url = resources.get_success_url(model)
-        return super().dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

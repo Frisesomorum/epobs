@@ -2,7 +2,7 @@ from django import forms
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from schoolauth.decorators import school_permission_required
-from core.views import DeletionFormMixin, SessionRecentsMixin
+from core.views import DeletionFormMixin, SessionRecentsMixin, ImportTool
 from core.lib import QueryStringArg
 from schoolauth.views import (
     SchooledListView, SchooledDetailView,
@@ -11,6 +11,7 @@ from ..models import (
     ExpenseTransaction, ExpenseCorrectiveJournalEntry, PayeeAccount,
     ExpenseCategory, ExpenseLedgerAccount, APPROVAL_STATUS_APPROVED,)
 from .shared import RequiresApprovalCreateView, RequiresApprovalUpdateView
+from ..resources import ExpenseResource
 
 
 EXPENSE_LEDGER_ACCOUNT = QueryStringArg(
@@ -93,6 +94,13 @@ class Edit(DeletionFormMixin, RequiresApprovalUpdateView):
     model = ExpenseTransaction
     form_class = ExpenseForm
     template_name = 'finance/expenses/edit.html'
+    success_url = reverse_lazy('expense-list')
+
+
+class Import(ImportTool):
+    permission_required = 'finance.add_expensetransaction'
+    model = ExpenseTransaction
+    resource_class = ExpenseResource
     success_url = reverse_lazy('expense-list')
 
 

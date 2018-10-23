@@ -75,7 +75,9 @@ class SchooledForeignKeyWidget(ForeignKeyWidget):
 
     def get_queryset(self, value, row, *args, **kwargs):
         queryset = super().get_queryset(value, row, *args, **kwargs)
-        return self.model.school_filter_queryset(queryset, self.school)
+        if hasattr(self.model, 'school_filter_queryset'):
+            return self.model.school_filter_queryset(queryset, self.school)
+        return queryset.filter(school=self.school)
 
 
 class SchooledExternalIdWidget(SchooledForeignKeyWidget):

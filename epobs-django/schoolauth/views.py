@@ -174,6 +174,8 @@ class SchoolFormViewMixin:
 
 
 class SchoolPermissionMixin(PermissionRequiredMixin):
+    permission_required = ()
+
     def has_permission(self):
         perms = self.get_permission_required()
         school = get_school(self.request.session)

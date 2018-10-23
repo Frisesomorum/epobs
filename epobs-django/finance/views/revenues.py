@@ -1,12 +1,13 @@
 from django import forms
 from django.urls import reverse_lazy
-from core.views import SessionRecentsMixin
+from core.views import SessionRecentsMixin, ImportTool
 from core.lib import QueryStringArg
 from schoolauth.views import (
     SchooledListView, SchooledDetailView, SchooledCreateView, SchoolFormMixin, get_school,)
 from ..models import (
     RevenueTransaction, RevenueCorrectiveJournalEntry, StudentAccount,
     RevenueLedgerAccount, RevenueCategory, APPROVAL_STATUS_APPROVED,)
+from ..resources import RevenueResource
 
 
 class RevenueForm(SchoolFormMixin, forms.ModelForm):
@@ -73,3 +74,10 @@ class Create(SessionRecentsMixin, SchooledCreateView):
         http_response = super().form_valid(form)
         self.add_object_to_session(self.object.pk)
         return http_response
+
+
+class Import(ImportTool):
+    permission_required = 'finance.add_revenuetransaction'
+    model = RevenueTransaction
+    resource_class = RevenueResource
+    success_url = reverse_lazy('revenue-list')

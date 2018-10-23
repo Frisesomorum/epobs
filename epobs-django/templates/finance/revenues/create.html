@@ -17,7 +17,7 @@
     <input type="submit" name="save" value="Save" />
   </form>
 
-  <a href="{% url 'import' 'revenues' %}" class="btn btn-secondary">Import...</a>
+  <a href="{% url 'revenue-import' %}" class="btn btn-secondary">Import...</a>
 
   {% if recent_revenuetransaction_list|length > 0 %}
     <h3>{{ user }}'s recently added revenues</h3>

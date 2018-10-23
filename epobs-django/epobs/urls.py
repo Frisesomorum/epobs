@@ -24,8 +24,6 @@ urlpatterns = [
     re_path(r'logout/$', authViews.LogoutView.as_view(), name='logout'),
     re_path(r'selectschool/$', schoolAuthViews.SelectSchool.as_view(), name='school-select'),
 
-    re_path(r'(?P<model>[\w\.]+)/import/$', coreViews.ImportTool.as_view(), name='import'),
-
     re_path(r'school/$', schoolViews.Edit.as_view(), name='school-edit'),
     re_path(r'user/new$', schoolViews.CreateUser.as_view(), name='user-create'),
     re_path(r'school/membership/$', schoolViews.ListMembership.as_view(), name='member-list'),
@@ -36,11 +34,13 @@ urlpatterns = [
     re_path(r'employees/(?P<pk>\d+)/$', employeeViews.Detail.as_view(), name='employee-detail'),
     re_path(r'employees/new/$', employeeViews.Create.as_view(), name='employee-create'),
     re_path(r'employees/(?P<pk>\d+)/edit/$', employeeViews.Edit.as_view(), name='employee-edit'),
+    re_path(r'employees/import/$', employeeViews.Import.as_view(), name='employee-import'),
 
     re_path(r'suppliers/$', supplierViews.List.as_view(), name='supplier-list'),
     re_path(r'suppliers/(?P<pk>\d+)/$', supplierViews.Detail.as_view(), name='supplier-detail'),
     re_path(r'suppliers/new/$', supplierViews.Create.as_view(), name='supplier-create'),
     re_path(r'suppliers/(?P<pk>\d+)/edit/$', supplierViews.Edit.as_view(), name='supplier-edit'),
+    re_path(r'suppliers/import/$', supplierViews.Import.as_view(), name='supplier-import'),
 
     re_path(r'payees/(?P<pk>\d+)/start-contract/$', payeeViews.start_contract, name='contract-start'),
     re_path(r'payees/(?P<pk>\d+)/terminate-contract/$', payeeViews.terminate_contract, name='contract-terminate'),
@@ -52,6 +52,7 @@ urlpatterns = [
     re_path(r'students/(?P<pk>\d+)/$', studentViews.Detail.as_view(), name='student-detail'),
     re_path(r'students/new/$', studentViews.Create.as_view(), name='student-create'),
     re_path(r'students/(?P<pk>\d+)/edit/$', studentViews.Edit.as_view(), name='student-edit'),
+    re_path(r'students/import/$', studentViews.Import.as_view(), name='student-import'),
 
     re_path(r'budgets/$', budgetViews.List.as_view(), name='budget-list'),
     re_path(r'budgets/new/$', budgetViews.Create.as_view(), name='budget-create'),
@@ -61,6 +62,7 @@ urlpatterns = [
     re_path(r'expenses/$', expenseViews.List.as_view(), name='expense-list'),
     re_path(r'expenses/(?P<pk>\d+)/$', expenseViews.Detail.as_view(), name='expense-detail'),
     re_path(r'expenses/new/$', expenseViews.Create.as_view(), name='expense-create'),
+    re_path(r'expenses/import/$', expenseViews.Import.as_view(), name='expense-import'),
     re_path(r'expenses/(?P<pk>\d+)/edit/$', expenseViews.Edit.as_view(), name='expense-edit'),
     re_path(r'expenses/(?P<pk>\d+)/submit/$', expenseViews.submit_for_approval, name='expense-submit'),
     re_path(r'expenses/(?P<pk>\d+)/unsubmit/$', expenseViews.unsubmit_for_approval, name='expense-unsubmit'),
@@ -77,6 +79,7 @@ urlpatterns = [
     re_path(r'revenues/$', revenueViews.List.as_view(), name='revenue-list'),
     re_path(r'revenues/(?P<pk>\d+)/$', revenueViews.Detail.as_view(), name='revenue-detail'),
     re_path(r'revenues/new/$', revenueViews.Create.as_view(), name='revenue-create'),
+    re_path(r'revenues/import/$', revenueViews.Import.as_view(), name='revenue-import'),
 
     re_path(r'revenues/cje/(?P<pk>\d+)/$', revenueCjeViews.Detail.as_view(), name='revenue-cje-detail'),
     re_path(r'revenues/cje/new/(?P<revenue_pk>\d+)/$', revenueCjeViews.Create.as_view(), name='revenue-cje-create'),
