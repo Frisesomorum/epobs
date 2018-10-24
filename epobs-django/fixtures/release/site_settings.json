@@ -1,0 +1,9 @@
+[
+{
+  "model": "schools.sitesettings",
+  "pk": 1,
+  "fields": {
+    "num_graduating_years": 5
+  }
+}
+]
