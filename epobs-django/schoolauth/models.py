@@ -109,7 +109,7 @@ class SchoolExternalId(models.Model):
         cls.object.get(external_id)
 
     def generate_external_id(self):
-        if len(self.external_id) > 0:
+        if self.external_id is not None and len(self.external_id) > 0:
             external_id = self.external_id
         else:
             external_id = self.default_external_id()
