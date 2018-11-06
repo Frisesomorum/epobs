@@ -72,8 +72,6 @@ class SessionRecentsMixin:
 
 DEFAULT_FORMATS = (
     base_formats.CSV,
-    base_formats.XLS,
-    base_formats.XLSX,
     base_formats.TSV,
 )
 
