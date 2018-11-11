@@ -14,6 +14,10 @@ def index_view(request):
     return render(request, 'index.html')
 
 
+def terms_of_service(request):
+    return render(request, 'accounts/tos.html')
+
+
 class DeletionFormMixin:
 
     # The combined edit/delete view expects a form

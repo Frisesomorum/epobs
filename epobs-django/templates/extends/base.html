@@ -19,7 +19,7 @@
           <a class="navbar-brand" href="{% url 'index' %}">EPOBS</a>
           {% if user.is_authenticated %}
             <span class="navbar-text"><a href="{% url 'school-select' %}">{{ request.session.school_name }}</a></span>
-            &nbsp;&nbsp;<span class="navbar-text">{{ user }}</span>
+            &nbsp;&nbsp;<span class="navbar-text"><a href="{% url 'user-profile' %}">{{ user }}</a></span>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>

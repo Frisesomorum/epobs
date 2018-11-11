@@ -1,7 +1,7 @@
 from django.contrib import admin
-from django.contrib.auth import views as authViews
 from django.conf import settings
 from django.urls import path, re_path, include
+from django.contrib.auth import views as authViews
 from core import views as coreViews
 from schoolauth import views as schoolAuthViews
 from schools import views as schoolViews
@@ -18,17 +18,33 @@ from finance.views import reports as reportViews
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
+    path('accounts/', include([
+        path('login/', authViews.LoginView.as_view(template_name='accounts/login.html'), name='login'),
+        path('logout/', authViews.LogoutView.as_view(), name='logout'),
+        path('change-password/', authViews.PasswordChangeView.as_view(
+            template_name='accounts/change-password.html'), name='password_change', ),
+        path('change-password/done/', authViews.PasswordChangeDoneView.as_view(
+            template_name='accounts/change-password-done.html'), name='password_change_done', ),
+        path('reset-password/', authViews.PasswordResetView.as_view(
+            template_name='accounts/reset-password.html'), name='password_reset', ),
+        path('reset-password/done/', authViews.PasswordResetDoneView.as_view(
+            template_name='accounts/reset-password-done.html'), name='password_reset_done', ),
+        path('reset/<uidb64>/<token>/', authViews.PasswordResetConfirmView.as_view(
+            template_name='accounts/reset-password-confirm.html'), name='password_reset_confirm', ),
+        path('reset/done/', authViews.PasswordResetCompleteView.as_view(
+            template_name='accounts/reset-password-complete.html'), name='password_reset_complete', ),
+        path('profile/', schoolAuthViews.user_profile, name='user-profile'),
+    ])),
 
     re_path(r'^$', coreViews.index_view, name='index'),
-    re_path(r'login/$', authViews.LoginView.as_view(template_name='login.html'), name='login'),
-    re_path(r'logout/$', authViews.LogoutView.as_view(), name='logout'),
+    path('tos/', coreViews.terms_of_service, name='terms-of-service'),
     re_path(r'selectschool/$', schoolAuthViews.SelectSchool.as_view(), name='school-select'),
 
     re_path(r'school/$', schoolViews.Edit.as_view(), name='school-edit'),
-    re_path(r'user/new$', schoolViews.CreateUser.as_view(), name='user-create'),
     re_path(r'school/membership/$', schoolViews.ListMembership.as_view(), name='member-list'),
     re_path(r'school/membership/new/$', schoolViews.CreateMembership.as_view(), name='member-create'),
     re_path(r'school/membership/(?P<pk>\d+)/edit/$', schoolViews.EditMembership.as_view(), name='member-edit'),
+    re_path(r'user/new$', schoolViews.CreateUser.as_view(), name='user-create'),
 
     re_path(r'employees/$', employeeViews.List.as_view(), name='employee-list'),
     re_path(r'employees/(?P<pk>\d+)/$', employeeViews.Detail.as_view(), name='employee-detail'),

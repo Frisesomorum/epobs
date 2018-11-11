@@ -6,6 +6,11 @@ from re import compile
 
 LOGIN_EXEMPT_URLS = [
     compile(reverse(settings.LOGIN_URL).lstrip('/')),
+    compile(reverse('terms-of-service').lstrip('/')),
+    compile(reverse('password_reset').lstrip('/')),
+    compile(reverse('password_reset_done').lstrip('/')),
+    compile(reverse('password_reset_complete').lstrip('/')),
+    compile(r'accounts/reset/\w+/\w+/$'),  # 'password_reset_confirm'
     ]
 SCHOOL_CONTEXT_EXEMPT_URLS = [
     compile(reverse('logout').lstrip('/')),

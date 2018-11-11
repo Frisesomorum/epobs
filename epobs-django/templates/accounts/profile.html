@@ -1,0 +1,12 @@
+{% extends 'extends/base.html' %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item">Account</li>
+{% endblock %}
+
+{% block content %}
+  <ul>
+    <li /><a href="{% url 'password_change' %}">Change Password</a>
+    <li /><a href="{% url 'terms-of-service' %}">Terms of Service</a>
+  </ul>
+{% endblock %}
