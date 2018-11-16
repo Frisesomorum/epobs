@@ -5,7 +5,9 @@ from django.urls import reverse_lazy
 from core.views import DeletionFormMixin
 from schoolauth.views import (
     SchooledListView, SchooledCreateView, SchooledUpdateView, )
-from ..models import BudgetPeriod, ExpenseBudgetItem, RevenueBudgetItem, ExpenseLedgerAccount, RevenueLedgerAccount
+from ..models import (
+    BudgetPeriod, ExpenseBudgetItem, RevenueBudgetItem, ExpenseLedgerAccount,
+    RevenueLedgerAccount, )
 
 
 class List(SchooledListView):
@@ -55,25 +57,10 @@ class EditBudget(SchooledUpdateView):
         # We need one budget item for each ledger account.
         # They're not automatically generated, so check if they exist
         # and create them if they don't.
-        expense_budget_items = ExpenseBudgetItem.objects.filter(period=period)
-        existing_ledger_accounts = []
-        for item in expense_budget_items:
-            existing_ledger_accounts.append(item.ledger_account)
         for ledger in ExpenseLedgerAccount.objects.all():
-            if ledger not in existing_ledger_accounts:
-                new_budget_item = ExpenseBudgetItem(
-                    period=period, ledger_account=ledger)
-                new_budget_item.save()
-
-        revenue_budget_items = RevenueBudgetItem.objects.filter(period=period)
-        existing_ledger_accounts = []
-        for item in revenue_budget_items:
-            existing_ledger_accounts.append(item.ledger_account)
+            ExpenseBudgetItem.objects.get_or_create(period=period, ledger_account=ledger)
         for ledger in RevenueLedgerAccount.objects.all():
-            if ledger not in existing_ledger_accounts:
-                new_budget_item = RevenueBudgetItem(
-                    period=period, ledger_account=ledger)
-                new_budget_item.save()
+            RevenueBudgetItem.objects.get_or_create(period=period, ledger_account=ledger)
 
         context['expense_formset'] = ExpenseBudgetFormSet(
             instance=period, prefix='expense')

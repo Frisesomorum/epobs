@@ -28,12 +28,6 @@ class GraduatingClass(models.Model):
         related_name='graduating_classes')
     graduating_year = models.SmallIntegerField()
     label = models.CharField(max_length=255, blank=True)
-    admission_fee = models.DecimalField(
-        max_digits=15, decimal_places=2, default=0)
-    school_fee = models.DecimalField(
-        max_digits=15, decimal_places=2, default=0)
-    canteen_fee = models.DecimalField(
-        max_digits=15, decimal_places=2, default=0)
     graduated = models.BooleanField(default=False)
 
     class Meta:

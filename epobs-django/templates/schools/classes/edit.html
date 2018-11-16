@@ -8,7 +8,7 @@
   <li class="breadcrumb-item">School</li>
   <li class="breadcrumb-item">Classes</li>
   <li class="breadcrumb-item">Edit</li>
-  <li class="breadcrumb-item">{{ graduatingclass.label }}</li>
+  <li class="breadcrumb-item">{{ graduatingclass.graduating_year }}</li>
 {% endblock %}
 
 {% block content %}
@@ -16,6 +16,13 @@
   <form method="post" class="mb-4" novalidate>
     {% csrf_token %}
     {% include 'includes/form.html' %}
+    {{ fee_formset.management_form }}
+    <div class="form-group">
+      {% for form in fee_formset.forms %}
+        <h6>{{ form.instance.ledger_account }}</h6>
+        {{ form.as_p }}
+      {% endfor %}
+    </div>
     <input type="submit" name="save" value="Save" />
     <input type="submit" name="cancel" value="Cancel" />
   </form>

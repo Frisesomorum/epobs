@@ -1,4 +1,5 @@
 {% extends 'extends/datatable.html' %}
+{% load core_tags %}
 
 {% block title %}EPOBS - List Classes{% endblock %}
 
@@ -23,9 +24,9 @@
       <tr>
         <th class="datatable-column">Class</th>
         <th class="datatable-column">Graduating Year</th>
-        <th class="datatable-column">School Fee</th>
-        <th class="datatable-column">Admission Fee</th>
-        <th class="datatable-column">Canteen Fee</th>
+        {% for fee_type in fee_list %}
+          <th class="datatable-column">{{ fee_type }}</th>
+        {% endfor %}
         {% if school_perms.schools.change_graduatingclass %}<th class="datatable-column datatable-nondata">Edit</th>{% endif %}
         {% if school_perms.students.view_student %}<th class="datatable-column datatable-nondata">View Students</th>{% endif %}
       </tr>
@@ -35,9 +36,9 @@
         <tr>
           <td>{{ class }}</td>
           <td>{{ class.graduating_year }}</td>
-          <td>{{ class.school_fee }}</td>
-          <td>{{ class.admission_fee }}</td>
-          <td>{{ class.canteen_fee }}</td>
+          {% for fee_type in fee_list %}
+            <td>{{ fees|get_item:class|get_item:fee_type }}</td>
+          {% endfor %}
           {% if school_perms.schools.change_graduatingclass %}<td>
             <a href="{% url 'class-edit' class.pk %}"><i class="fas fa-pencil-alt"></i></a></td>{% endif %}
           {% if school_perms.students.view_student %}<td>

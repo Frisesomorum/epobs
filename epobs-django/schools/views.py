@@ -9,6 +9,7 @@ from core.lib import QueryStringArg
 from schoolauth.views import (
     SchooledListView, SchooledCreateView, SchooledUpdateView, SchoolFormMixin, )
 from .models import SchoolProfile, GraduatingClass
+from finance.models import RevenueLedgerAccount, SchoolFee
 from schoolauth.models import User, UserSchoolMembership
 from schoolauth.views import is_admin_mode, get_school
 
@@ -97,12 +98,60 @@ class ListClass(SchooledListView):
     template_name = 'schools/classes/list.html'
     querystring_args = (CLASS_IS_GRADUATED, )
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context['fee_list'] = list(RevenueLedgerAccount.objects.filter(is_student_fee=True))
+        context['fees'] = {}
+        for graduating_class in context['object_list']:
+            context['fees'][graduating_class] = {}
+            for ledger_account in context['fee_list']:
+                school_fee = SchoolFee.objects.get_or_create(
+                    graduating_class=graduating_class, ledger_account=ledger_account)[0]
+                context['fees'][graduating_class][ledger_account] = school_fee.amount
+        return context
+
+
+SchoolFeeFormSet = forms.inlineformset_factory(
+    GraduatingClass, SchoolFee, exclude=('graduating_year', 'ledger_account'),
+    extra=0, can_delete=False)
+
 
 class EditClass(SchooledUpdateView):
     permission_required = 'schools.change_graduatingclass'
     model = GraduatingClass
-    fields = (
-        'graduating_year', 'label', 'admission_fee', 'school_fee',
-        'canteen_fee', 'graduated')
+    fields = ('label', 'graduated')
     template_name = 'schools/classes/edit.html'
     success_url = reverse_lazy('class-list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        class_pk = self.kwargs['pk']
+        graduating_class = GraduatingClass.objects.get(pk=class_pk)
+
+        for ledger in RevenueLedgerAccount.objects.filter(is_student_fee=True).all():
+            SchoolFee.objects.get_or_create(graduating_class=graduating_class, ledger_account=ledger)
+
+        context['fee_formset'] = SchoolFeeFormSet(instance=graduating_class)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if 'cancel' in request.POST:
+            return redirect(self.get_success_url())
+        else:
+            class_pk = self.kwargs['pk']
+            graduating_class = GraduatingClass.objects.get(pk=class_pk)
+            fee_formset = SchoolFeeFormSet(
+                request.POST, instance=graduating_class)
+            if not fee_formset.is_valid():
+                return self.form_invalid(fee_formset)
+            return self.form_valid(fee_formset)
+
+    def form_valid(self, fee_formset):
+        fee_formset.save()
+        self.object = self.get_object()
+        return redirect(self.get_success_url())
+
+    def form_invalid(self, fee_formset):
+        self.object = self.get_object()
+        return self.render_to_response(self.get_context_data())

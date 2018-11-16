@@ -4,6 +4,7 @@ from django.db import models, OperationalError
 from core.models import Descriptor
 from core.lib import querystring_url
 from schoolauth.models import User, School
+from schools.models import GraduatingClass
 from students.models import Student
 from personnel import models as personnelModels
 
@@ -50,6 +51,7 @@ class RevenueLedgerAccount(LedgerAccount):
     category = models.ForeignKey(
         RevenueCategory, on_delete=models.CASCADE,
         related_name='ledger_accounts')
+    is_student_fee = models.BooleanField(default=False)
 
 
 class BudgetPeriod(models.Model):
@@ -438,6 +440,19 @@ class RevenueCorrectiveJournalEntry(RequiresApproval, RevenueInfo):
         self.reversed_in = self.create_reversal_revenue(user)
         self.restated_in = self.create_restatement_revenue(user)
         self.save()
+
+
+class SchoolFee(models.Model):
+    amount = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+    ledger_account = models.ForeignKey(
+        RevenueLedgerAccount, on_delete=models.CASCADE,
+        related_name='related_%(app_label)s_%(class)s')
+    graduating_class = models.ForeignKey(
+        GraduatingClass, on_delete=models.CASCADE,
+        related_name='related_%(app_label)s_%(class)s')
+
+    class Meta:
+        unique_together = ('ledger_account', 'graduating_class')
 
 
 class ReportItem(models.Model):

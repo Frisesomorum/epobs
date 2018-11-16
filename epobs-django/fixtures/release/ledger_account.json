@@ -1,1172 +1,1088 @@
 [
-    {
-        "pk": 1,
-        "model": "finance.Fund",
-        "fields": {
-            "name": "Operations and Management",
-            "abbreviation": "O & M",
-            "description": ""
-        }
-    },
-    {
-        "pk": 2,
-        "model": "finance.Fund",
-        "fields": {
-            "name": "Capital Projects",
-            "abbreviation": "Capital",
-            "description": ""
-        }
-    },
-    {
-        "pk": 1,
-        "model": "finance.ExpenseCategory",
-        "fields": {
-            "name": "Transportation",
-            "abbreviation": "",
-            "fund": [
-                "Operations and Management"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 2,
-        "model": "finance.ExpenseCategory",
-        "fields": {
-            "name": "Salaries & Wages",
-            "abbreviation": "",
-            "fund": [
-                "Operations and Management"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 3,
-        "model": "finance.ExpenseCategory",
-        "fields": {
-            "name": "Rep & Maint.",
-            "abbreviation": "",
-            "fund": [
-                "Operations and Management"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 4,
-        "model": "finance.ExpenseCategory",
-        "fields": {
-            "name": "Benefits",
-            "abbreviation": "",
-            "fund": [
-                "Operations and Management"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 5,
-        "model": "finance.ExpenseCategory",
-        "fields": {
-            "name": "Utilities",
-            "abbreviation": "",
-            "fund": [
-                "Operations and Management"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 6,
-        "model": "finance.ExpenseCategory",
-        "fields": {
-            "name": "Rentals",
-            "abbreviation": "",
-            "fund": [
-                "Operations and Management"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 7,
-        "model": "finance.ExpenseCategory",
-        "fields": {
-            "name": "Supplies",
-            "abbreviation": "",
-            "fund": [
-                "Operations and Management"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 8,
-        "model": "finance.ExpenseCategory",
-        "fields": {
-            "name": "Canteen",
-            "abbreviation": "",
-            "fund": [
-                "Operations and Management"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 9,
-        "model": "finance.ExpenseCategory",
-        "fields": {
-            "name": "Capital Impv't",
-            "abbreviation": "",
-            "fund": [
-                "Capital Projects"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 10,
-        "model": "finance.ExpenseCategory",
-        "fields": {
-            "name": "Taxes",
-            "abbreviation": "",
-            "fund": [
-                "Operations and Management"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 1,
-        "model": "finance.RevenueCategory",
-        "fields": {
-            "name": "Grant",
-            "abbreviation": "",
-            "fund": [
-                "Operations and Management"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 2,
-        "model": "finance.RevenueCategory",
-        "fields": {
-            "name": "School Fee",
-            "abbreviation": "",
-            "fund": [
-                "Operations and Management"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 3,
-        "model": "finance.RevenueCategory",
-        "fields": {
-            "name": "Admission Fee",
-            "abbreviation": "",
-            "fund": [
-                "Operations and Management"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 4,
-        "model": "finance.RevenueCategory",
-        "fields": {
-            "name": "Canteen Fee",
-            "abbreviation": "",
-            "fund": [
-                "Operations and Management"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 1,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Professional Services",
-            "abbreviation": "",
-            "category": [
-                "Transportation"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 2,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Repairs",
-            "abbreviation": "",
-            "category": [
-                "Transportation"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 3,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Maintenance",
-            "abbreviation": "",
-            "category": [
-                "Transportation"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 4,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Oil",
-            "abbreviation": "",
-            "category": [
-                "Transportation"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 5,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Petrol/Diesel/Gas",
-            "abbreviation": "",
-            "category": [
-                "Transportation"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 6,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Other Services",
-            "abbreviation": "",
-            "category": [
-                "Transportation"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 7,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Tyres",
-            "abbreviation": "",
-            "category": [
-                "Transportation"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 8,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Car Batteries",
-            "abbreviation": "",
-            "category": [
-                "Transportation"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 9,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Car Hiring",
-            "abbreviation": "",
-            "category": [
-                "Transportation"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 10,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Seat Repair",
-            "abbreviation": "",
-            "category": [
-                "Transportation"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 11,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Mechanic/workmanship",
-            "abbreviation": "",
-            "category": [
-                "Transportation"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 12,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Travel Expenses",
-            "abbreviation": "",
-            "category": [
-                "Transportation"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 13,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Training",
-            "abbreviation": "",
-            "category": [
-                "Transportation"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 14,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Insurance",
-            "abbreviation": "",
-            "category": [
-                "Transportation"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 15,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "DVLA",
-            "abbreviation": "",
-            "category": [
-                "Transportation"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 16,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Overhauling",
-            "abbreviation": "",
-            "category": [
-                "Transportation"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 17,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Regular time",
-            "abbreviation": "",
-            "category": [
-                "Salaries & Wages"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 18,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Extra Time/Classes",
-            "abbreviation": "",
-            "category": [
-                "Salaries & Wages"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 19,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Consultant Personnel",
-            "abbreviation": "",
-            "category": [
-                "Salaries & Wages"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 20,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Awards",
-            "abbreviation": "",
-            "category": [
-                "Salaries & Wages"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 21,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Sprayer",
-            "abbreviation": "",
-            "category": [
-                "Rep & Maint."
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 22,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Straightner",
-            "abbreviation": "",
-            "category": [
-                "Rep & Maint."
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 23,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Plumber",
-            "abbreviation": "",
-            "category": [
-                "Rep & Maint."
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 24,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Recycling",
-            "abbreviation": "",
-            "category": [
-                "Rep & Maint."
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 25,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Environmental Services",
-            "abbreviation": "",
-            "category": [
-                "Rep & Maint."
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 26,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Water Feature Services",
-            "abbreviation": "",
-            "category": [
-                "Rep & Maint."
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 27,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Roof Maintenance",
-            "abbreviation": "",
-            "category": [
-                "Rep & Maint."
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 28,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Electrical System Maintenance",
-            "abbreviation": "",
-            "category": [
-                "Rep & Maint."
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 29,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Bldg-repair & maint",
-            "abbreviation": "",
-            "category": [
-                "Rep & Maint."
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 30,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Other equip-repair",
-            "abbreviation": "",
-            "category": [
-                "Rep & Maint."
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 31,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "SSNIT",
-            "abbreviation": "",
-            "category": [
-                "Benefits"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 32,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Transportation Allowance",
-            "abbreviation": "",
-            "category": [
-                "Benefits"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 33,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Advanced Payment",
-            "abbreviation": "",
-            "category": [
-                "Benefits"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 34,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Bonuses",
-            "abbreviation": "",
-            "category": [
-                "Benefits"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 35,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "End of Terms Gifts",
-            "abbreviation": "",
-            "category": [
-                "Benefits"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 36,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Life Insurance",
-            "abbreviation": "",
-            "category": [
-                "Benefits"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 37,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Moving expenses",
-            "abbreviation": "",
-            "category": [
-                "Benefits"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 38,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Writing Materials [Chalks]",
-            "abbreviation": "",
-            "category": [
-                "Benefits"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 39,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Tool allowance",
-            "abbreviation": "",
-            "category": [
-                "Benefits"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 40,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Benefits",
-            "abbreviation": "",
-            "category": [
-                "Benefits"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 41,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Auto allowance",
-            "abbreviation": "",
-            "category": [
-                "Benefits"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 42,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Benefits - Other",
-            "abbreviation": "",
-            "category": [
-                "Benefits"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 43,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Telephone",
-            "abbreviation": "",
-            "category": [
-                "Utilities"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 44,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Heating",
-            "abbreviation": "",
-            "category": [
-                "Utilities"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 45,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Electricity",
-            "abbreviation": "",
-            "category": [
-                "Utilities"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 46,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Water",
-            "abbreviation": "",
-            "category": [
-                "Utilities"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 47,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Garbage",
-            "abbreviation": "",
-            "category": [
-                "Utilities"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 48,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Utilities - Other",
-            "abbreviation": "",
-            "category": [
-                "Utilities"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 49,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Rentals-bldgs",
-            "abbreviation": "",
-            "category": [
-                "Rentals"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 50,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Rentals-equip",
-            "abbreviation": "",
-            "category": [
-                "Rentals"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 51,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Rentals-other",
-            "abbreviation": "",
-            "category": [
-                "Rentals"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 52,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Books, maps & periodicals",
-            "abbreviation": "",
-            "category": [
-                "Supplies"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 53,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Office supplies",
-            "abbreviation": "",
-            "category": [
-                "Supplies"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 54,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Pens",
-            "abbreviation": "",
-            "category": [
-                "Supplies"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 55,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Pencils",
-            "abbreviation": "",
-            "category": [
-                "Supplies"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 56,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Calling Phone Cards",
-            "abbreviation": "",
-            "category": [
-                "Supplies"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 57,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Internet Bundle",
-            "abbreviation": "",
-            "category": [
-                "Supplies"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 58,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Detergents",
-            "abbreviation": "",
-            "category": [
-                "Supplies"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 59,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Soap",
-            "abbreviation": "",
-            "category": [
-                "Supplies"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 60,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Supplies - Water",
-            "abbreviation": "",
-            "category": [
-                "Supplies"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 61,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Chalk",
-            "abbreviation": "",
-            "category": [
-                "Supplies"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 62,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Supplies - Other",
-            "abbreviation": "",
-            "category": [
-                "Supplies"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 63,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Canteen costs",
-            "abbreviation": "",
-            "category": [
-                "Canteen"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 64,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Food Supplies",
-            "abbreviation": "",
-            "category": [
-                "Canteen"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 65,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Canteen - Water",
-            "abbreviation": "",
-            "category": [
-                "Canteen"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 66,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Canteen Staff",
-            "abbreviation": "",
-            "category": [
-                "Canteen"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 67,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Canteen - Other",
-            "abbreviation": "",
-            "category": [
-                "Canteen"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 68,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Land",
-            "abbreviation": "",
-            "category": [
-                "Capital Impv't"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 69,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Buildings",
-            "abbreviation": "",
-            "category": [
-                "Capital Impv't"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 70,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Other structures & improvements",
-            "abbreviation": "",
-            "category": [
-                "Capital Impv't"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 71,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Machinery, equipment & furniture",
-            "abbreviation": "",
-            "category": [
-                "Capital Impv't"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 72,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Construction costs",
-            "abbreviation": "",
-            "category": [
-                "Capital Impv't"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 73,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Other Projects",
-            "abbreviation": "",
-            "category": [
-                "Capital Impv't"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 74,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "GRA",
-            "abbreviation": "",
-            "category": [
-                "Taxes"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 75,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Sales Tax",
-            "abbreviation": "",
-            "category": [
-                "Taxes"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 76,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "State Tax",
-            "abbreviation": "",
-            "category": [
-                "Taxes"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 77,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Federal Tax",
-            "abbreviation": "",
-            "category": [
-                "Taxes"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 78,
-        "model": "finance.ExpenseLedgerAccount",
-        "fields": {
-            "name": "Tax - Other",
-            "abbreviation": "",
-            "category": [
-                "Taxes"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 1,
-        "model": "finance.RevenueLedgerAccount",
-        "fields": {
-            "name": "Grant",
-            "abbreviation": "",
-            "category": [
-                "Grant"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 2,
-        "model": "finance.RevenueLedgerAccount",
-        "fields": {
-            "name": "School Fee",
-            "abbreviation": "",
-            "category": [
-                "School Fee"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 3,
-        "model": "finance.RevenueLedgerAccount",
-        "fields": {
-            "name": "Admission Fee",
-            "abbreviation": "",
-            "category": [
-                "Admission Fee"
-            ],
-            "description": ""
-        }
-    },
-    {
-        "pk": 4,
-        "model": "finance.RevenueLedgerAccount",
-        "fields": {
-            "name": "Canteen Fee",
-            "abbreviation": "",
-            "category": [
-                "Canteen Fee"
-            ],
-            "description": ""
-        }
-    }
+{
+  "model": "finance.fund",
+  "fields": {
+    "name": "Operations and Management",
+    "abbreviation": "O & M",
+    "description": ""
+  }
+},
+{
+  "model": "finance.fund",
+  "fields": {
+    "name": "Capital Projects",
+    "abbreviation": "Capital",
+    "description": ""
+  }
+},
+{
+  "model": "finance.expensecategory",
+  "fields": {
+    "name": "Transportation",
+    "abbreviation": "",
+    "description": "",
+    "fund": [
+      "Operations and Management"
+    ],
+    "department": null
+  }
+},
+{
+  "model": "finance.expensecategory",
+  "fields": {
+    "name": "Salaries & Wages",
+    "abbreviation": "",
+    "description": "",
+    "fund": [
+      "Operations and Management"
+    ],
+    "department": null
+  }
+},
+{
+  "model": "finance.expensecategory",
+  "fields": {
+    "name": "Rep & Maint.",
+    "abbreviation": "",
+    "description": "",
+    "fund": [
+      "Operations and Management"
+    ],
+    "department": null
+  }
+},
+{
+  "model": "finance.expensecategory",
+  "fields": {
+    "name": "Benefits",
+    "abbreviation": "",
+    "description": "",
+    "fund": [
+      "Operations and Management"
+    ],
+    "department": null
+  }
+},
+{
+  "model": "finance.expensecategory",
+  "fields": {
+    "name": "Utilities",
+    "abbreviation": "",
+    "description": "",
+    "fund": [
+      "Operations and Management"
+    ],
+    "department": null
+  }
+},
+{
+  "model": "finance.expensecategory",
+  "fields": {
+    "name": "Rentals",
+    "abbreviation": "",
+    "description": "",
+    "fund": [
+      "Operations and Management"
+    ],
+    "department": null
+  }
+},
+{
+  "model": "finance.expensecategory",
+  "fields": {
+    "name": "Supplies",
+    "abbreviation": "",
+    "description": "",
+    "fund": [
+      "Operations and Management"
+    ],
+    "department": null
+  }
+},
+{
+  "model": "finance.expensecategory",
+  "fields": {
+    "name": "Canteen",
+    "abbreviation": "",
+    "description": "",
+    "fund": [
+      "Operations and Management"
+    ],
+    "department": null
+  }
+},
+{
+  "model": "finance.expensecategory",
+  "fields": {
+    "name": "Capital Impv't",
+    "abbreviation": "",
+    "description": "",
+    "fund": [
+      "Capital Projects"
+    ],
+    "department": null
+  }
+},
+{
+  "model": "finance.expensecategory",
+  "fields": {
+    "name": "Taxes",
+    "abbreviation": "",
+    "description": "",
+    "fund": [
+      "Operations and Management"
+    ],
+    "department": null
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Professional Services",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Transportation"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Repairs",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Transportation"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Maintenance",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Transportation"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Oil",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Transportation"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Petrol/Diesel/Gas",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Transportation"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Other Services",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Transportation"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Tyres",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Transportation"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Car Batteries",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Transportation"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Car Hiring",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Transportation"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Seat Repair",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Transportation"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Mechanic/workmanship",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Transportation"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Travel Expenses",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Transportation"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Training",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Transportation"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Insurance",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Transportation"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "DVLA",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Transportation"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Overhauling",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Transportation"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Regular time",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Salaries & Wages"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Extra Time/Classes",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Salaries & Wages"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Consultant Personnel",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Salaries & Wages"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Awards",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Salaries & Wages"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Sprayer",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Rep & Maint."
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Straightner",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Rep & Maint."
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Plumber",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Rep & Maint."
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Recycling",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Rep & Maint."
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Environmental Services",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Rep & Maint."
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Water Feature Services",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Rep & Maint."
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Roof Maintenance",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Rep & Maint."
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Electrical System Maintenance",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Rep & Maint."
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Bldg-repair & maint",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Rep & Maint."
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Other equip-repair",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Rep & Maint."
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "SSNIT",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Benefits"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Transportation Allowance",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Benefits"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Advanced Payment",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Benefits"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Bonuses",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Benefits"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "End of Terms Gifts",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Benefits"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Life Insurance",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Benefits"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Moving expenses",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Benefits"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Writing Materials [Chalks]",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Benefits"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Tool allowance",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Benefits"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Benefits",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Benefits"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Auto allowance",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Benefits"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Benefits - Other",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Benefits"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Telephone",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Utilities"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Heating",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Utilities"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Electricity",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Utilities"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Water",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Utilities"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Garbage",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Utilities"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Utilities - Other",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Utilities"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Rentals-bldgs",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Rentals"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Rentals-equip",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Rentals"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Rentals-other",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Rentals"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Books, maps & periodicals",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Supplies"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Office supplies",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Supplies"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Pens",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Supplies"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Pencils",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Supplies"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Calling Phone Cards",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Supplies"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Internet Bundle",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Supplies"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Detergents",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Supplies"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Soap",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Supplies"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Supplies - Water",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Supplies"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Chalk",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Supplies"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Supplies - Other",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Supplies"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Canteen costs",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Canteen"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Food Supplies",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Canteen"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Canteen - Water",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Canteen"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Canteen Staff",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Canteen"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Canteen - Other",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Canteen"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Land",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Capital Impv't"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Buildings",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Capital Impv't"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Other structures & improvements",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Capital Impv't"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Machinery, equipment & furniture",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Capital Impv't"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Construction costs",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Capital Impv't"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Other Projects",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Capital Impv't"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "GRA",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Taxes"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Sales Tax",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Taxes"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "State Tax",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Taxes"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Federal Tax",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Taxes"
+    ]
+  }
+},
+{
+  "model": "finance.expenseledgeraccount",
+  "fields": {
+    "name": "Tax - Other",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Taxes"
+    ]
+  }
+},
+{
+  "model": "finance.revenuecategory",
+  "fields": {
+    "name": "Grant",
+    "abbreviation": "",
+    "description": "",
+    "fund": [
+      "Operations and Management"
+    ]
+  }
+},
+{
+  "model": "finance.revenuecategory",
+  "fields": {
+    "name": "School Fee",
+    "abbreviation": "",
+    "description": "",
+    "fund": [
+      "Operations and Management"
+    ]
+  }
+},
+{
+  "model": "finance.revenuecategory",
+  "fields": {
+    "name": "Admission Fee",
+    "abbreviation": "",
+    "description": "",
+    "fund": [
+      "Operations and Management"
+    ]
+  }
+},
+{
+  "model": "finance.revenuecategory",
+  "fields": {
+    "name": "Canteen Fee",
+    "abbreviation": "",
+    "description": "",
+    "fund": [
+      "Operations and Management"
+    ]
+  }
+},
+{
+  "model": "finance.revenueledgeraccount",
+  "fields": {
+    "name": "Grant",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Grant"
+    ],
+    "is_student_fee": false
+  }
+},
+{
+  "model": "finance.revenueledgeraccount",
+  "fields": {
+    "name": "School Fee",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "School Fee"
+    ],
+    "is_student_fee": true
+  }
+},
+{
+  "model": "finance.revenueledgeraccount",
+  "fields": {
+    "name": "Admission Fee",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Admission Fee"
+    ],
+    "is_student_fee": true
+  }
+},
+{
+  "model": "finance.revenueledgeraccount",
+  "fields": {
+    "name": "Canteen Fee",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Canteen Fee"
+    ],
+    "is_student_fee": true
+  }
+}
 ]
