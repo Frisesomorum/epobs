@@ -110,9 +110,10 @@ class SchoolExternalId(models.Model):
 
     def generate_external_id(self):
         if self.external_id is not None and len(self.external_id) > 0:
-            external_id = self.external_id
+            external_id_base = self.external_id
         else:
-            external_id = self.default_external_id()
+            external_id_base = self.default_external_id()
+        external_id = external_id_base
         suffix = 1
         while True:
             if not type(self).objects.filter(external_id=external_id).exists():
@@ -120,7 +121,7 @@ class SchoolExternalId(models.Model):
             elif type(self).objects.get(external_id=external_id) == self:
                 break
             suffix += 1
-            external_id = '{0}{1}'.format(external_id, suffix)
+            external_id = '{0}{1}'.format(external_id_base, suffix)
         return external_id
 
     def default_external_id(self):
