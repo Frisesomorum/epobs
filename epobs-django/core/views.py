@@ -10,12 +10,10 @@ from import_export.formats import base_formats
 from import_export.tmp_storages import TempFolderStorage
 
 
-def index_view(request):
-    return render(request, 'index.html')
-
-
-def terms_of_service(request):
-    return render(request, 'accounts/tos.html')
+def static_view(template_name):
+    def view(request):
+        return render(request, template_name)
+    return view
 
 
 class DeletionFormMixin:

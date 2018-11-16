@@ -11,10 +11,6 @@ from core.lib import QueryStringParam
 from .models import School
 
 
-def user_profile(request):
-    return render(request, 'accounts/profile.html')
-
-
 class SelectSchoolForm(forms.Form):
     school_list = []
     is_admin = False

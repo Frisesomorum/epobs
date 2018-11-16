@@ -1,14 +1,10 @@
 from django import forms
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.urls import reverse, resolve
 from django.views.generic import TemplateView
 from schoolauth.views import (
     SchooledFormView, SchoolFormMixin, get_school, register_school_session_data, )
 from .. import models
-
-
-def index_view(request):
-    return render(request, 'reports/index.html')
 
 
 def set_report_period(session, period):

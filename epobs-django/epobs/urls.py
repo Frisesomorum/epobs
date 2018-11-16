@@ -33,11 +33,11 @@ urlpatterns = [
             template_name='accounts/reset-password-confirm.html'), name='password_reset_confirm', ),
         path('reset/done/', authViews.PasswordResetCompleteView.as_view(
             template_name='accounts/reset-password-complete.html'), name='password_reset_complete', ),
-        path('profile/', schoolAuthViews.user_profile, name='user-profile'),
+        path('profile/', coreViews.static_view('accounts/profile.html'), name='user-profile'),
     ])),
 
-    re_path(r'^$', coreViews.index_view, name='index'),
-    path('tos/', coreViews.terms_of_service, name='terms-of-service'),
+    re_path(r'^$', coreViews.static_view('index.html'), name='index'),
+    path('tos/', coreViews.static_view('accounts/tos.html'), name='terms-of-service'),
     re_path(r'selectschool/$', schoolAuthViews.SelectSchool.as_view(), name='school-select'),
 
     re_path(r'school/$', schoolViews.Edit.as_view(), name='school-edit'),
@@ -105,7 +105,7 @@ urlpatterns = [
         r'revenues/cje/(?P<pk>\d+)/unsubmit/$', revenueCjeViews.unsubmit_for_approval, name='revenue-cje-unsubmit'),
     re_path(r'revenues/cje/(?P<pk>\d+)/approve/$', revenueCjeViews.approve, name='revenue-cje-approve'),
 
-    re_path(r'reports/index/$', reportViews.index_view, name='report-index'),
+    re_path(r'reports/index/$', coreViews.static_view('reports/index.html'), name='report-index'),
     re_path(r'reports/select-period/(?P<next>[\w-]+)$', reportViews.SelectPeriod.as_view(),
             name='report-select-period'),
     re_path(r'reports/expense-summary/$', reportViews.ExpenseSummary.as_view(), name='report-expense-summary'),
