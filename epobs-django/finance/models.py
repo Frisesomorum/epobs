@@ -54,7 +54,17 @@ class RevenueLedgerAccount(LedgerAccount):
     is_student_fee = models.BooleanField(default=False)
 
 
+class BudgetPeriodManager(models.Manager):
+    def get_current_period(self, school):
+        today = datetime.date.today()
+        for period in self.all():
+            if period.start <= today and period.end >= today:
+                return period
+        return None
+
+
 class BudgetPeriod(models.Model):
+    objects = BudgetPeriodManager()
     school = models.ForeignKey(
         School, on_delete=models.CASCADE, related_name='budget_periods')
     name = models.CharField(max_length=255, blank=True)
@@ -155,8 +165,18 @@ class StudentAccount(models.Model):
         return self.student.external_id
 
     @property
-    def balance_due(self):
-        return NotImplemented
+    def balance_due(self, period=None):
+        if period is None:
+            period = BudgetPeriod.objects.get_current_period(self.student.school)
+        graduating_class = self.student.graduating_class
+        amount_owed = 0
+        for fee in SchoolFee.objects.filter(graduating_class=graduating_class).all():
+            amount_owed += fee.amount
+        amount_paid = 0
+        for revenue in RevenueTransaction.objects.filter(student=self).all():
+            if revenue.budget_period == period:
+                amount_paid += revenue.amount
+        return amount_owed - amount_paid
 
     @property
     def is_enrolled(self):
