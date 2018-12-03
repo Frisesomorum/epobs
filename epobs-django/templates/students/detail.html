@@ -21,6 +21,7 @@
     <tr><th>ID:</th><td>{{ student.external_id }}</td></tr>
   </table>
 
-  <a href="{{ student.revenue_list_url }}"><span class="btn btn-secondary">View payments</span></a>
+  <a href="{{ student.revenue_create_url }}"><span class="btn btn-secondary">Make Payment</span></a>
+  <a href="{{ student.revenue_list_url }}"><span class="btn btn-secondary">View Payments</span></a>
 
 {% endblock %}

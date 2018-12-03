@@ -68,6 +68,19 @@ class Create(SessionRecentsMixin, SchooledCreateView):
     form_class = RevenueForm
     template_name = 'finance/revenues/create.html'
     success_url = reverse_lazy('revenue-create')
+    default_student = None
+
+    def get(self, request, *args, **kwargs):
+        student = request.GET.get('student', default=None)
+        if student is not None:
+            self.default_student = student
+        return super().get(request, *args, **kwargs)
+
+    def get_initial(self):
+        initial = super().get_initial().copy()
+        if self.default_student is not None:
+            initial['student'] = self.default_student
+        return initial
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user

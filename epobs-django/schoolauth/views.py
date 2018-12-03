@@ -1,6 +1,6 @@
 from django import forms
 from django.core.exceptions import PermissionDenied, SuspiciousOperation
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic import FormView

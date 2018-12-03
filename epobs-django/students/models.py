@@ -22,3 +22,8 @@ class Student(SchoolExternalId, Person):
     def revenue_list_url(self):
         params = {'student': self.account.pk}
         return querystring_url('revenue-list', params)
+
+    @property
+    def revenue_create_url(self):
+        params = {'student': self.account.pk}
+        return querystring_url('revenue-create', params)
