@@ -1,4 +1,5 @@
 import datetime
+from django.utils.timezone import now
 from django.db import models
 from core.models import Person, Descriptor
 from core.lib import querystring_url
@@ -86,10 +87,13 @@ class Payee(models.Model):
             contract.active for contract
             in Contract.objects.filter(payee=self).all())
 
-    def start_contract(self):
+    def start_contract(self, start_date=None):
         contract = Contract.objects.filter(payee=self, active=True).first()
         if contract is None:
-            contract = Contract.objects.create(payee=self)
+            if start_date is None:
+                contract = Contract.objects.create(payee=self)
+            else:
+                contract = Contract.objects.create(payee=self, date_opened=start_date)
         return contract
 
     def terminate_contract(self):
@@ -120,7 +124,7 @@ class Payee(models.Model):
 
 class Contract(models.Model):
     active = models.BooleanField(default=True)
-    date_opened = models.DateField(blank=True, null=True, auto_now_add=True)
+    date_opened = models.DateField(blank=True, default=now)
     date_terminated = models.DateField(blank=True, null=True)
     payee = models.ForeignKey(
         Payee, on_delete=models.CASCADE, related_name='contracts')

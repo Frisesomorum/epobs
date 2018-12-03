@@ -1,9 +1,10 @@
 from django.urls import reverse_lazy
 from core.views import DeletionFormMixin, SessionRecentsMixin, ImportTool
 from schoolauth.views import (
-    SchooledListView, SchooledDetailView, SchooledCreateView, SchooledUpdateView, )
+    SchooledListView, SchooledDetailView, SchooledUpdateView, )
 from ..models import Supplier
 from ..resources import SupplierResource
+from .payees import PayeeForm, PayeeCreateView
 
 
 class List(SchooledListView):
@@ -19,10 +20,16 @@ class Detail(SchooledDetailView):
     context_object_name = 'supplier'
 
 
-class Create(SessionRecentsMixin, SchooledCreateView):
+class SupplierForm(PayeeForm):
+    class Meta:
+        model = Supplier
+        fields = ('name', 'external_id', )
+
+
+class Create(SessionRecentsMixin, PayeeCreateView):
     permission_required = 'personnel.add_supplier'
     model = Supplier
-    fields = ('name', 'external_id', )
+    form_class = SupplierForm
     template_name = 'personnel/suppliers/create.html'
     success_url = reverse_lazy('supplier-create')
 

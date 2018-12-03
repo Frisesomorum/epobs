@@ -2,9 +2,10 @@ from django.urls import reverse_lazy
 from core.views import DeletionFormMixin, SessionRecentsMixin, ImportTool
 from core.lib import QueryStringArg
 from schoolauth.views import (
-    SchooledListView, SchooledDetailView, SchooledCreateView, SchooledUpdateView, )
+    SchooledListView, SchooledDetailView, SchooledUpdateView, )
 from ..models import Employee, Department
 from ..resources import EmployeeResource
+from .payees import PayeeForm, PayeeCreateView
 
 
 EMPLOYEE_DEPARTMENT = QueryStringArg(
@@ -28,11 +29,17 @@ class Detail(SchooledDetailView):
     context_object_name = 'employee'
 
 
-class Create(SessionRecentsMixin, SchooledCreateView):
+class EmployeeForm(PayeeForm):
+    class Meta:
+        model = Employee
+        fields = ('first_name', 'last_name', 'date_of_birth', 'email',
+                  'department', 'external_id', )
+
+
+class Create(SessionRecentsMixin, PayeeCreateView):
     permission_required = 'personnel.add_employee'
     model = Employee
-    fields = ('first_name', 'last_name', 'date_of_birth', 'email',
-              'department', 'external_id', )
+    form_class = EmployeeForm
     template_name = 'personnel/employees/create.html'
     success_url = reverse_lazy('employee-create')
 
