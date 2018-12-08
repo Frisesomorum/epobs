@@ -72,7 +72,7 @@ admin.site.register(models.School, SchoolAdmin)
 
 class UserSchoolMembershipAdmin(ImportExportModelAdmin21, admin.ModelAdmin):
     fieldsets = (
-        (None, {'fields': ('groups',)}),
+        (None, {'fields': ('user', 'school', 'groups', )}),
     )
     resource_class = resources.UserSchoolMembershipResource
 
