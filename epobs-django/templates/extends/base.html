@@ -14,7 +14,7 @@
   <body>
     {% block body %}
       {% block nav %}
-      <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+      <nav class="navbar sticky-top navbar-expand-sm navbar-dark bg-dark">
         <div class="container">
           <a class="navbar-brand" href="{% url 'index' %}">EPOBS</a>
           {% if user.is_authenticated %}
