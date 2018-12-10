@@ -1,30 +1,16 @@
 from django import forms
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
-from django.core.exceptions import SuspiciousOperation
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView
 from core.views import DeletionFormMixin
 from core.lib import QueryStringArg
 from schoolauth.views import (
     SchooledListView, SchooledCreateView, SchooledUpdateView, SchoolFormMixin, )
-from .models import SchoolProfile, GraduatingClass
+from .models import GraduatingClass
 from finance.models import RevenueLedgerAccount, SchoolFee
 from schoolauth.models import User, UserSchoolMembership
-from schoolauth.views import is_admin_mode, get_school
-
-
-class Edit(SchooledUpdateView):
-    permission_required = 'schools.change_schoolprofile'
-    model = SchoolProfile
-    fields = ()
-    template_name = 'schools/edit.html'
-    success_url = reverse_lazy('index')
-
-    def get_object(self):
-        if is_admin_mode(self.request.session):
-            raise SuspiciousOperation("You are in administrator mode and cannot edit school info.")
-        return get_school(self.request.session).school_profile
+from schoolauth.views import get_school
 
 
 class CreateUserForm(UserCreationForm):

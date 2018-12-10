@@ -44,8 +44,6 @@
                       <a class="dropdown-item" href="{% url 'supplier-list' %}">Suppliers</a>{% endif %}
                     {% if school_perms.students.view_student %}
                       <a class="dropdown-item" href="{% url 'student-list' %}">Students</a>{% endif %}
-                    {% if school_perms.schools.change_schoolprofile %}
-                      <a class="dropdown-item" href="{% url 'school-edit' %}">School Settings</a>{% endif %}
                     {% if school_perms.schools.view_graduatingclass %}
                       <a class="dropdown-item" href="{% url 'class-list' %}">Graduating Classes</a>{% endif %}
                     {% if school_perms.schoolauth.view_userschoolmembership %}

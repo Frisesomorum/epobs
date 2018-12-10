@@ -40,7 +40,6 @@ urlpatterns = [
     path('tos/', coreViews.static_view('accounts/tos.html'), name='terms-of-service'),
     re_path(r'selectschool/$', schoolAuthViews.SelectSchool.as_view(), name='school-select'),
 
-    re_path(r'school/$', schoolViews.Edit.as_view(), name='school-edit'),
     re_path(r'school/membership/$', schoolViews.ListMembership.as_view(), name='member-list'),
     re_path(r'school/membership/new/$', schoolViews.CreateMembership.as_view(), name='member-create'),
     re_path(r'school/membership/(?P<pk>\d+)/edit/$', schoolViews.EditMembership.as_view(), name='member-edit'),
