@@ -15,9 +15,10 @@
   <form method="post" class="mb-4" novalidate>
     {% csrf_token %}
     {% include 'includes/form.html' %}
-    <input type="submit" name="save" value="Save" />
-    {% if school_perms.personnel.delete_supplier %}<input type="submit" name="delete" value="Delete" />{% endif %}
-    <input type="submit" name="cancel" value="Cancel" />
+    <input type="submit" name="save" value="Save" class="btn btn-primary" />
+    {% if school_perms.personnel.delete_supplier %}
+      <input type="submit" name="delete" value="Delete" class="btn btn-danger" />{% endif %}
+    <a href="{% url 'supplier-list' %}" class="btn btn-secondary">Cancel</a>
   </form>
 
 {% endblock %}

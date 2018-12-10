@@ -18,15 +18,11 @@ def static_view(template_name):
 
 class DeletionFormMixin:
 
-    # The combined edit/delete view expects a form
-    # that includes buttons named 'delete' and 'cancel'.
+    # The combined edit/delete view expects a form with a button named 'delete'.
     def post(self, request, **kwargs):
         if 'delete' in request.POST:
             self.object = self.get_object()
             self.object.delete()
-            return redirect(self.get_success_url())
-        elif 'cancel' in request.POST:
-            self.object = self.get_object()
             return redirect(self.get_success_url())
         else:
             return super().post(request, **kwargs)

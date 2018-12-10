@@ -15,10 +15,11 @@
     {% csrf_token %}
     {% include 'includes/form.html' %}
     <div class="font-weight-bold">Total Amount: <label id="total-amount"></label></div>
-    <input type="submit" name="save" value="Save as Draft" />
-    <input type="submit" name="save-and-submit" value="Save and Submit for Approval" />
-    {% if school_perms.finance.delete_expensetransaction %}<input type="submit" name="delete" value="Delete" />{% endif %}
-    <input type="submit" name="cancel" value="Cancel" />
+    <input type="submit" name="save" value="Save as Draft" class="btn btn-primary" />
+    <input type="submit" name="save-and-submit" value="Submit for Approval" class="btn btn-primary" />
+    {% if school_perms.finance.delete_expensetransaction %}
+      <input type="submit" name="delete" value="Delete" class="btn btn-danger" />{% endif %}
+    <a href="{% url 'expense-list' %}" class="btn btn-secondary">Cancel</a>
   </form>
 
 {% endblock %}

@@ -70,18 +70,15 @@ class EditBudget(SchooledUpdateView):
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if 'cancel' in request.POST:
-            return redirect(self.get_success_url())
-        else:
-            period_pk = self.kwargs['pk']
-            period = BudgetPeriod.objects.get(pk=period_pk)
-            expense_formset = ExpenseBudgetFormSet(
-                request.POST, instance=period, prefix='expense')
-            revenue_formset = RevenueBudgetFormSet(
-                request.POST, instance=period, prefix='revenue')
-            if not (expense_formset.is_valid() and revenue_formset.is_valid()):
-                return self.form_invalid(expense_formset, revenue_formset)
-            return self.form_valid(expense_formset, revenue_formset)
+        period_pk = self.kwargs['pk']
+        period = BudgetPeriod.objects.get(pk=period_pk)
+        expense_formset = ExpenseBudgetFormSet(
+            request.POST, instance=period, prefix='expense')
+        revenue_formset = RevenueBudgetFormSet(
+            request.POST, instance=period, prefix='revenue')
+        if not (expense_formset.is_valid() and revenue_formset.is_valid()):
+            return self.form_invalid(expense_formset, revenue_formset)
+        return self.form_valid(expense_formset, revenue_formset)
 
     def form_valid(self, expense_formset, revenue_formset):
         expense_formset.save()

@@ -12,9 +12,10 @@
   <form method="post" class="mb-4" novalidate>
     {% csrf_token %}
     {% include 'includes/form.html' %}
-    <input type="submit" name="save" value="Save" />
+    <input type="submit" name="save" value="Save" class="btn btn-primary" />
   </form>
 
+  <a href="{% url 'student-list' %}" class="btn btn-secondary">Back to Student List</a>
   <a href="{% url 'student-import' %}" class="btn btn-secondary">Import...</a>
 
   {% if recent_student_list|length > 0 %}
