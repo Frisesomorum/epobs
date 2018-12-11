@@ -38,6 +38,13 @@ class Detail(SchooledDetailView):
     template_name = 'students/detail.html'
     context_object_name = 'student'
 
+    def get_context_data(self, **kwargs):
+        context = {}
+        balances = self.get_object().account.balance_due_by_ledger_account()
+        context['balances'] = balances
+        context['total_balance'] = sum(balances.values())
+        return super().get_context_data(**context)
+
 
 class StudentForm(SchoolFormMixin, forms.ModelForm):
     school_filter_fields = ('graduating_class', )

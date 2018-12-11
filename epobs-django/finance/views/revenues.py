@@ -1,5 +1,6 @@
 from django import forms
 from django.urls import reverse_lazy
+from django.shortcuts import redirect
 from core.views import SessionRecentsMixin, ImportTool
 from core.lib import QueryStringArg
 from schoolauth.views import (
@@ -13,12 +14,25 @@ from ..resources import RevenueResource
 class RevenueForm(SchoolFormMixin, forms.ModelForm):
     class Meta:
         model = RevenueTransaction
-        fields = ('ledger_account', 'amount', 'student', 'notes')
+        fields = ('ledger_account', 'amount', 'student', 'notes', )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['student'].queryset = StudentAccount.school_filter_queryset(
             self.fields['student'].queryset, self.school)
+
+
+class RevenueCreateForm(SchoolFormMixin, forms.ModelForm):
+    class Meta:
+        model = RevenueTransaction
+        fields = ('student', 'notes', )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['student'].queryset = StudentAccount.school_filter_queryset(
+            self.fields['student'].queryset, self.school)
+        for ledger_account in RevenueLedgerAccount.objects.all():
+            self.fields[ledger_account.name] = forms.DecimalField(required=False)
 
 
 REVENUE_LEDGER_ACCOUNT = QueryStringArg(
@@ -65,7 +79,7 @@ class Detail(SchooledDetailView):
 class Create(SessionRecentsMixin, SchooledCreateView):
     permission_required = 'finance.add_revenuetransaction'
     model = RevenueTransaction
-    form_class = RevenueForm
+    form_class = RevenueCreateForm
     template_name = 'finance/revenues/create.html'
     success_url = reverse_lazy('revenue-create')
     default_student = None
@@ -80,13 +94,30 @@ class Create(SessionRecentsMixin, SchooledCreateView):
         initial = super().get_initial().copy()
         if self.default_student is not None:
             initial['student'] = self.default_student
+            student_account = StudentAccount.objects.get(pk=self.default_student)
+            balances = student_account.balance_due_by_ledger_account()
+            for ledger_account in balances.keys():
+                initial[ledger_account.name] = balances[ledger_account]
         return initial
 
     def form_valid(self, form):
-        form.instance.created_by = self.request.user
-        http_response = super().form_valid(form)
-        self.add_object_to_session(self.object.pk)
-        return http_response
+        student_account = form.cleaned_data['student']
+        notes = form.cleaned_data['notes']
+        user = self.request.user
+        school = get_school(self.request.session)
+        for ledger_account in RevenueLedgerAccount.objects.all():
+            amount = form.cleaned_data[ledger_account.name]
+            if amount is not None and amount > 0:
+                revenue = RevenueTransaction.objects.create(
+                    school=school,
+                    student=student_account,
+                    ledger_account=ledger_account,
+                    amount=amount,
+                    notes=notes,
+                    created_by=user,
+                )
+                self.add_object_to_session(revenue.pk)
+        return redirect(self.success_url)
 
 
 class Import(ImportTool):
