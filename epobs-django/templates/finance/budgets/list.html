@@ -20,8 +20,10 @@
         <th class="datatable-column">Name</th>
         <th class="datatable-column datatable-date">Start</th>
         <th class="datatable-column datatable-date">End</th>
-        <th class="datatable-column datatable-nondata">Budget</th>
-        {% if school_perms.finance.change_budgetperiod %}<th class="datatable-column datatable-nondata">Edit</th>{% endif %}
+        <th class="datatable-column">Status</th>
+        <th class="datatable-column datatable-nondata">View</th>
+        {% if school_perms.finance.change_budgetperiod %}
+          <th class="datatable-column datatable-nondata">Edit</th>{% endif %}
       </tr>
     </thead>
     <tbody>
@@ -30,8 +32,17 @@
           <td>{{ period.name }}</td>
           <td>{{ period.start }}</td>
           <td>{{ period.end }}</td>
-          <td><a href="{% url 'budget-edit' period.pk %}"><i class="fas fa-file-invoice-dollar"></i></a></td>
-          {% if school_perms.finance.change_budgetperiod %}<td><a href="{% url 'budget-period-edit' period.pk %}"><i class="fas fa-pencil-alt"></i></a></td>{% endif %}
+          <td>{{ period.get_approval_status_display }}</td>
+          <td><a href="{% url 'budget-detail' period.pk %}"><i class="fas fa-file-invoice"></i></a></td>
+          {% if school_perms.finance.change_budgetperiod %}
+            <td>
+              {% if period.approval_status == 'D' %}
+                <a href="{% url 'budget-edit' period.pk %}"><i class="fas fa-pencil-alt"></i></a>
+              {% else %}
+                <a href="{% url 'budget-edit-approved' period.pk %}"><i class="fas fa-pencil-alt"></i></a>
+              {% endif %}
+            </td>
+          {% endif %}
         </tr>
       {% endfor %}
     </tbody>

@@ -12,26 +12,6 @@
       {% if 'students.view_student' in school_perms %}<li>There are M <a href="{% url 'student-list' %}">students</a> with outstanding fees.</li>{% endif %}
       <li><a href="{% url 'report-index' %}">H%</a> of the current budget has been used.</li>
     </ul>
-    <h3>What's New</h3>
-    <ul>
-      <li />12/11/18: Allow students to pay multiple fees at once. Minor UI tweaks.
-      <li />12/3/18: Implemented student 'balance due'. Added a 'make payment'
-      shortcut from the student page. Allowed user to create records for active
-      payees with a hire date in the past. Disabled Excel file formats in import.
-      Added password change/reset functions.
-      <li />10/23/18: Added filters for the student/employee/supplier/expense/revenue listviews.
-      Removed need for users to create graduating classes; they are now auto-generated.
-      Fixed a permissions bug in the import tool.
-      <li />10/19/18: Created import tool (look for a link at the bottom of the
-      'create student/employee/supplier/expense/revenue' pages). Added external
-      IDs for students and payees.
-      <li />9/21/18: Added: student graduation classes, employee departments, payee contracts.
-       Expense amounts are now calculated based on quantity, unit cost, discount, and tax.
-       Made some approval workflows more efficient. Added 'total' rows to reports.
-       Created details pages for students and payees. Renamed 'term' to 'period'.
-      <li />9/14/18: Created reports; added export functionality to all tables
-      <li />9/12/18: Fixes to multi-school support; school superuser tools
-      <li />9/3/18: Multi-school support; corrective journal entries for revenues
-    </ul>
+    {% include 'change_notes.html' %}
   </div>
 {% endblock content %}

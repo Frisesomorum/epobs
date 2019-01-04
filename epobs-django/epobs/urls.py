@@ -70,9 +70,13 @@ urlpatterns = [
     re_path(r'students/import/$', studentViews.Import.as_view(), name='student-import'),
 
     re_path(r'budgets/$', budgetViews.List.as_view(), name='budget-list'),
+    re_path(r'budgets/(?P<pk>\d+)/$', budgetViews.Detail.as_view(), name='budget-detail'),
     re_path(r'budgets/new/$', budgetViews.Create.as_view(), name='budget-create'),
-    re_path(r'budgets/(?P<pk>\d+)/edit/$', budgetViews.EditPeriod.as_view(), name='budget-period-edit'),
-    re_path(r'budgets/(?P<pk>\d+)/$', budgetViews.EditBudget.as_view(), name='budget-edit'),
+    re_path(r'budgets/(?P<pk>\d+)/edit/$', budgetViews.Edit.as_view(), name='budget-edit'),
+    re_path(r'budgets/(?P<pk>\d+)/edit-approved/$', budgetViews.EditApproved.as_view(), name='budget-edit-approved'),
+    re_path(r'budgets/(?P<pk>\d+)/submit/$', budgetViews.submit_for_approval, name='budget-submit'),
+    re_path(r'budgets/(?P<pk>\d+)/unsubmit/$', budgetViews.unsubmit_for_approval, name='budget-unsubmit'),
+    re_path(r'budgets/(?P<pk>\d+)/approve/$', budgetViews.approve, name='budget-approve'),
 
     re_path(r'expenses/$', expenseViews.List.as_view(), name='expense-list'),
     re_path(r'expenses/(?P<pk>\d+)/$', expenseViews.Detail.as_view(), name='expense-detail'),

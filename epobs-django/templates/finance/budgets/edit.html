@@ -13,6 +13,8 @@
 
 <form method="post" class="mb-4" novalidate>
   {% csrf_token %}
+  {% include 'includes/form.html' %}
+
   {{ expense_formset.management_form }}
   <div class="form-group">
     <h3>Expense Budgets</h3>
@@ -31,7 +33,10 @@
     {% endfor %}
   </div>
 
-  <input type="submit" name="save" value="Save" class="btn btn-primary" />
+  {% if school_perms.finance.delete_budgetperiod %}
+    <input type="submit" name="delete" value="Delete" class="btn btn-danger" />{% endif %}
+  <input type="submit" name="save" value="Save as Draft" class="btn btn-primary" />
+  <input type="submit" name="save-and-submit" value="Submit for Approval" class="btn btn-primary" />
   <a href="{% url 'budget-list' %}" class="btn btn-secondary">Cancel</a>
 </form>
 {% endblock %}

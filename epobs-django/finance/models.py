@@ -1,5 +1,6 @@
 import datetime
 from decimal import Decimal
+from django.urls import reverse
 from django.db import models, OperationalError
 from core.models import Descriptor
 from core.lib import querystring_url
@@ -54,6 +55,72 @@ class RevenueLedgerAccount(LedgerAccount):
     is_student_fee = models.BooleanField(default=False)
 
 
+APPROVAL_STATUS_DRAFT = 'D'
+APPROVAL_STATUS_PENDING = 'P'
+APPROVAL_STATUS_APPROVED = 'A'
+APPROVAL_STATUS_CHOICES = (
+    (APPROVAL_STATUS_DRAFT, 'Draft'),
+    (APPROVAL_STATUS_PENDING, 'Pending Approval'),
+    (APPROVAL_STATUS_APPROVED, 'Approved')
+)
+
+
+class RequiresApproval(models.Model):
+    approval_status = models.CharField(
+        max_length=1, choices=APPROVAL_STATUS_CHOICES, default=APPROVAL_STATUS_DRAFT)
+    date_submitted = models.DateField(blank=True, null=True)
+    submitted_by = models.ForeignKey(
+        User, on_delete=models.PROTECT, blank=True, null=True,
+        related_name='submitted_%(app_label)s_%(class)s')
+    date_approved = models.DateField(blank=True, null=True)
+    approved_by = models.ForeignKey(
+        User, on_delete=models.PROTECT, blank=True, null=True,
+        related_name='approved_%(app_label)s_%(class)s')
+
+    class Meta:
+        abstract = True
+
+    def verify_can_be_edited(self):
+        if self.approval_status != APPROVAL_STATUS_DRAFT:
+            raise OperationalError(
+                "This {0} is not in 'draft' status and cannot be edited.".format(self._meta.verbose_name))
+
+    def submit_for_approval(self, user):
+        if self.approval_status != APPROVAL_STATUS_DRAFT:
+            raise OperationalError(
+                "This {0} is not in 'draft' status and cannot be submitted for approval.".format(
+                    self._meta.verbose_name))
+        self.approval_status = APPROVAL_STATUS_PENDING
+        self.submitted_by = user
+        self.date_submitted = datetime.date.today()
+        self.save()
+
+    def unsubmit_for_approval(self):
+        if self.approval_status != APPROVAL_STATUS_PENDING:
+            raise OperationalError(
+                "This {0} is not in 'pending' status and cannot be reverted to draft.".format(
+                    self._meta.verbose_name))
+        self.approval_status = APPROVAL_STATUS_DRAFT
+        self.submitted_by = None
+        self.date_submitted = None
+        self.save()
+
+    def approve(self, user, commit=True):
+        if self.approval_status != APPROVAL_STATUS_PENDING:
+            raise OperationalError(
+                "This {0} is not in 'pending' status and cannot be approved.".format(
+                    self._meta.verbose_name))
+        if self.submitted_by == user:
+            raise OperationalError(
+                "The same user cannot both submit and approve the same {0}.".format(
+                    self._meta.verbose_name))
+        self.approval_status = APPROVAL_STATUS_APPROVED
+        self.approved_by = user
+        self.date_approved = datetime.date.today()
+        if commit:
+            self.save()
+
+
 class BudgetPeriodManager(models.Manager):
     def get_current_period(self, school):
         today = datetime.date.today()
@@ -63,7 +130,7 @@ class BudgetPeriodManager(models.Manager):
         return None
 
 
-class BudgetPeriod(models.Model):
+class BudgetPeriod(RequiresApproval):
     objects = BudgetPeriodManager()
     school = models.ForeignKey(
         School, on_delete=models.CASCADE, related_name='budget_periods')
@@ -73,11 +140,18 @@ class BudgetPeriod(models.Model):
 
     class Meta:
         ordering = ['start', 'end']
+        verbose_name = 'budget'
+        permissions = (
+            ("approve_budget", "Can approve budgets"),
+        )
 
     def __str__(self):
         if len(self.name) > 0:
             return self.name
         return str(self.start) + " - " + str(self.end)
+
+    def get_absolute_url(self):
+        return reverse('budget-edit', args=[str(self.id)])
 
 
 class BudgetItem(models.Model):
@@ -238,63 +312,6 @@ class Transaction(models.Model):
                 and self.corrected_by_cje.approval_status != APPROVAL_STATUS_APPROVED):
             return False
         return True
-
-
-APPROVAL_STATUS_DRAFT = 'D'
-APPROVAL_STATUS_PENDING = 'P'
-APPROVAL_STATUS_APPROVED = 'A'
-APPROVAL_STATUS_CHOICES = (
-    (APPROVAL_STATUS_DRAFT, 'Draft'),
-    (APPROVAL_STATUS_PENDING, 'Pending Approval'),
-    (APPROVAL_STATUS_APPROVED, 'Approved')
-)
-
-
-class RequiresApproval(models.Model):
-    approval_status = models.CharField(
-        max_length=1, choices=APPROVAL_STATUS_CHOICES, default=APPROVAL_STATUS_DRAFT)
-    date_submitted = models.DateField(blank=True, null=True)
-    submitted_by = models.ForeignKey(
-        User, on_delete=models.PROTECT, blank=True, null=True,
-        related_name='submitted_%(app_label)s_%(class)s')
-    date_approved = models.DateField(blank=True, null=True)
-    approved_by = models.ForeignKey(
-        User, on_delete=models.PROTECT, blank=True, null=True,
-        related_name='approved_%(app_label)s_%(class)s')
-
-    class Meta:
-        abstract = True
-
-    def verify_can_be_edited(self):
-        if self.approval_status != APPROVAL_STATUS_DRAFT:
-            raise OperationalError("This transaction is not in 'draft' status and cannot be edited.")
-
-    def submit_for_approval(self, user):
-        if self.approval_status != APPROVAL_STATUS_DRAFT:
-            raise OperationalError("This transaction is not in 'draft' status and cannot be submitted for approval.")
-        self.approval_status = APPROVAL_STATUS_PENDING
-        self.submitted_by = user
-        self.date_submitted = datetime.date.today()
-        self.save()
-
-    def unsubmit_for_approval(self):
-        if self.approval_status != APPROVAL_STATUS_PENDING:
-            raise OperationalError("This transaction is not in 'pending' status and cannot be reverted to draft.")
-        self.approval_status = APPROVAL_STATUS_DRAFT
-        self.submitted_by = None
-        self.date_submitted = None
-        self.save()
-
-    def approve(self, user, commit=True):
-        if self.approval_status != APPROVAL_STATUS_PENDING:
-            raise OperationalError("This transaction is not in 'pending' status and cannot be approved.")
-        if self.submitted_by == user:
-            raise OperationalError("The same user cannot both submit and approve the same transaction.")
-        self.approval_status = APPROVAL_STATUS_APPROVED
-        self.approved_by = user
-        self.date_approved = datetime.date.today()
-        if commit:
-            self.save()
 
 
 class AdmitsCorrections:

@@ -1,13 +1,14 @@
 from django.forms import inlineformset_factory
 from django.shortcuts import redirect
-from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
-from core.views import DeletionFormMixin
+from schoolauth.decorators import school_permission_required
 from schoolauth.views import (
-    SchooledListView, SchooledCreateView, SchooledUpdateView, )
+    SchooledListView, SchooledDetailView, SchooledCreateView,
+    SchooledUpdateView, get_school_object_or_404, )
 from ..models import (
     BudgetPeriod, ExpenseBudgetItem, RevenueBudgetItem, ExpenseLedgerAccount,
     RevenueLedgerAccount, )
+from .shared import RequiresApprovalUpdateView
 
 
 class List(SchooledListView):
@@ -16,20 +17,28 @@ class List(SchooledListView):
     template_name = 'finance/budgets/list.html'
 
 
+class Detail(SchooledDetailView):
+    permission_required = 'finance.view_budgetperiod'
+    model = BudgetPeriod
+    template_name = 'finance/budgets/detail.html'
+    context_object_name = 'budget'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        period = self.get_object()
+        context['amounts'] = {}
+        for budget_item in ExpenseBudgetItem.objects.filter(period=period).all():
+            context['amounts'][budget_item.ledger_account] = budget_item.amount
+        for budget_item in RevenueBudgetItem.objects.filter(period=period).all():
+            context['amounts'][budget_item.ledger_account] = budget_item.amount
+        return context
+
+
 class Create(SchooledCreateView):
     permission_required = 'finance.add_budgetperiod'
     model = BudgetPeriod
     fields = ('name', 'start', 'end')
     template_name = 'finance/budgets/create.html'
-    success_url = reverse_lazy('budget-list')
-
-
-class EditPeriod(DeletionFormMixin, SchooledUpdateView):
-    permission_required = 'finance.change_budgetperiod'
-    model = BudgetPeriod
-    fields = ('name', 'start', 'end')
-    template_name = 'finance/budgets/period.html'
-    success_url = reverse_lazy('budget-list')
 
 
 ExpenseBudgetFormSet = inlineformset_factory(
@@ -40,13 +49,14 @@ RevenueBudgetFormSet = inlineformset_factory(
     extra=0, can_delete=False)
 
 
-class EditBudget(SchooledUpdateView):
+class Edit(RequiresApprovalUpdateView):
     permission_required = (
-        'finance.change_expensebudgetitem', 'finance.change_revenuebudgetitem')
+        'finance.change_budgetperiod',
+        'finance.change_expensebudgetitem', 'finance.change_revenuebudgetitem', )
     model = BudgetPeriod
-    template_name = 'finance/budgets/amounts.html'
+    template_name = 'finance/budgets/edit.html'
     success_url = reverse_lazy('budget-list')
-    fields = '__all__'
+    fields = ('name', 'start', 'end')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -70,22 +80,54 @@ class EditBudget(SchooledUpdateView):
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
+        if 'delete' in request.POST:
+            self.object.delete()
+            return redirect(self.get_success_url())
+        form = self.get_form()
         period_pk = self.kwargs['pk']
         period = BudgetPeriod.objects.get(pk=period_pk)
         expense_formset = ExpenseBudgetFormSet(
             request.POST, instance=period, prefix='expense')
         revenue_formset = RevenueBudgetFormSet(
             request.POST, instance=period, prefix='revenue')
-        if not (expense_formset.is_valid() and revenue_formset.is_valid()):
-            return self.form_invalid(expense_formset, revenue_formset)
-        return self.form_valid(expense_formset, revenue_formset)
+        if not (form.is_valid() and expense_formset.is_valid() and revenue_formset.is_valid()):
+            return self.form_invalid(form, expense_formset, revenue_formset)
+        return self.form_valid(form, expense_formset, revenue_formset)
 
-    def form_valid(self, expense_formset, revenue_formset):
+    def form_valid(self, form, expense_formset, revenue_formset):
         expense_formset.save()
         revenue_formset.save()
-        self.object = self.get_object()
-        return HttpResponseRedirect(self.get_success_url())
+        return super().form_valid(form)
 
-    def form_invalid(self, expense_formset, revenue_formset):
+    def form_invalid(self, form, expense_formset, revenue_formset):
         self.object = self.get_object()
         return self.render_to_response(self.get_context_data())
+
+
+class EditApproved(SchooledUpdateView):
+    permission_required = 'finance.change_budgetperiod'
+    model = BudgetPeriod
+    template_name = 'finance/budgets/edit_approved.html'
+    success_url = reverse_lazy('budget-list')
+    fields = ('name', )
+
+
+@school_permission_required('finance.change_budgetperiod')
+def submit_for_approval(request, pk):
+    expense = get_school_object_or_404(request, BudgetPeriod, pk=pk)
+    expense.submit_for_approval(request.user)
+    return redirect('budget-list')
+
+
+@school_permission_required('finance.change_budgetperiod')
+def unsubmit_for_approval(request, pk):
+    expense = get_school_object_or_404(request, BudgetPeriod, pk=pk)
+    expense.unsubmit_for_approval()
+    return redirect('budget-list')
+
+
+@school_permission_required('finance.approve_budget')
+def approve(request, pk):
+    expense = get_school_object_or_404(request, BudgetPeriod, pk=pk)
+    expense.approve(request.user)
+    return redirect('budget-list')

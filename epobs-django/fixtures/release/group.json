@@ -5,6 +5,16 @@
     "name": "Bookkeeper",
     "permissions": [
       [
+        "view_budgetperiod",
+        "finance",
+        "budgetperiod"
+      ],
+      [
+        "approve_budget",
+        "finance",
+        "budgetperiod"
+      ],
+      [
         "add_expensecorrectivejournalentry",
         "finance",
         "expensecorrectivejournalentry"
@@ -179,6 +189,11 @@
       ],
       [
         "view_budgetperiod",
+        "finance",
+        "budgetperiod"
+      ],
+      [
+        "approve_budget",
         "finance",
         "budgetperiod"
       ],

@@ -1,0 +1,36 @@
+{% extends 'extends/base.html' %}
+{% load core_tags %}
+
+{% load static %}
+
+{% block title %}EPOBS - View Budget{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item">Budgets</li>
+  <li class="breadcrumb-item">View</li>
+{% endblock %}
+
+{% block content %}
+
+  <table class="table">
+    <tr><th>Name:</th><td>{{ budget.name }}</td></tr>
+    <tr><th>Period:</th><td>{{ budget.start }} - {{ budget.end }}</td></tr>
+    {% for ledger_account in amounts %}
+      <tr><td>{{ ledger_account }}:</td><td>{{ amounts|get_item:ledger_account }}</td></tr>
+    {% endfor %}
+    <tr><th>Status:</th><td>{{ budget.get_approval_status_display }}</td></tr>
+    {% if budget.approval_status == 'P' %}<tr><th>Submitted for Approval:</th><td>{{ budget.date_submitted }} by {{ budget.submitted_by }}</td></tr>{% endif %}
+    {% if budget.approval_status == 'A' %}<tr><th>Approved:</th><td>{{ budget.date_approved }} by {{ budget.approved_by }}</td></tr>{% endif %}
+  </table>
+
+  {% if budget.approval_status == 'P' and school_perms.finance.approve_budget and user != budget.submitted_by %}
+    <a href="{% url 'budget-approve' budget.pk %}"><span class="btn btn-secondary">Approve</span></a>
+  {% endif %}
+  {% if budget.approval_status == 'P' and school_perms.finance.change_budgetperiod %}
+    <a href="{% url 'budget-unsubmit' budget.pk %}"><span class="btn btn-secondary">Revert to draft</span></a>
+  {% endif %}
+  {% if budget.approval_status == 'D' and school_perms.finance.change_budgetperiod %}
+    <a href="{% url 'budget-submit' budget.pk %}"><span class="btn btn-secondary">Submit for Approval</span></a>
+    <a href="{% url 'budget-edit' budget.pk %}"><span class="btn btn-secondary">Edit</span></a>
+  {% endif %}
+{% endblock %}
