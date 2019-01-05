@@ -1,25 +1,7 @@
-$('#id_quantity').change(function() {
+$('.amount-factor').change(function() {
     update();
 });
-$('#id_unit_cost').change(function() {
-    update();
-});
-$('#id_discount').change(function() {
-    update();
-});
-$('#id_tax').change(function() {
-    update();
-});
-$('#id_quantity').on('keyup', function() {
-    update();
-});
-$('#id_unit_cost').on('keyup', function() {
-    update();
-});
-$('#id_discount').on('keyup', function() {
-    update();
-});
-$('#id_tax').on('keyup', function() {
+$('.amount-factor').on('keyup', function() {
     update();
 });
 

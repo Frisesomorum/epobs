@@ -15,12 +15,45 @@
   <table class="table">
     <tr><th>Name:</th><td>{{ budget.name }}</td></tr>
     <tr><th>Period:</th><td>{{ budget.start }} - {{ budget.end }}</td></tr>
-    {% for ledger_account in amounts %}
-      <tr><td>{{ ledger_account }}:</td><td>{{ amounts|get_item:ledger_account }}</td></tr>
-    {% endfor %}
     <tr><th>Status:</th><td>{{ budget.get_approval_status_display }}</td></tr>
     {% if budget.approval_status == 'P' %}<tr><th>Submitted for Approval:</th><td>{{ budget.date_submitted }} by {{ budget.submitted_by }}</td></tr>{% endif %}
     {% if budget.approval_status == 'A' %}<tr><th>Approved:</th><td>{{ budget.date_approved }} by {{ budget.approved_by }}</td></tr>{% endif %}
+  </table>
+  <table class="table table-sm budget">
+    {% for category in expense_amounts %}
+      <tr>
+        <td id="category-{{ category.pk }}" class="category-toggle collapsed">
+          <i class="fas fa-angle-right"></i>
+        </td>
+        <th>{{ category }}:</th>
+        <td><label id="total-amount-{{ category.pk }}"></label></td>
+      </tr>
+      {% for ledger_account in expense_amounts|get_item:category %}
+        <tr class="budget-item-{{ category.pk }}" style="display: none">
+          <td></td>
+          <td>{{ ledger_account }}:</td>
+          <td id="budget-item-{{ category.pk }}-{{ ledger_account.pk }}" class="budget-item-amount">
+            {{ expense_amounts|get_item:category|get_item:ledger_account }}
+          </td>
+        </tr>
+      {% endfor %}
+    {% endfor %}
+    <tr>
+      <td id="category-rev" class="category-toggle collapsed">
+        <i class="fas fa-angle-right"></i>
+      </td>
+      <th>Revenues:</th>
+      <td><label id="total-amount-rev"></label></td>
+    </tr>
+    {% for ledger_account in revenue_amounts %}
+      <tr class="budget-item-rev" style="display: none">
+        <td></td>
+        <td>{{ ledger_account }}:</td>
+        <td id="budget-item-rev-{{ ledger_account.pk }}" class="budget-item-amount">
+          {{ revenue_amounts|get_item:ledger_account }}
+        </td>
+      </tr>
+    {% endfor %}
   </table>
 
   {% if budget.approval_status == 'P' and school_perms.finance.approve_budget and user != budget.submitted_by %}
@@ -33,4 +66,9 @@
     <a href="{% url 'budget-submit' budget.pk %}"><span class="btn btn-secondary">Submit for Approval</span></a>
     <a href="{% url 'budget-edit' budget.pk %}"><span class="btn btn-secondary">Edit</span></a>
   {% endif %}
+{% endblock %}
+
+{% block scripts %}
+  {{ block.super }}
+  <script src="{% static 'js/budget-detail.js' %}"></script>
 {% endblock %}

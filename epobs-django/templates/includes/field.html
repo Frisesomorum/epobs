@@ -1,0 +1,17 @@
+{% load widget_tweaks %}
+
+{{ field.label_tag }}
+
+{% render_field field class+="form-control" %}
+
+{% for error in field.errors %}
+  <div class="invalid-feedback d-block">
+    {{ error }}
+  </div>
+{% endfor %}
+
+{% if field.help_text %}
+  <small class="form-text text-muted">
+	  {{ field.help_text }}
+  </small>
+{% endif %}

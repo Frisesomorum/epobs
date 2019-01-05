@@ -1,0 +1,13 @@
+{% load widget_tweaks %}
+{% load core_tags %}
+
+{% include 'includes/non-field-errors.html' %}
+
+{% to_list form.ledger_account form.payee form.quantity form.unit_cost form.discount form.tax form.notes as field_list %}
+{% for field in field_list %}
+  <div class="form-group">
+    {% include 'includes/field.html' %}
+  </div>
+{% endfor %}
+
+<div class="font-weight-bold">Total Amount: <label id="total-amount"></label></div>

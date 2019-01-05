@@ -13,8 +13,7 @@
 
   <form method="post" class="mb-4" novalidate>
     {% csrf_token %}
-    {% include 'includes/form.html' %}
-    <div class="font-weight-bold">Total Amount: <label id="total-amount"></label></div>
+    {% include 'includes/expense-form.html' %}
     <input type="submit" name="save" value="Save as Draft" class="btn btn-primary" />
     <input type="submit" name="save-and-submit" value="Submit for Approval" class="btn btn-primary" />
     {% if school_perms.finance.delete_expensetransaction %}

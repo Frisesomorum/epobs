@@ -1,6 +1,8 @@
 {% extends 'extends/base.html' %}
 
 {% load static %}
+{% load widget_tweaks %}
+{% load core_tags %}
 
 {% block title %}EPOBS - Edit Budget{% endblock %}
 
@@ -15,23 +17,49 @@
   {% csrf_token %}
   {% include 'includes/form.html' %}
 
-  {{ expense_formset.management_form }}
-  <div class="form-group">
-    <h3>Expense Budgets</h3>
-    {% for form in expense_formset.forms %}
-      <h6>{{ form.instance.ledger_account }}</h6>
-      {{ form.as_p }}
+  {% for category in budget_items %}
+  {% with cat_id=category.pk|default:"rev" %}
+  {% with budget_item_class="form-control form-control-sm budget-item-amount budget-item-amount-"|concat:cat_id %}
+    <h6>
+      <span id="category-{{ cat_id }}" class="category-toggle collapsed">
+        <i class="fas fa-angle-right"></i>
+      </span>
+      {{ category }}:
+      <label id="total-amount-{{ cat_id }}" class="total-amount"></label>
+    </h6>
+    <div id="budget-items-{{ cat_id }}" class="form-group form-inline" style="display:none">
+    {% with formset=budget_items|get_item:category %}
+    {{ formset.management_form }}
+    {% for budget_item_form in formset.forms %}
+      {{ budget_item_form.id }}
+      {% cycle 1 2 3 4 as column silent %}
+      {% if column == 1 %}<div class="form-row">{% endif %}
+        <div class="col-sm-3 pr-4 pb-4">
+          {{ budget_item_form.instance.ledger_account }}
+          {% with field=budget_item_form.amount %}
+          <div class="input-group">
+            {% render_field field class+=budget_item_class %}
+            {% for error in field.errors %}
+              <div class="invalid-feedback d-block">
+                {{ error }}
+              </div>
+            {% endfor %}
+            {% if field.help_text %}
+              <small class="form-text text-muted">
+            	  {{ field.help_text }}
+              </small>
+            {% endif %}
+          </div>
+          {% endwith %}
+        </div>
+      {% if column == 4 or forloop.last %}</div>{% endif %}
     {% endfor %}
-  </div>
-
-  {{ revenue_formset.management_form }}
-  <div class="form-group">
-    <h3>Revenue Budgets</h3>
-    {% for form in revenue_formset.forms %}
-      <h6>{{ form.instance.ledger_account }}</h6>
-      {{ form.as_p }}
-    {% endfor %}
-  </div>
+    {% resetcycle %}
+    {% endwith %}
+    </div>
+  {% endwith %}
+  {% endwith %}
+  {% endfor %}
 
   {% if school_perms.finance.delete_budgetperiod %}
     <input type="submit" name="delete" value="Delete" class="btn btn-danger" />{% endif %}
@@ -39,4 +67,9 @@
   <input type="submit" name="save-and-submit" value="Submit for Approval" class="btn btn-primary" />
   <a href="{% url 'budget-list' %}" class="btn btn-secondary">Cancel</a>
 </form>
+{% endblock %}
+
+{% block scripts %}
+  {{ block.super }}
+  <script src="{% static 'js/budget-edit.js' %}"></script>
 {% endblock %}

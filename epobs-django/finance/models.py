@@ -153,6 +153,21 @@ class BudgetPeriod(RequiresApproval):
     def get_absolute_url(self):
         return reverse('budget-edit', args=[str(self.id)])
 
+    def get_expense_budget_items(self):
+        amounts = {}
+        for category in ExpenseCategory.objects.all():
+            amounts[category] = {}
+        for budget_item in ExpenseBudgetItem.objects.filter(period=self).all():
+            ledger_account = budget_item.ledger_account
+            amounts[ledger_account.category][ledger_account] = budget_item.amount
+        return amounts
+
+    def get_revenue_budget_items(self):
+        amounts = {}
+        for budget_item in RevenueBudgetItem.objects.filter(period=self).all():
+            amounts[budget_item.ledger_account] = budget_item.amount
+        return amounts
+
 
 class BudgetItem(models.Model):
     amount = models.DecimalField(max_digits=15, decimal_places=2, default=0)
