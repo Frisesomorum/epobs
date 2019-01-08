@@ -1,3 +1,14 @@
+$('#id_ledger_account').change(function() {
+  selectCategory($(this).find(':selected').attr('la_category'));
+});
+$('#id_ledger_account').on('keyup', function() {
+  selectCategory($(this).find(':selected').attr('la_category'));
+});
+
+function selectCategory(category) {
+  $('#id_category').val(category);
+}
+
 $('#id_category').change(function() {
   filterLedgerAccountsByCategory(this.value);
 });
