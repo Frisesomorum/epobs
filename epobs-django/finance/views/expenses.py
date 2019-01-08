@@ -60,6 +60,15 @@ class Detail(SchooledDetailView):
     context_object_name = 'expense'
 
 
+class LedgerAccountSelect(forms.Select):
+    def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
+        option = super().create_option(name, value, label, selected, index, subindex, attrs)
+        if value:
+            ledger_account = ExpenseLedgerAccount.objects.get(pk=int(value))
+            option['attrs']['la_category'] = ledger_account.category.pk
+        return option
+
+
 class ExpenseForm(SchoolFormMixin, forms.ModelForm):
     category = forms.ModelChoiceField(queryset=ExpenseCategory.objects.all(), required=False)
 
@@ -68,6 +77,9 @@ class ExpenseForm(SchoolFormMixin, forms.ModelForm):
         fields = (
             'ledger_account', 'payee', 'quantity', 'unit_cost', 'discount',
             'tax', 'notes', )
+        widgets = {
+            'ledger_account': LedgerAccountSelect(),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
