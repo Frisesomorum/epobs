@@ -13,7 +13,7 @@
 
   <form method="post" class="mb-4" novalidate>
     {% csrf_token %}
-    {% include 'includes/form.html' %}
+    {% include './revenue-create-form.html' %}
     <input type="submit" name="save" value="Save" class="btn btn-primary" />
   </form>
 

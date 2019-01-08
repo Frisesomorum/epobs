@@ -33,7 +33,7 @@ class SelectSchoolForm(forms.Form):
 
 class SelectSchool(FormView):
     form_class = SelectSchoolForm
-    template_name = 'school_select.html'
+    template_name = 'accounts/school_select.html'
     success_url = reverse_lazy('index')
 
     def get_context_data(self, **kwargs):

@@ -1,0 +1,33 @@
+{% load widget_tweaks %}
+{% load core_tags %}
+
+{% include 'core/non-field-errors.html' %}
+
+{% with field=form.payee %}
+<div class="form-row">
+  <div class="form-group col-sm-9">
+    {% include 'core/field.html' %}
+  </div>
+</div>
+{% endwith %}
+
+{% to_list form.ledger_account form.category form.quantity form.unit_cost form.discount form.tax as field_list %}
+{% for field in field_list %}
+{% cycle 1 2 as column silent %}
+  {% if column == 1 %}<div class="form-row">{% endif %}
+  <div class="form-group col-sm-6">
+    {% include 'core/field.html' %}
+  </div>
+  {% if column == 2 or forloop.last %}</div>{% endif %}
+{% endfor %}
+{% resetcycle %}
+
+{% with field=form.notes %}
+<div class="form-row">
+  <div class="form-group col-sm-12">
+    {% include 'core/field.html' %}
+  </div>
+</div>
+{% endwith %}
+
+<div class="font-weight-bold">Total Amount: <label id="total-amount"></label></div>

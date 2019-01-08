@@ -1,0 +1,7 @@
+{% include './non-field-errors.html' %}
+
+{% for field in form %}
+  <div class="form-group">
+    {% include './field.html' %}
+  </div>
+{% endfor %}

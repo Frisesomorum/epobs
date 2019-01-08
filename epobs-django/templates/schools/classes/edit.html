@@ -15,7 +15,7 @@
 
   <form method="post" class="mb-4" novalidate>
     {% csrf_token %}
-    {% include 'includes/form.html' %}
+    {% include 'core/form.html' %}
     {{ fee_formset.management_form }}
     <div class="form-group">
       {% for form in fee_formset.forms %}

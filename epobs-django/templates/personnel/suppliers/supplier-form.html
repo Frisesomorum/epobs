@@ -1,0 +1,27 @@
+{% load widget_tweaks %}
+{% load core_tags %}
+
+{% include 'core/non-field-errors.html' %}
+
+{% with field=form.name %}
+<div class="form-row">
+  <div class="form-group col-sm-12">
+    {% include 'core/field.html' %}
+  </div>
+</div>
+{% endwith %}
+
+<div class="form-row">
+  {% with field=form.external_id %}
+  <div class="form-group col-sm-6">
+    {% include 'core/field.html' %}
+  </div>
+  {% endwith %}
+  {% with field=form.date_hired %}
+  {% if field in form %}
+    <div class="form-group col-sm-6">
+      {% include 'core/field.html' %}
+    </div>
+  {% endif %}
+  {% endwith %}
+</div>

@@ -10,7 +10,7 @@
 {% block content %}
   <form method="post" novalidate>
     {% csrf_token %}
-    {% include 'includes/form.html' %}
+    {% include 'core/form.html' %}
     <button type="submit" class="btn btn-primary">Run Report</button>
   </form>
 {% endblock %}

@@ -13,51 +13,8 @@
 
   <body>
     {% block body %}
-      {% block nav %}
-      <nav class="navbar sticky-top navbar-expand-sm navbar-dark bg-dark">
-        <div class="container">
-          <a class="navbar-brand" href="{% url 'index' %}">EPOBS</a>
-          {% if user.is_authenticated %}
-            <span class="navbar-text"><a href="{% url 'school-select' %}">{{ request.session.school_name }}</a></span>
-            &nbsp;&nbsp;<span class="navbar-text"><a href="{% url 'user-profile' %}">{{ user }}</a></span>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="mainMenu">
-              <ul class="navbar-nav ml-auto">
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Menu
-                  </a>
-                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
-                    <a class="dropdown-item" href="{% url 'report-index' %}">Reports</a>
-                    <div class="dropdown-divider"></div>
-                    {% if school_perms.finance.view_expensetransaction %}
-                      <a class="dropdown-item" href="{% url 'expense-list' %}">Expenses</a>{% endif %}
-                    {% if school_perms.finance.view_revenuetransaction %}
-                      <a class="dropdown-item" href="{% url 'revenue-list' %}">Revenues</a>{% endif %}
-                    {% if school_perms.finance.view_budgetperiod %}
-                      <a class="dropdown-item" href="{% url 'budget-list' %}">Budgets</a>{% endif %}
-                    {% if school_perms.personnel.view_employee %}
-                      <a class="dropdown-item" href="{% url 'employee-list' %}">Employees</a>{% endif %}
-                    {% if school_perms.personnel.view_supplier %}
-                      <a class="dropdown-item" href="{% url 'supplier-list' %}">Suppliers</a>{% endif %}
-                    {% if school_perms.students.view_student %}
-                      <a class="dropdown-item" href="{% url 'student-list' %}">Students</a>{% endif %}
-                    {% if school_perms.schools.view_graduatingclass %}
-                      <a class="dropdown-item" href="{% url 'class-list' %}">Graduating Classes</a>{% endif %}
-                    {% if school_perms.schoolauth.view_userschoolmembership %}
-                      <a class="dropdown-item" href="{% url 'member-list' %}">School Members</a>{% endif %}
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="{% url 'logout' %}">Log out</a>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          {% endif %}
-        </div>
-      </nav>
-      {% endblock nav %}
+
+      {% block nav %}{% include 'core/navbar.html' %}{% endblock nav %}
 
       <div class="container">
         <ol class="breadcrumb my-4">
@@ -67,6 +24,7 @@
         {% block content %}
         {% endblock %}
       </div>
+
     {% endblock body %}
 
     {% block scripts %}

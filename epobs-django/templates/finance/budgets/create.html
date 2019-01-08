@@ -13,7 +13,7 @@
 
   <form method="post" class="mb-4" novalidate>
     {% csrf_token %}
-    {% include 'includes/form.html' %}
+    {% include 'core/form.html' %}
     <input type="submit" name="save" value="Save" class="btn btn-primary" />
     <a href="{% url 'budget-list' %}" class="btn btn-secondary">Cancel</a>
   </form>

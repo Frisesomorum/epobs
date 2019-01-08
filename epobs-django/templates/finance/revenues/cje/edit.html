@@ -14,7 +14,7 @@
 
   <form method="post" class="mb-4" novalidate>
     {% csrf_token %}
-    {% include 'includes/form.html' %}
+    {% include '../revenue-form.html' %}
     <input type="submit" name="save" value="Save as Draft" class="btn btn-primary" />
     <input type="submit" name="save-and-submit" value="Submit for Approval" class="btn btn-primary" />
     {% if school_perms.finance.delete_revenuecorrectivejournalentry %}

@@ -12,5 +12,5 @@
     Reporting period:
     <a href="{% url 'report-select-period' next='report-expense-summary' %}">{{ period }}</a>
   </div>
-  {% include 'includes/expense-summary-table.html' %}
+  {% include './expense-summary-table.html' %}
 {% endblock %}

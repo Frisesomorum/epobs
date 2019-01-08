@@ -61,6 +61,8 @@ class Detail(SchooledDetailView):
 
 
 class ExpenseForm(SchoolFormMixin, forms.ModelForm):
+    category = forms.ModelChoiceField(queryset=ExpenseCategory.objects.all(), required=False)
+
     class Meta:
         model = ExpenseTransaction
         fields = (

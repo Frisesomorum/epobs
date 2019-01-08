@@ -25,7 +25,7 @@ class CreateUser(CreateView):
     permission_required = 'schoolauth.add_user'
     model = User
     form_class = CreateUserForm
-    template_name = 'user_create.html'
+    template_name = 'accounts/user_create.html'
 
     def get_success_url(self, user_membership_pk):
         return reverse_lazy('member-edit', kwargs={'pk': user_membership_pk})

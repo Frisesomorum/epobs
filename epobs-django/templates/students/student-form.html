@@ -1,0 +1,15 @@
+{% load widget_tweaks %}
+{% load core_tags %}
+
+{% include 'core/non-field-errors.html' %}
+
+{% to_list form.first_name form.last_name form.date_of_birth form.email form.external_id form.graduating_class form.is_enrolled as field_list %}
+{% for field in field_list %}
+{% cycle 1 2 as column silent %}
+  {% if column == 1 %}<div class="form-row">{% endif %}
+    <div class="form-group col-sm-6">
+      {% include 'core/field.html' %}
+    </div>
+  {% if column == 2 or forloop.last %}</div>{% endif %}
+{% endfor %}
+{% resetcycle %}

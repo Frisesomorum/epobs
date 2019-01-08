@@ -1,0 +1,32 @@
+{% load widget_tweaks %}
+{% load core_tags %}
+
+{% include 'core/non-field-errors.html' %}
+
+{% with field=form.student %}
+<div class="form-row">
+  <div class="form-group col-sm-9">
+    {% include 'core/field.html' %}
+  </div>
+</div>
+{% endwith %}
+
+{% for field in form %}
+{% if field != form.student and field != form.notes %}
+{% cycle 1 2 as column silent %}
+  {% if column == 1 %}<div class="form-row">{% endif %}
+    <div class="form-group col-sm-6">
+      {% include 'core/field.html' %}
+    </div>
+  {% if column == 2 or forloop.last %}</div>{% endif %}
+{% endif %}
+{% endfor %}
+{% resetcycle %}
+
+{% with field=form.notes %}
+<div class="form-row">
+  <div class="form-group col-sm-12">
+    {% include 'core/field.html' %}
+  </div>
+</div>
+{% endwith %}

@@ -13,8 +13,8 @@
     <a href="{% url 'report-select-period' next='report-expense-revenue-summary' %}">{{ period }}</a>
   </div>
   <h2>Expenses</h2>
-  {% include 'includes/expense-summary-table.html' %}
+  {% include './expense-summary-table.html' %}
 
   <h2>Revenues</h2>
-  {% include 'includes/revenue-summary-table.html' %}
+  {% include './revenue-summary-table.html' %}
 {% endblock %}

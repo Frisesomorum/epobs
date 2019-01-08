@@ -15,7 +15,7 @@
 
   <form method="post" class="mb-4" novalidate>
     {% csrf_token %}
-    {% include 'includes/form.html' %}
+    {% include 'core/form.html' %}
     <input type="submit" name="save" value="Save" class="btn btn-primary" />
     {% if school_perms.schoolauth.delete_userschoolmembership %}
       <input type="submit" name="delete" value="Delete" class="btn btn-danger" />{% endif %}

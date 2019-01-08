@@ -5,11 +5,9 @@
 
   {% include 'core/logo-lg.html' %}
 
-  Enter your new password.
-
   <form method="post" novalidate>
     {% csrf_token %}
     {% include 'core/form.html' %}
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <div class="text-center"><button type="submit" class="btn btn-primary">Select</button></div>
   </form>
 {% endblock %}
