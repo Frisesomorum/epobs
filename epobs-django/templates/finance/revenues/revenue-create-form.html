@@ -13,12 +13,12 @@
 
 {% for field in form %}
 {% if field != form.student and field != form.notes %}
-{% cycle 1 2 as column silent %}
+{% cycle 1 2 3 4 as column silent %}
   {% if column == 1 %}<div class="form-row">{% endif %}
-    <div class="form-group col-sm-6">
+    <div class="form-group col-sm-3">
       {% include 'core/field.html' %}
     </div>
-  {% if column == 2 or forloop.last %}</div>{% endif %}
+  {% if column == 4 or forloop.last %}</div>{% endif %}
 {% endif %}
 {% endfor %}
 {% resetcycle %}

@@ -11,16 +11,18 @@
 </div>
 {% endwith %}
 
-{% to_list form.ledger_account form.amount as field_list %}
-{% for field in field_list %}
-{% cycle 1 2 as column silent %}
-  {% if column == 1 %}<div class="form-row">{% endif %}
-    <div class="form-group col-sm-6">
-      {% include 'core/field.html' %}
-    </div>
-  {% if column == 2 or forloop.last %}</div>{% endif %}
-{% endfor %}
-{% resetcycle %}
+<div class="form-row">
+  {% with field=form.ledger_account %}
+  <div class="form-group col-sm-6">
+    {% include 'core/field.html' %}
+  </div>
+  {% endwith %}
+  {% with field=form.amount %}
+  <div class="form-group col-sm-3">
+    {% include 'core/field.html' %}
+  </div>
+  {% endwith %}
+</div>
 
 {% with field=form.notes %}
 <div class="form-row">

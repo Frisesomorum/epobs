@@ -1,3 +1,4 @@
+from django import forms
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from schoolauth.decorators import school_permission_required
@@ -5,7 +6,7 @@ from core.views import DeletionFormMixin
 from schoolauth.views import (
     SchooledDetailView, get_school_object_or_404, )
 from ..models import ExpenseTransaction, ExpenseCorrectiveJournalEntry
-from .expenses import ExpenseForm
+from .expenses import ExpenseForm, LedgerAccountSelect
 from .shared import RequiresApprovalCreateView, RequiresApprovalUpdateView
 
 
@@ -15,6 +16,10 @@ class ExpenseCjeForm(ExpenseForm):
         fields = (
             'ledger_account', 'payee', 'quantity', 'unit_cost', 'discount',
             'tax', 'notes', )
+        widgets = {
+            'ledger_account': LedgerAccountSelect(),
+            'notes': forms.Textarea(attrs={'rows': 2}),
+            }
 
 
 class Detail(SchooledDetailView):

@@ -13,6 +13,9 @@ class RevenueCjeForm(SchoolFormMixin, forms.ModelForm):
     class Meta:
         model = RevenueCorrectiveJournalEntry
         fields = ('ledger_account', 'amount', 'student', 'notes')
+        widgets = {
+            'notes': forms.Textarea(attrs={'rows': 2}),
+            }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

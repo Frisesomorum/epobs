@@ -11,7 +11,7 @@
 </div>
 {% endwith %}
 
-{% to_list form.ledger_account form.category form.quantity form.unit_cost form.discount form.tax as field_list %}
+{% to_list form.ledger_account form.category as field_list %}
 {% for field in field_list %}
 {% cycle 1 2 as column silent %}
   {% if column == 1 %}<div class="form-row">{% endif %}
@@ -19,6 +19,17 @@
     {% include 'core/field.html' %}
   </div>
   {% if column == 2 or forloop.last %}</div>{% endif %}
+{% endfor %}
+{% resetcycle %}
+
+{% to_list form.quantity form.unit_cost form.discount form.tax as field_list %}
+{% for field in field_list %}
+{% cycle 1 2 3 4 as column silent %}
+  {% if column == 1 %}<div class="form-row">{% endif %}
+  <div class="form-group col-sm-3">
+    {% include 'core/field.html' %}
+  </div>
+  {% if column == 4 or forloop.last %}</div>{% endif %}
 {% endfor %}
 {% resetcycle %}
 

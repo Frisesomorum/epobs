@@ -51,7 +51,7 @@ function update() {
   var discount = Number($('#id_discount').val());
   var tax = Number($('#id_tax').val());
   var amount = (quantity * unit_cost) - discount + tax;
-  document.getElementById('total-amount').innerHTML = amount;
+  document.getElementById('total-amount').innerHTML = amount.toFixed(2);
 }
 
 update();

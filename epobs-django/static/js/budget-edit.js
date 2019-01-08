@@ -12,7 +12,7 @@ function update(category) {
   $( ".budget-item-amount-" + category ).each(function( index ) {
     total += Number(this.value);
   } );
-  document.getElementById('total-amount-' + category).innerHTML = total;
+  document.getElementById('total-amount-' + category).innerHTML = total.toFixed(2);
 }
 
 function updateAll() {

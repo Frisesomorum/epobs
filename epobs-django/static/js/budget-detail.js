@@ -10,7 +10,7 @@ function initAll() {
     }
   } );
   Object.keys(amounts).forEach(function (category) {
-    document.getElementById('total-amount-' + category).innerHTML = amounts[category];
+    document.getElementById('total-amount-' + category).innerHTML = amounts[category].toFixed(2);
   } );
 }
 

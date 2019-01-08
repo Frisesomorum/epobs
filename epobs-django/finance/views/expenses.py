@@ -79,7 +79,8 @@ class ExpenseForm(SchoolFormMixin, forms.ModelForm):
             'tax', 'notes', )
         widgets = {
             'ledger_account': LedgerAccountSelect(),
-        }
+            'notes': forms.Textarea(attrs={'rows': 2}),
+            }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

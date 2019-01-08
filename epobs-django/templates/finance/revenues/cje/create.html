@@ -14,7 +14,7 @@
 
   <form method="post" class="mb-4" novalidate>
     {% csrf_token %}
-    {% include '../revenue-form.html' %}
+    {% include './revenue-cje-form.html' %}
     <input type="submit" name="save" value="Save as Draft" class="btn btn-primary" />
     <input type="submit" name="save-and-submit" value="Submit for Approval" class="btn btn-primary" />
     <a href="{% url 'revenue-list' %}" class="btn btn-secondary">Cancel</a>
