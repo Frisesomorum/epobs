@@ -5,9 +5,9 @@
 {% block title %}EPOBS - Edit Employee{% endblock %}
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item">Personnel</li>
-  <li class="breadcrumb-item">Employees</li>
+  <li class="breadcrumb-item"><a href="{% url 'employee-list' %}">Employees</a></li>
   <li class="breadcrumb-item">Edit</li>
+  <li class="breadcrumb-item">{{ object }}</li>
 {% endblock %}
 
 {% block content %}

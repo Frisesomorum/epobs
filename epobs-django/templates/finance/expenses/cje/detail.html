@@ -5,9 +5,10 @@
 {% block title %}EPOBS - View Expense Corrective Journal Entry{% endblock %}
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item">Expenses</li>
+  <li class="breadcrumb-item"><a href="{% url 'expense-list' %}">Expenses</a></li>
   <li class="breadcrumb-item">Corrective Journal Entry</li>
   <li class="breadcrumb-item">View</li>
+  <li class="breadcrumb-item">{{ expensecje }}</li>
 {% endblock %}
 
 {% block content %}

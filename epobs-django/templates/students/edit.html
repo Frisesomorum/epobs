@@ -3,7 +3,7 @@
 {% block title %}EPOBS - Edit Students{% endblock %}
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item">Students</li>
+  <li class="breadcrumb-item"><a href="{% url 'student-list' %}">Students</a></li>
   <li class="breadcrumb-item">Edit</li>
   <li class="breadcrumb-item">{{ student }}</li>
 {% endblock %}

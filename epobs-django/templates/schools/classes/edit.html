@@ -5,8 +5,8 @@
 {% block title %}EPOBS - Edit Class{% endblock %}
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item">School</li>
-  <li class="breadcrumb-item">Classes</li>
+  <li class="breadcrumb-item">School Admin</li>
+  <li class="breadcrumb-item"><a href="{% url 'class-list' %}">Graduating Classes</a></li>
   <li class="breadcrumb-item">Edit</li>
   <li class="breadcrumb-item">{{ graduatingclass.graduating_year }}</li>
 {% endblock %}

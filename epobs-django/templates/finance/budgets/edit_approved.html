@@ -5,8 +5,9 @@
 {% block title %}EPOBS - Edit Budget{% endblock %}
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item">Budgets</li>
-  <li class="breadcrumb-item">{{ period }}</li>
+  <li class="breadcrumb-item"><a href="{% url 'budget-list' %}">Budgets</a></li>
+  <li class="breadcrumb-item">Edit</li>
+  <li class="breadcrumb-item">{{ object }}</li>
 {% endblock %}
 
 {% block content %}

@@ -5,8 +5,9 @@
 {% block title %}EPOBS - View Revenue{% endblock %}
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item">Revenues</li>
+  <li class="breadcrumb-item"><a href="{% url 'revenue-list' %}">Revenues</a></li>
   <li class="breadcrumb-item">View</li>
+  <li class="breadcrumb-item">{{ revenue }}</li>
 {% endblock %}
 
 {% block content %}
