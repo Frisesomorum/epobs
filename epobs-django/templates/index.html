@@ -6,12 +6,46 @@
 
 {% block content %}
   <div class="container">
-    <h1>Dashboard (mockup)</h1>
-    <ul>
-      {% if school_perms.finance.approve_expensetransaction %}<li>There are N <a href="{% url 'expense-list' %}">expenses</a> waiting for approval.</li>{% endif %}
-      {% if 'students.view_student' in school_perms %}<li>There are M <a href="{% url 'student-list' %}">students</a> with outstanding fees.</li>{% endif %}
-      <li><a href="{% url 'report-index' %}">H%</a> of the current budget has been used.</li>
-    </ul>
-    {% include 'change_notes.html' %}
+    <div class="row">
+      {% if school_perms.finance.view_budgetperiod %}
+      <div class="col-lg-3">
+        <a href="{% url 'budget-list' %}"><div class="card text-center"><div class="card-body">
+          Budgets</div></div></a></div>
+      {% endif %}
+      {% if school_perms.finance.view_expensetransaction %}
+      <div class="col-lg-3">
+        <a href="{% url 'expense-list' %}"><div class="card text-center"><div class="card-body">
+          Expenses</div></div></a></div>
+      {% endif %}
+      {% if school_perms.finance.view_revenuetransaction %}
+      <div class="col-lg-3">
+        <a href="{% url 'revenue-list' %}"><div class="card text-center"><div class="card-body">
+          Revenues</div></div></a></div>
+      {% endif %}
+      <div class="col-lg-3">
+        <a href="{% url 'report-index' %}"><div class="card text-center"><div class="card-body">
+          Reports</div></div></a></div>
+    </div>
+    <div class="row">
+      {% if school_perms.students.view_student %}
+      <div class="col-lg-3">
+        <a href="{% url 'student-list' %}"><div class="card text-center"><div class="card-body">
+          Students</div></div></a></div>
+      {% endif %}
+      {% if school_perms.personnel.view_employee %}
+      <div class="col-lg-3">
+        <a href="{% url 'employee-list' %}"><div class="card text-center"><div class="card-body">
+          Employees</div></div></a></div>
+      {% endif %}
+      {% if school_perms.personnel.view_supplier %}
+      <div class="col-lg-3">
+        <a href="{% url 'supplier-list' %}"><div class="card text-center"><div class="card-body">
+          Suppliers</div></div></a></div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="container">
+    <a href="{% url 'change-notes' %}">What's new / Patch notes</a>
   </div>
 {% endblock content %}

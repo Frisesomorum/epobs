@@ -38,6 +38,7 @@ urlpatterns = [
 
     re_path(r'^$', coreViews.static_view('index.html'), name='index'),
     path('tos/', coreViews.static_view('accounts/tos.html'), name='terms-of-service'),
+    path('change-notes/', coreViews.static_view('change_notes.html'), name='change-notes'),
     re_path(r'selectschool/$', schoolAuthViews.SelectSchool.as_view(), name='school-select'),
 
     re_path(r'school/membership/$', schoolViews.ListMembership.as_view(), name='member-list'),
