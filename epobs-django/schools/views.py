@@ -135,9 +135,7 @@ class EditClass(SchooledUpdateView):
 
     def form_valid(self, fee_formset):
         fee_formset.save()
-        self.object = self.get_object()
-        return redirect(self.get_success_url())
+        return super().form_valid(self.get_form())
 
     def form_invalid(self, fee_formset):
-        self.object = self.get_object()
-        return self.render_to_response(self.get_context_data())
+        return super().form_invalid(self, self.get_form())
