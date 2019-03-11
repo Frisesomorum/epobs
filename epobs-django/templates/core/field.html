@@ -1,8 +1,13 @@
 {% load widget_tweaks %}
+{% load core_tags %}
 
 <small>{{ field.label_tag }}</small>
 
-{% render_field field class+="form-control" %}
+{% if field.field.widget|klass == "DateInput" %}
+  {% render_field field class+="form-control datepicker" %}
+{% else %}
+  {% render_field field class+="form-control" %}
+{% endif %}
 
 {% for error in field.errors %}
   <div class="invalid-feedback d-block">
