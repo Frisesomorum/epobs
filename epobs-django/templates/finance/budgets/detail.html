@@ -16,6 +16,9 @@
   <table class="table">
     <tr><th>Name:</th><td>{{ budget.name }}</td></tr>
     <tr><th>Period:</th><td>{{ budget.start }} - {{ budget.end }}</td></tr>
+    <tr><th>Expenses:</th><td><label id="total-amount-exp"></label></td></tr>
+    <tr><th>Revenues:</th><td><label class="total-amount-rev"></label></td></tr>
+    <tr><th>Balance:</th><td><label id="total-amount-balance"></label></td></tr>
     <tr><th>Status:</th><td>{{ budget.get_approval_status_display }}</td></tr>
     {% if budget.approval_status == 'P' %}<tr><th>Submitted for Approval:</th><td>{{ budget.date_submitted }} by {{ budget.submitted_by }}</td></tr>{% endif %}
     {% if budget.approval_status == 'A' %}<tr><th>Approved:</th><td>{{ budget.date_approved }} by {{ budget.approved_by }}</td></tr>{% endif %}
@@ -27,7 +30,7 @@
           <i class="fas fa-angle-right"></i>
         </td>
         <th>{{ category }}:</th>
-        <td><label id="total-amount-{{ category.pk }}"></label></td>
+        <td><label class="total-amount-{{ category.pk }}"></label></td>
       </tr>
       {% for ledger_account in expense_amounts|get_item:category %}
         <tr class="budget-item-{{ category.pk }}" style="display: none">
@@ -44,7 +47,7 @@
         <i class="fas fa-angle-right"></i>
       </td>
       <th>Revenues:</th>
-      <td><label id="total-amount-rev"></label></td>
+      <td><label class="total-amount-rev"></label></td>
     </tr>
     {% for ledger_account in revenue_amounts %}
       <tr class="budget-item-rev" style="display: none">

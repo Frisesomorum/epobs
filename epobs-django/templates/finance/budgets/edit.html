@@ -16,7 +16,31 @@
 
 <form method="post" class="mb-4" novalidate>
   {% csrf_token %}
-  {% include 'core/form.html' %}
+
+  {% include 'core/non-field-errors.html' %}
+
+  {% with field=form.name %}
+  <div class="form-row">
+    <div class="form-group col-sm-9">
+      {% include 'core/field.html' %}
+    </div>
+  </div>
+  {% endwith %}
+
+  {% to_list form.start form.end as field_list %}
+  {% for field in field_list %}
+  {% cycle 1 2 as column silent %}
+    {% if column == 1 %}<div class="form-row">{% endif %}
+    <div class="form-group col-sm-6">
+      {% include 'core/field.html' %}
+    </div>
+    {% if column == 2 or forloop.last %}</div>{% endif %}
+  {% endfor %}
+  {% resetcycle %}
+
+  Expenses: <label id="summary-exp"></label>
+  Revenues: <label id="summary-rev"></label>
+  Balance: <label id="summary-balance"></label>
 
   {% for category in budget_items %}
   {% with cat_id=category.pk|default:"rev" %}

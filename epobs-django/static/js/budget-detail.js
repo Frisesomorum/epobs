@@ -9,9 +9,23 @@ function initAll() {
       amounts[category] = Number(this.innerHTML);
     }
   } );
+  var totalExpenses = 0;
+  var totalRevenues = 0;
   Object.keys(amounts).forEach(function (category) {
-    document.getElementById('total-amount-' + category).innerHTML = amounts[category].toFixed(2);
+    var totalAmount = amounts[category].toFixed(2);
+    var name = 'total-amount-' + category;
+    var totals = document.getElementsByClassName(name);
+    for (var i = 0; i < totals.length; i++){
+      totals[i].innerHTML = totalAmount;
+    }
+    if (category !== 'rev'){
+      totalExpenses += amounts[category];
+    } else {
+      totalRevenues = amounts[category];
+    }
   } );
+  document.getElementById('total-amount-exp').innerHTML = totalExpenses.toFixed(2);
+  document.getElementById('total-amount-balance').innerHTML = (totalRevenues - totalExpenses).toFixed(2);
 }
 
 initAll();
