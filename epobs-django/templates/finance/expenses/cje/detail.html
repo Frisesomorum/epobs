@@ -1,6 +1,7 @@
 {% extends 'extends/base.html' %}
 
 {% load static %}
+{% load core_tags %}
 
 {% block title %}EPOBS - View Expense Corrective Journal Entry{% endblock %}
 
@@ -38,17 +39,17 @@
       <td>{{ expensecje.correction_to.quantity }}</td>
       <td>{{ expensecje.quantity }}</td></tr>
     <tr><th>Cost per Unit:</th>
-      <td>{{ expensecje.correction_to.unit_cost }}</td>
-      <td>{{ expensecje.unit_cost }}</td></tr>
+      <td>{{ expensecje.correction_to.unit_cost|currency }}</td>
+      <td>{{ expensecje.unit_cost|currency }}</td></tr>
     <tr><th>Discount:</th>
-      <td>{{ expensecje.correction_to.discount }}</td>
-      <td>{{ expensecje.discount }}</td></tr>
+      <td>{{ expensecje.correction_to.discount|currency }}</td>
+      <td>{{ expensecje.discount|currency }}</td></tr>
     <tr><th>Tax:</th>
-      <td>{{ expensecje.correction_to.tax }}</td>
-      <td>{{ expensecje.tax }}</td></tr>
+      <td>{{ expensecje.correction_to.tax|currency }}</td>
+      <td>{{ expensecje.tax|currency }}</td></tr>
     <tr><th>Amount:</th>
-      <td>{{ expensecje.correction_to.amount }}</td>
-      <td>{{ expensecje.amount }}</td></tr>
+      <td>{{ expensecje.correction_to.amount|currency }}</td>
+      <td>{{ expensecje.amount|currency }}</td></tr>
     <tr><th>Notes:</th>
       <td>{{ expensecje.correction_to.notes }}</td>
       <td>{{ expensecje.notes }}</td></tr>

@@ -4,15 +4,15 @@ function initAll() {
     var id = this.id.split("-");
     var category = id[2];
     if (amounts[category]) {
-      amounts[category] += Number(this.innerHTML);
+      amounts[category] += Number($( this ).attr("raw-value"));
     } else {
-      amounts[category] = Number(this.innerHTML);
+      amounts[category] = Number($( this ).attr("raw-value"));
     }
   } );
   var totalExpenses = 0;
   var totalRevenues = 0;
   Object.keys(amounts).forEach(function (category) {
-    var totalAmount = amounts[category].toFixed(2);
+    var totalAmount = formatCurrency(amounts[category]);
     var name = 'total-amount-' + category;
     var totals = document.getElementsByClassName(name);
     for (var i = 0; i < totals.length; i++){
@@ -24,8 +24,8 @@ function initAll() {
       totalRevenues = amounts[category];
     }
   } );
-  document.getElementById('total-amount-exp').innerHTML = totalExpenses.toFixed(2);
-  document.getElementById('total-amount-balance').innerHTML = (totalRevenues - totalExpenses).toFixed(2);
+  document.getElementById('total-amount-exp').innerHTML = formatCurrency(totalExpenses);
+  document.getElementById('total-amount-balance').innerHTML = formatCurrency(totalRevenues - totalExpenses);
 }
 
 initAll();

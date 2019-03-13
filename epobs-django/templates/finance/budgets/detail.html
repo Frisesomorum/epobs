@@ -36,8 +36,9 @@
         <tr class="budget-item-{{ category.pk }}" style="display: none">
           <td></td>
           <td>{{ ledger_account }}:</td>
-          <td id="budget-item-{{ category.pk }}-{{ ledger_account.pk }}" class="budget-item-amount">
-            {{ expense_amounts|get_item:category|get_item:ledger_account }}
+          <td id="budget-item-{{ category.pk }}-{{ ledger_account.pk }}" class="budget-item-amount"
+            raw-value="{{ expense_amounts|get_item:category|get_item:ledger_account }}">
+            {{ expense_amounts|get_item:category|get_item:ledger_account|currency }}
           </td>
         </tr>
       {% endfor %}
@@ -53,8 +54,9 @@
       <tr class="budget-item-rev" style="display: none">
         <td></td>
         <td>{{ ledger_account }}:</td>
-        <td id="budget-item-rev-{{ ledger_account.pk }}" class="budget-item-amount">
-          {{ revenue_amounts|get_item:ledger_account }}
+        <td id="budget-item-rev-{{ ledger_account.pk }}" class="budget-item-amount"
+          raw-value="{{ revenue_amounts|get_item:ledger_account }}">
+          {{ revenue_amounts|get_item:ledger_account|currency }}
         </td>
       </tr>
     {% endfor %}

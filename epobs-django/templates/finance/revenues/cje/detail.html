@@ -1,6 +1,7 @@
 {% extends 'extends/base.html' %}
 
 {% load static %}
+{% load core_tags %}
 
 {% block title %}EPOBS - View Revenue Corrective Journal Entry{% endblock %}
 
@@ -32,8 +33,8 @@
       <td>{{ revenuecje.correction_to.student }}</td>
       <td>{{ revenuecje.student }}</td></tr>
     <tr><th>Amount:</th>
-      <td>{{ revenuecje.correction_to.amount }}</td>
-      <td>{{ revenuecje.amount }}</td></tr>
+      <td>{{ revenuecje.correction_to.amount|currency }}</td>
+      <td>{{ revenuecje.amount|currency }}</td></tr>
     <tr><th>Notes:</th>
       <td>{{ revenuecje.correction_to.notes }}</td>
       <td>{{ revenuecje.notes }}</td></tr>

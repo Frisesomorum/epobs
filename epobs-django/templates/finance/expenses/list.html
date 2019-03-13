@@ -1,4 +1,5 @@
 {% extends 'extends/datatable.html' %}
+{% load core_tags %}
 
 {% block title %}EPOBS - List Expenses{% endblock %}
 
@@ -44,7 +45,7 @@
           <td>{{ expense.budget_period }}</td>
           <td>{{ expense.payee }}</td>
           <td>{{ expense.ledger_account }}</td>
-          <td>{{ expense.amount }}</td>
+          <td>{{ expense.amount|currency }}</td>
           <td>{{ expense.get_approval_status_display }}</td>
           <td><a href="{% url 'expense-detail' expense.pk %}"><i class="fas fa-file-invoice"></i></a></td>
           {% if school_perms.finance.change_expensetransaction %}<td>
@@ -79,7 +80,7 @@
         <tr>
           <td>{{ expensecje.payee }}</td>
           <td>{{ expensecje.ledger_account }}</td>
-          <td>{{ expensecje.amount }}</td>
+          <td>{{ expensecje.amount|currency }}</td>
           <td>{{ expensecje.get_approval_status_display }}</td>
           <td><a href="{% url 'expense-cje-detail' expensecje.pk %}"><i class="fas fa-file-invoice"></i></a></td>
           {% if school_perms.finance.change_expensecorrectivejournalentry %}<td>
@@ -102,9 +103,9 @@
               {% endif %}
             {% endif %}
             <span class="font-weight-bold">Quantity:</span> {{ expensecje.quantity }}
-            <span class="font-weight-bold">Cost per Unit:</span> {{ expensecje.unit_cost }}
-            {% if expensecje.discount > 0 %}<span class="font-weight-bold">Discount:</span> {{ expensecje.discount }}{% endif %}
-            {% if expensecje.tax > 0 %}<span class="font-weight-bold">Tax:</span> {{ expensecje.tax }}{% endif %}
+            <span class="font-weight-bold">Cost per Unit:</span> {{ expensecje.unit_cost|currency }}
+            {% if expensecje.discount > 0 %}<span class="font-weight-bold">Discount:</span> {{ expensecje.discount|currency }}{% endif %}
+            {% if expensecje.tax > 0 %}<span class="font-weight-bold">Tax:</span> {{ expensecje.tax|currency }}{% endif %}
             {% if expensecje.notes %}<br/><span class="font-weight-bold">Notes:</span> {{ expensecje.notes }}{% endif %}
             <br/><span class="font-weight-bold">Created:</span> {{ expensecje.created }} by {{ expensecje.created_by }}
             {% if expensecje.approval_status == 'P' %}<br/><span class="font-weight-bold">Submitted for Approval:</span> {{ expensecje.date_submitted }} by {{ expensecje.submitted_by }}{% endif %}

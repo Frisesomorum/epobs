@@ -14,7 +14,9 @@ function update(category) {
   $( ".budget-item-amount-" + category ).each(function( index ) {
     total += Number(this.value);
   } );
-  document.getElementById('total-amount-' + category).innerHTML = total.toFixed(2);
+  var totalElement = document.getElementById('total-amount-' + category);
+  $( totalElement ).attr({ "raw-value": total });
+  totalElement.innerHTML = formatCurrency(total);
 }
 
 function updateAll() {
@@ -33,14 +35,14 @@ function updateSummaries() {
     var id = this.id;
     var category = id.slice(id.lastIndexOf("-")+1);
     if (category !== 'rev'){
-      totalExpenses += Number(this.innerHTML);
+      totalExpenses += Number($( this ).attr("raw-value"));
     } else {
-      totalRevenues = Number(this.innerHTML);
+      totalRevenues = Number($( this ).attr("raw-value"));
     }
   } );
-  document.getElementById('summary-exp').innerHTML = totalExpenses.toFixed(2);
-  document.getElementById('summary-rev').innerHTML = totalRevenues.toFixed(2);
-  document.getElementById('summary-balance').innerHTML = (totalRevenues - totalExpenses).toFixed(2);
+  document.getElementById('summary-exp').innerHTML = formatCurrency(totalExpenses);
+  document.getElementById('summary-rev').innerHTML = formatCurrency(totalRevenues);
+  document.getElementById('summary-balance').innerHTML = formatCurrency(totalRevenues - totalExpenses);
 }
 
 updateAll();

@@ -1,6 +1,7 @@
 {% extends 'extends/base.html' %}
 
 {% load static %}
+{% load core_tags %}
 
 {% block title %}EPOBS - View Revenue{% endblock %}
 
@@ -39,7 +40,7 @@
   <table class="table">
     <tr><th>Ledger Account:</th><td>{{ revenue.ledger_account }}</td></tr>
     <tr><th>Student:</th><td>{{ revenue.student }}</td></tr>
-    <tr><th>Amount:</th><td>{{ revenue.amount }}</td></tr>
+    <tr><th>Amount:</th><td>{{ revenue.amount|currency }}</td></tr>
     <tr><th>Created:</th><td>{{ revenue.created }} by {{ revenue.created_by }}</td></tr>
     {% if revenue.notes %}<tr><th>Notes:</th><td>{{ revenue.notes }}</td></tr>{% endif %}
   </table>

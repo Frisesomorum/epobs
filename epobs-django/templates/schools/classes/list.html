@@ -37,7 +37,7 @@
           <td>{{ class }}</td>
           <td>{{ class.graduating_year }}</td>
           {% for fee_type in fee_list %}
-            <td>{{ fees|get_item:class|get_item:fee_type }}</td>
+            <td>{{ fees|get_item:class|get_item:fee_type|currency }}</td>
           {% endfor %}
           {% if school_perms.schools.change_graduatingclass %}<td>
             <a href="{% url 'class-edit' class.pk %}"><i class="fas fa-pencil-alt"></i></a></td>{% endif %}

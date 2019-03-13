@@ -1,6 +1,7 @@
 {% extends 'extends/base.html' %}
 
 {% load static %}
+{% load core_tags %}
 
 {% block title %}EPOBS - Add Revenues{% endblock %}
 
@@ -35,7 +36,7 @@
           <tr>
             <td>{{ revenue.student }}</td>
             <td>{{ revenue.ledger_account }}</td>
-            <td>{{ revenue.amount }}</td>
+            <td>{{ revenue.amount|currency }}</td>
           </tr>
         {% endfor %}
       </tbody>

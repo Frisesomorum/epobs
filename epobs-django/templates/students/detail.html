@@ -20,9 +20,9 @@
     <tr><th>Date of Birth:</th><td>{{ student.date_of_birth }}</td></tr>
     <tr><th>Expected Graduation Year:</th><td>{{ student.graduating_class.graduating_year }}</td></tr>
     {% for ledger_account in balances %}
-      <tr><td>{{ ledger_account }} Balance Due:</td><td>{{ balances|get_item:ledger_account }}</td></tr>
+      <tr><td>{{ ledger_account }} Balance Due:</td><td>{{ balances|get_item:ledger_account|currency }}</td></tr>
     {% endfor %}
-    <tr><th>Total Balance Due:</th><td>{{ total_balance }}</td></tr>
+    <tr><th>Total Balance Due:</th><td>{{ total_balance|currency }}</td></tr>
     <tr><th>ID:</th><td>{{ student.external_id }}</td></tr>
   </table>
 

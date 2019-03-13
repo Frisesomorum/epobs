@@ -1,3 +1,5 @@
+{% load core_tags %}
+
 <tr><td colspan="100%"><div class="card-body bg-light" style="width: 90%; padding-top: 0px; padding-bottom:5px; margin-bottom:20px;">
   {% if expense.approval_status == 'P' %}
     {% if school_perms.finance.approve_expensetransaction and user != expense.submitted_by %}
@@ -10,9 +12,9 @@
     {% endif %}
   {% endif %}
   <span class="font-weight-bold">Quantity:</span> {{ expense.quantity }}
-  <span class="font-weight-bold">Cost per Unit:</span> {{ expense.unit_cost }}
-  {% if expense.discount > 0 %}<span class="font-weight-bold">Discount:</span> {{ expense.discount }}{% endif %}
-  {% if expense.tax > 0 %}<span class="font-weight-bold">Tax:</span> {{ expense.tax }}{% endif %}
+  <span class="font-weight-bold">Cost per Unit:</span> {{ expense.unit_cost|currency }}
+  {% if expense.discount > 0 %}<span class="font-weight-bold">Discount:</span> {{ expense.discount|currency }}{% endif %}
+  {% if expense.tax > 0 %}<span class="font-weight-bold">Tax:</span> {{ expense.tax|currency }}{% endif %}
   {% if expense.notes %}<br/><span class="font-weight-bold">Notes:</span> {{ expense.notes }}{% endif %}
   <br/><span class="font-weight-bold">Created:</span> {{ expense.created }} by {{ expense.created_by }}
   {% if expense.approval_status == 'P' %}<br/><span class="font-weight-bold">Submitted for Approval:</span> {{ expense.date_submitted }} by {{ expense.submitted_by }}{% endif %}

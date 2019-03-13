@@ -1,6 +1,7 @@
 {% extends 'extends/base.html' %}
 
 {% load static %}
+{% load core_tags %}
 
 {% block title %}EPOBS - View Expense{% endblock %}
 
@@ -41,10 +42,10 @@
     <tr><th>Ledger Account:</th><td>{{ expense.ledger_account }}</td></tr>
     <tr><th>Payee:</th><td>{{ expense.payee }}</td></tr>
     <tr><th>Quantity:</th><td>{{ expense.quantity }}</td></tr>
-    <tr><th>Cost per Unit:</th><td>{{ expense.unit_cost }}</td></tr>
-    {% if expense.discount > 0 %}<tr><th>Discount:</th><td>{{ expense.discount }}</td></tr>{% endif %}
-    {% if expense.tax > 0 %}<tr><th>Tax:</th><td>{{ expense.tax }}</td></tr>{% endif %}
-    <tr><th>Amount:</th><td>{{ expense.amount }}</td></tr>
+    <tr><th>Cost per Unit:</th><td>{{ expense.unit_cost|currency }}</td></tr>
+    {% if expense.discount > 0 %}<tr><th>Discount:</th><td>{{ expense.discount|currency }}</td></tr>{% endif %}
+    {% if expense.tax > 0 %}<tr><th>Tax:</th><td>{{ expense.tax|currency }}</td></tr>{% endif %}
+    <tr><th>Amount:</th><td>{{ expense.amount|currency }}</td></tr>
     {% if expense.notes %}<tr><th>Notes:</th><td>{{ expense.notes }}</td></tr>{% endif %}
     <tr><th/><td/></tr>
     <tr><th>Created:</th><td>{{ expense.created }} by {{ expense.created_by }}</td></tr>

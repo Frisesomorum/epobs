@@ -1,4 +1,5 @@
 {% extends 'extends/datatable.html' %}
+{% load core_tags %}
 
 {% block title %}EPOBS - List Revenues{% endblock %}
 
@@ -41,7 +42,7 @@
           <td>{{ revenue.budget_period }}</td>
           <td>{{ revenue.student }}</td>
           <td>{{ revenue.ledger_account }}</td>
-          <td>{{ revenue.amount }}</td>
+          <td>{{ revenue.amount|currency }}</td>
           <td><a href="{% url 'revenue-detail' revenue.pk %}"><i class="fas fa-file-invoice"></i></a></td>
         </tr>
       {% endfor %}
@@ -67,7 +68,7 @@
         <tr>
           <td>{{ revenuecje.student }}</td>
           <td>{{ revenuecje.ledger_account }}</td>
-          <td>{{ revenuecje.amount }}</td>
+          <td>{{ revenuecje.amount|currency }}</td>
           <td>{{ revenuecje.get_approval_status_display }}</td>
           <td><a href="{% url 'revenue-cje-detail' revenuecje.pk %}"><i class="fas fa-file-invoice"></i></a></td>
           {% if school_perms.finance.change_revenuecorrectivejournalentry %}<td>

@@ -1,3 +1,5 @@
+{% load core_tags %}
+
 <table class="datatable-report table table-striped table-sm small table-hover">
   <thead>
     <tr>
@@ -18,9 +20,9 @@
             {{ report_item }}
           {% endif %}
         </td>
-        <td>{{ report_item.period_budget }}</td>
-        <td>{{ report_item.period_actual }}</td>
-        <td>{{ report_item.budget_balance }}</td>
+        <td>{{ report_item.period_budget|currency }}</td>
+        <td>{{ report_item.period_actual|currency }}</td>
+        <td>{{ report_item.budget_balance|currency }}</td>
         <td>{{ report_item.percent_used }}</td>
       </tr>
     {% endfor %}
