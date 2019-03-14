@@ -301,6 +301,11 @@
         "view_schoolprofile",
         "schools",
         "schoolprofile"
+      ],
+      [
+        "view_student",
+        "students",
+        "student"
       ]
     ]
   }
