@@ -357,7 +357,7 @@ class ExpenseInfo(Transaction):
         ExpenseLedgerAccount, on_delete=models.CASCADE,
         related_name='related_%(app_label)s_%(class)s')
     payee = models.ForeignKey(
-        PayeeAccount, on_delete=models.CASCADE, blank=True, null=True,
+        PayeeAccount, on_delete=models.CASCADE,
         related_name='related_%(app_label)s_%(class)s')
     quantity = models.DecimalField(max_digits=15, decimal_places=2, default=1)
     unit_cost = models.DecimalField(max_digits=15, decimal_places=2, default=0)
