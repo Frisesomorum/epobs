@@ -124,7 +124,7 @@ class RequiresApproval(models.Model):
 class BudgetPeriodManager(models.Manager):
     def get_current_period(self, school):
         today = datetime.date.today()
-        for period in self.all():
+        for period in self.filter(school=school).all():
             if period.start <= today and period.end >= today:
                 return period
         return None
