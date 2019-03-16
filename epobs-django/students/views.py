@@ -54,6 +54,9 @@ class StudentForm(SchoolFormMixin, forms.ModelForm):
         fields = (
             'first_name', 'last_name', 'date_of_birth', 'email',
             'graduating_class', 'is_enrolled', 'external_id', )
+        labels = {
+            'graduating_class': 'Class',
+        }
 
 
 class Create(SessionRecentsMixin, SchooledCreateView):

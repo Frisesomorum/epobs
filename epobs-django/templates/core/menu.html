@@ -17,7 +17,7 @@
   {% if school_perms.students.view_student %}
     <a class="dropdown-item" href="{% url 'student-list' %}">Students</a>{% endif %}
   {% if school_perms.schools.view_graduatingclass %}
-    <a class="dropdown-item" href="{% url 'class-list' %}">Graduating Classes</a>{% endif %}
+    <a class="dropdown-item" href="{% url 'class-list' %}">Classes</a>{% endif %}
   {% if school_perms.schoolauth.view_userschoolmembership %}
     <a class="dropdown-item" href="{% url 'member-list' %}">School Members</a>{% endif %}
   <div class="dropdown-divider"></div>
