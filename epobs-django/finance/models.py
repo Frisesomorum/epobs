@@ -275,7 +275,7 @@ class StudentAccount(models.Model):
         for fee in SchoolFee.objects.filter(graduating_class=graduating_class).all():
             balances[fee.ledger_account] = fee.amount
         for revenue in RevenueTransaction.objects.filter(student=self).all():
-            if revenue.budget_period == period:
+            if revenue.ledger_account in balances and revenue.budget_period == period:
                 balances[revenue.ledger_account] -= revenue.amount
         return balances
 
