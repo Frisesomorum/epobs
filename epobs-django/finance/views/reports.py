@@ -13,7 +13,11 @@ def set_report_period(session, period):
 
 
 def get_report_period(session):
-    return session.get('report_period', default=[])
+    period = session.get('report_period', default=[])
+    existence_check = [term.pk for term in models.BudgetPeriod.objects.filter(pk__in=period).all()]
+    if existence_check != period:
+        set_report_period(session, existence_check)
+    return existence_check
 
 
 class SelectPeriodForm(SchoolFormMixin, forms.Form):
