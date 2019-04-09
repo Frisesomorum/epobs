@@ -6,46 +6,53 @@
 
 {% block content %}
   <div class="container">
-    <div class="row">
+    <div class="row" style="margin: 30px;">
       {% if school_perms.finance.view_budgetperiod %}
       <div class="col-lg-3">
         <a href="{% url 'budget-list' %}"><div class="card text-center"><div class="card-body">
+          <img src="/static/assets/Budgets_thumb.png" /><br />
           Budgets</div></div></a></div>
       {% endif %}
       {% if school_perms.finance.view_expensetransaction %}
       <div class="col-lg-3">
         <a href="{% url 'expense-list' %}"><div class="card text-center"><div class="card-body">
+          <img src="/static/assets/Expenses_thumb.png" /><br />
           Expenses</div></div></a></div>
       {% endif %}
       {% if school_perms.finance.view_revenuetransaction %}
       <div class="col-lg-3">
         <a href="{% url 'revenue-list' %}"><div class="card text-center"><div class="card-body">
+          <img src="/static/assets/Revenues_thumb.png" /><br />
           Revenues</div></div></a></div>
       {% endif %}
       <div class="col-lg-3">
         <a href="{% url 'report-index' %}"><div class="card text-center"><div class="card-body">
+          <img src="/static/assets/Reports_thumb.png" /><br />
           Reports</div></div></a></div>
     </div>
-    <div class="row">
+    <div class="row" style="margin: 30px;">
       {% if school_perms.students.view_student %}
       <div class="col-lg-3">
         <a href="{% url 'student-list' %}"><div class="card text-center"><div class="card-body">
+          <img src="/static/assets/Students_thumb.png" /><br />
           Students</div></div></a></div>
       {% endif %}
       {% if school_perms.personnel.view_employee %}
       <div class="col-lg-3">
         <a href="{% url 'employee-list' %}"><div class="card text-center"><div class="card-body">
+          <img src="/static/assets/Employees_thumb.png" /><br />
           Employees</div></div></a></div>
       {% endif %}
       {% if school_perms.personnel.view_supplier %}
       <div class="col-lg-3">
         <a href="{% url 'supplier-list' %}"><div class="card text-center"><div class="card-body">
+          <img src="/static/assets/Suppliers_thumb.png" /><br />
           Suppliers</div></div></a></div>
       {% endif %}
     </div>
   </div>
 
-  <div class="container">
+  <div class="container alert alert-dark">
     <a href="{% url 'change-notes' %}">What's new / Patch notes</a>
   </div>
 {% endblock content %}
