@@ -24,6 +24,8 @@
       {% endfor %}
     </div>
     <input type="submit" name="save" value="Save" class="btn btn-primary" />
+    {% if school_perms.school.delete_graduatingclass %}
+      <input type="submit" name="delete" value="Delete" class="btn btn-danger" />{% endif %}
     <a href="{% url 'class-list' %}" class="btn btn-secondary">Cancel</a>
   </form>
 

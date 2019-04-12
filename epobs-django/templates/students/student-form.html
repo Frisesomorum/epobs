@@ -3,7 +3,7 @@
 
 {% include 'core/non-field-errors.html' %}
 
-{% to_list form.first_name form.last_name form.date_of_birth form.email form.external_id form.graduating_class form.is_enrolled as field_list %}
+{% to_list form.first_name form.last_name form.date_of_birth form.email form.external_id form.graduating_year form.is_enrolled as field_list %}
 {% for field in field_list %}
 {% cycle 1 2 as column silent %}
   {% if column == 1 %}<div class="form-row">{% endif %}

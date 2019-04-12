@@ -1,0 +1,22 @@
+{% extends 'extends/base.html' %}
+
+{% load static %}
+
+{% block title %}EPOBS - Add Classes{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item">School Admin</li>
+  <li class="breadcrumb-item"><a href="{% url 'class-list' %}">Classes</a></li>
+  <li class="breadcrumb-item">Add</li>
+{% endblock %}
+
+{% block content %}
+
+  <form method="post" class="mb-4" novalidate>
+    {% csrf_token %}
+    {% include 'core/form.html' %}
+    <input type="submit" name="save" value="Save" class="btn btn-primary" />
+    <a href="{% url 'class-list' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+
+{% endblock %}

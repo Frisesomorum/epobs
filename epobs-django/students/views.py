@@ -5,15 +5,15 @@ from core.views import DeletionFormMixin, SessionRecentsMixin, ImportTool
 from schoolauth.views import (
     SchooledListView, SchooledDetailView, SchooledCreateView,
     SchooledUpdateView, SchoolFormMixin, )
-from schools.models import GraduatingClass
 from .models import Student
 from .resources import StudentResource
 
 
-STUDENT_GRADUATING_CLASS = QueryStringArg(
-    url_arg='graduating_class',
-    queryset_arg='graduating_class',
-    model=GraduatingClass
+STUDENT_GRADUATING_YEAR = QueryStringArg(
+    url_arg='graduating_year',
+    queryset_arg='graduating_year',
+    display_name='Graduating Year',
+    type=int
 )
 
 STUDENT_IS_ENROLLED = QueryStringArg(
@@ -29,7 +29,7 @@ class List(SchooledListView):
     permission_required = 'students.view_student'
     model = Student
     template_name = 'students/list.html'
-    querystring_args = (STUDENT_GRADUATING_CLASS, STUDENT_IS_ENROLLED, )
+    querystring_args = (STUDENT_GRADUATING_YEAR, STUDENT_IS_ENROLLED, )
 
 
 class Detail(SchooledDetailView):
@@ -47,16 +47,12 @@ class Detail(SchooledDetailView):
 
 
 class StudentForm(SchoolFormMixin, forms.ModelForm):
-    school_filter_fields = ('graduating_class', )
 
     class Meta:
         model = Student
         fields = (
             'first_name', 'last_name', 'date_of_birth', 'email',
-            'graduating_class', 'is_enrolled', 'external_id', )
-        labels = {
-            'graduating_class': 'Class',
-        }
+            'graduating_year', 'is_enrolled', 'external_id', )
 
 
 class Create(SessionRecentsMixin, SchooledCreateView):

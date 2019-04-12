@@ -1,5 +1,4 @@
-from schoolauth.resources import SchooledModelResource, SchooledForeignKeyWidget
-from schools.models import GraduatingClass
+from schoolauth.resources import SchooledModelResource
 from .models import Student
 
 
@@ -9,10 +8,5 @@ class StudentResource(SchooledModelResource):
         model = Student
         fields = (
             'external_id', 'first_name', 'last_name', 'date_of_birth',
-            'email', 'graduating_class', 'is_enrolled', )
+            'email', 'graduating_year', 'is_enrolled', )
         import_id_fields = ('external_id', )
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.fields['graduating_class'].widget = SchooledForeignKeyWidget(
-            GraduatingClass, 'graduating_year', school=self.school)

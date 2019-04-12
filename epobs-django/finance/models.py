@@ -258,6 +258,8 @@ class StudentAccount(models.Model):
         if period is None:
             period = BudgetPeriod.objects.get_current_period(self.student.school)
         graduating_class = self.student.graduating_class
+        if graduating_class is None:
+            return 0
         amount_owed = 0
         for fee in SchoolFee.objects.filter(graduating_class=graduating_class).all():
             amount_owed += fee.amount
@@ -270,8 +272,10 @@ class StudentAccount(models.Model):
     def balance_due_by_ledger_account(self, period=None):
         if period is None:
             period = BudgetPeriod.objects.get_current_period(self.student.school)
-        graduating_class = self.student.graduating_class
         balances = {}
+        graduating_class = self.student.graduating_class
+        if graduating_class is None:
+            return balances
         for fee in SchoolFee.objects.filter(graduating_class=graduating_class).all():
             balances[fee.ledger_account] = fee.amount
         for revenue in RevenueTransaction.objects.filter(student=self).all():

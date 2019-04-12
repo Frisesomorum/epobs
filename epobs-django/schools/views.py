@@ -102,10 +102,17 @@ SchoolFeeFormSet = forms.inlineformset_factory(
     extra=0, can_delete=False)
 
 
-class EditClass(SchooledUpdateView):
+class CreateClass(SchooledCreateView):
+    permission_required = 'schools.add_graduatingclass'
+    model = GraduatingClass
+    fields = ('graduating_year', 'label', 'graduated')
+    template_name = 'schools/classes/create.html'
+
+
+class EditClass(DeletionFormMixin, SchooledUpdateView):
     permission_required = 'schools.change_graduatingclass'
     model = GraduatingClass
-    fields = ('label', 'graduated')
+    fields = ('graduating_year', 'label', 'graduated')
     template_name = 'schools/classes/edit.html'
     success_url = reverse_lazy('class-list')
 

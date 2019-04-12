@@ -10,6 +10,12 @@
 {% endblock %}
 
 {% block content %}
+  {% if school_perms.schools.add_graduatingclass %}
+    <div class="form-group">
+      <a href="{% url 'class-create' %}" class="btn btn-secondary"><i class="fas fa-plus-square"></i> Create New Class...</a>
+    </div>
+  {% endif %}
+
   <div class="alert alert-info">
     {% if listview_filters %}
       Showing classes matching filters:
