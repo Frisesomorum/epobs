@@ -16,10 +16,18 @@
   }
 },
 {
+  "model": "schoolauth.school",
+  "pk": 3,
+  "fields": {
+    "name": "Attipoe School",
+    "location": "Shoreline, WA"
+  }
+},
+{
   "model": "schoolauth.user",
   "fields": {
-    "password": "pbkdf2_sha256$120000$VTfLqsFzOhKU$Xcufu4sJugWo8ncXFUbzb7PjiUtz5RSXuEZJ5YcXZfk=",
-    "last_login": "2018-09-12T22:34:13.822Z",
+    "password": "pbkdf2_sha256$150000$y0YlMvBr0rIR$903qmfmSxAkHAJaJsRkyZZSoUfQDDozXp1/25swiMyY=",
+    "last_login": "2019-04-13T19:21:49.672Z",
     "is_superuser": true,
     "username": "admin",
     "first_name": "Thorin",
@@ -69,8 +77,8 @@
 {
   "model": "schoolauth.user",
   "fields": {
-    "password": "pbkdf2_sha256$120000$N56KtIYx0QiE$FMKWNKb8XyqT80hV9y0OomF8O3MUA2P7NJYebNz3//g=",
-    "last_login": "2018-09-12T12:25:27.441Z",
+    "password": "pbkdf2_sha256$150000$3E8ZFrEHfGPY$oxPPNPWBKEktXW3weKZBruf5NyOlLp07aO1t9Z1Lelk=",
+    "last_login": "2019-04-12T19:58:00.154Z",
     "is_superuser": false,
     "username": "acctbkpr",
     "first_name": "Ori",
@@ -164,6 +172,57 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-09-12T12:19:12Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "schoolauth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$150000$YvdBXGEGYMpM$WT+Kz0eI839+jRf5XUrDaputZd86eCiy/nhXJ/t8EDc=",
+    "last_login": "2019-04-13T19:51:04.451Z",
+    "is_superuser": false,
+    "username": "earhu",
+    "first_name": "Emmanuel",
+    "last_name": "Arhu",
+    "email": "earhu@epobs.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2019-04-13T19:50:00Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "schoolauth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$150000$PN7RF8Qk7zq0$z39AwDdzYUmILVXwlQnDYmJ2FxavkwGPjIIQzLAhm14=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "emusafir",
+    "first_name": "Edgard",
+    "last_name": "Musafiri",
+    "email": "emusafir@epobs.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2019-04-13T19:51:46.294Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "schoolauth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$150000$INW3osOybu0t$trMr+BjBgdv7Qq2I8qZG0EMm1PrSIun4qZDxYcr0X5c=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "epobee",
+    "first_name": "Eben",
+    "last_name": "Pobee",
+    "email": "epobee@epobs.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2019-04-13T19:52:46.684Z",
     "groups": [],
     "user_permissions": []
   }
@@ -321,6 +380,54 @@
       ],
       [
         "Accountant"
+      ]
+    ]
+  }
+},
+{
+  "model": "schoolauth.userschoolmembership",
+  "pk": 12,
+  "fields": {
+    "user": [
+      "earhu"
+    ],
+    "school": 3,
+    "groups": [
+      [
+        "School Superuser"
+      ]
+    ]
+  }
+},
+{
+  "model": "schoolauth.userschoolmembership",
+  "pk": 13,
+  "fields": {
+    "user": [
+      "emusafir"
+    ],
+    "school": 3,
+    "groups": [
+      [
+        "Bookkeeper"
+      ],
+      [
+        "Accountant"
+      ]
+    ]
+  }
+},
+{
+  "model": "schoolauth.userschoolmembership",
+  "pk": 14,
+  "fields": {
+    "user": [
+      "epobee"
+    ],
+    "school": 3,
+    "groups": [
+      [
+        "Bookkeeper"
       ]
     ]
   }
