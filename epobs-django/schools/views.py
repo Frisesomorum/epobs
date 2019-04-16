@@ -1,5 +1,6 @@
 from django import forms
 from django.urls import reverse_lazy
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.shortcuts import redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView
@@ -44,14 +45,44 @@ class ListMembership(SchooledListView):
 
 
 class CreateMembershipForm(SchoolFormMixin, forms.ModelForm):
+    username = forms.CharField()
+    email = forms.EmailField()
+    field_order = ['username', 'email']
+
     class Meta:
         model = UserSchoolMembership
-        fields = ('user', 'groups')
+        fields = ('groups',)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['user'].queryset = self.fields[
-            'user'].queryset.exclude(school_perms__school=self.school)
+    def clean(self):
+        cleaned_data = super().clean()
+        username = cleaned_data.get('username')
+        email = cleaned_data.get('email')
+        self.cleaned_data['user'] = None
+        try:
+            user = User.objects.get(username=username)
+        except ObjectDoesNotExist:
+            raise ValidationError(
+                'There is no user with that user name.',
+                code='user_not_found',
+            )
+        if user.email != email:
+            raise ValidationError(
+                '%(user)s\'s email address does not match the one you entered.',
+                code='mismatched_email',
+                params={'user': user},
+            )
+        if UserSchoolMembership.objects.filter(user=user, school=self.school).exists():
+            raise ValidationError(
+                '%(user)s is already a member of this school.',
+                code='user_already_member',
+                params={'user': user},
+            )
+        self.cleaned_data['user'] = user
+        return self.cleaned_data
+
+    def save(self, commit=True):
+        self.instance.user = self.cleaned_data.get('user')
+        return super().save(commit)
 
 
 class CreateMembership(SchooledCreateView):
