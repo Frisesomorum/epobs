@@ -1,5 +1,7 @@
 {% extends 'extends/base.html' %}
 
+{% load static %}
+
 {% block title %}EPOBS - Add Students{% endblock %}
 
 {% block breadcrumb %}
@@ -44,4 +46,9 @@
     </table>
   {% endif %}
 
+{% endblock %}
+
+{% block scripts %}
+  {{ block.super }}
+  <script src="{% static 'js/students.js' %}"></script>
 {% endblock %}

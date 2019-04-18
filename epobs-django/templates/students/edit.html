@@ -1,5 +1,7 @@
 {% extends 'extends/base.html' %}
 
+{% load static %}
+
 {% block title %}EPOBS - Edit Students{% endblock %}
 
 {% block breadcrumb %}
@@ -19,4 +21,9 @@
     <a href="{% url 'student-list' %}" class="btn btn-secondary">Cancel</a>
   </form>
 
+{% endblock %}
+
+{% block scripts %}
+  {{ block.super }}
+  <script src="{% static 'js/students.js' %}"></script>
 {% endblock %}

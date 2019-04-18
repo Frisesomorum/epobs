@@ -5,6 +5,7 @@ from core.views import DeletionFormMixin, SessionRecentsMixin, ImportTool
 from schoolauth.views import (
     SchooledListView, SchooledDetailView, SchooledCreateView,
     SchooledUpdateView, SchoolFormMixin, )
+from schools.models import GraduatingClass
 from .models import Student
 from .resources import StudentResource
 
@@ -46,13 +47,28 @@ class Detail(SchooledDetailView):
         return super().get_context_data(**context)
 
 
+class GraduatingClassSelect(forms.Select):
+    def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
+        option = super().create_option(name, value, label, selected, index, subindex, attrs)
+        if value:
+            graduating_class = GraduatingClass.objects.get(pk=int(value))
+            option['attrs']['graduating_year'] = graduating_class.graduating_year
+        return option
+
+
 class StudentForm(SchoolFormMixin, forms.ModelForm):
+    graduating_class = forms.ModelChoiceField(
+        queryset=None, label='Class', required=False, widget=GraduatingClassSelect)
 
     class Meta:
         model = Student
         fields = (
             'first_name', 'last_name', 'date_of_birth', 'email',
             'graduating_year', 'is_enrolled', 'external_id', )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['graduating_class'].queryset = GraduatingClass.objects.filter(school=self.school).all()
 
 
 class Create(SessionRecentsMixin, SchooledCreateView):
