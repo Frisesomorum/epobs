@@ -1038,6 +1038,28 @@
   }
 },
 {
+  "model": "finance.revenuecategory",
+  "fields": {
+    "name": "Transportation Fee",
+    "abbreviation": "",
+    "description": "",
+    "fund": [
+      "Operations and Management"
+    ]
+  }
+},
+{
+  "model": "finance.revenuecategory",
+  "fields": {
+    "name": "ICT Fee",
+    "abbreviation": "",
+    "description": "",
+    "fund": [
+      "Operations and Management"
+    ]
+  }
+},
+{
   "model": "finance.revenueledgeraccount",
   "fields": {
     "name": "Grant",
@@ -1081,6 +1103,30 @@
     "description": "",
     "category": [
       "Canteen Fee"
+    ],
+    "is_student_fee": true
+  }
+},
+{
+  "model": "finance.revenueledgeraccount",
+  "fields": {
+    "name": "Transportation Fee",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "Transportation Fee"
+    ],
+    "is_student_fee": true
+  }
+},
+{
+  "model": "finance.revenueledgeraccount",
+  "fields": {
+    "name": "ICT Fee",
+    "abbreviation": "",
+    "description": "",
+    "category": [
+      "ICT Fee"
     ],
     "is_student_fee": true
   }
