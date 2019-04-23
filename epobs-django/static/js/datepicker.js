@@ -3,5 +3,6 @@ $(function() {
     changeMonth: true,
     changeYear: true,
     yearRange: "1900:2100",
+    dateFormat: "dd/mm/yy",
   });
 });
