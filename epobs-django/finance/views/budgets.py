@@ -1,4 +1,5 @@
-from django.forms import inlineformset_factory
+from django import forms
+from django.core.exceptions import ValidationError
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from schoolauth.decorators import school_permission_required
@@ -31,10 +32,27 @@ class Detail(SchooledDetailView):
         return context
 
 
+class BudgetPeriodForm(forms.ModelForm):
+    class Meta:
+        model = BudgetPeriod
+        fields = ('name', 'start', 'end')
+
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data['start']
+        end_date = cleaned_data['end']
+        if start_date > end_date:
+            raise ValidationError(
+                'The start date is later than the end date.',
+                code='date_inversion',
+            )
+        return self.cleaned_data
+
+
 class Create(SchooledCreateView):
     permission_required = 'finance.add_budgetperiod'
     model = BudgetPeriod
-    fields = ('name', 'start', 'end')
+    form_class = BudgetPeriodForm
     template_name = 'finance/budgets/create.html'
 
     def form_valid(self, form):
@@ -48,10 +66,10 @@ class Create(SchooledCreateView):
         return http_response
 
 
-ExpenseBudgetFormSet = inlineformset_factory(
+ExpenseBudgetFormSet = forms.inlineformset_factory(
     BudgetPeriod, ExpenseBudgetItem, exclude=('period', 'ledger_account'),
     extra=0, can_delete=False)
-RevenueBudgetFormSet = inlineformset_factory(
+RevenueBudgetFormSet = forms.inlineformset_factory(
     BudgetPeriod, RevenueBudgetItem, exclude=('period', 'ledger_account'),
     extra=0, can_delete=False)
 
@@ -61,9 +79,9 @@ class Edit(RequiresApprovalUpdateView):
         'finance.change_budgetperiod',
         'finance.change_expensebudgetitem', 'finance.change_revenuebudgetitem', )
     model = BudgetPeriod
+    form_class = BudgetPeriodForm
     template_name = 'finance/budgets/edit.html'
     success_url = reverse_lazy('budget-list')
-    fields = ('name', 'start', 'end')
     context_object_name = 'period'
 
     def create_formsets(self, request):
