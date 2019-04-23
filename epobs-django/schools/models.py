@@ -17,7 +17,7 @@ class GraduatingClass(models.Model):
         School, on_delete=models.CASCADE,
         related_name='graduating_classes')
     graduating_year = models.SmallIntegerField()
-    label = models.CharField(max_length=255, blank=True)
+    label = models.CharField(max_length=255, blank=True, verbose_name='class name')
     graduated = models.BooleanField(default=False)
 
     class Meta:
