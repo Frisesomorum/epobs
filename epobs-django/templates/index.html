@@ -10,43 +10,43 @@
       {% if school_perms.finance.view_budgetperiod %}
       <div class="col-lg-3">
         <a href="{% url 'budget-list' %}"><div class="card text-center"><div class="card-body">
-          <img src="/static/assets/Budgets_thumb.png" /><br />
+          <img src="/static/assets/Budgets_thumb.png" title="Budgets" /><br />
           Budgets</div></div></a></div>
       {% endif %}
       {% if school_perms.finance.view_expensetransaction %}
       <div class="col-lg-3">
         <a href="{% url 'expense-list' %}"><div class="card text-center"><div class="card-body">
-          <img src="/static/assets/Expenses_thumb.png" /><br />
+          <img src="/static/assets/Expenses_thumb.png" title="Expenses" /><br />
           Expenses</div></div></a></div>
       {% endif %}
       {% if school_perms.finance.view_revenuetransaction %}
       <div class="col-lg-3">
         <a href="{% url 'revenue-list' %}"><div class="card text-center"><div class="card-body">
-          <img src="/static/assets/Revenues_thumb.png" /><br />
+          <img src="/static/assets/Revenues_thumb.png" title="Revenues" /><br />
           Revenues</div></div></a></div>
       {% endif %}
       <div class="col-lg-3">
         <a href="{% url 'report-index' %}"><div class="card text-center"><div class="card-body">
-          <img src="/static/assets/Reports_thumb.png" /><br />
+          <img src="/static/assets/Reports_thumb.png" title="Reports" /><br />
           Reports</div></div></a></div>
     </div>
     <div class="row" style="margin: 30px;">
       {% if school_perms.students.view_student %}
       <div class="col-lg-3">
         <a href="{% url 'student-list' %}"><div class="card text-center"><div class="card-body">
-          <img src="/static/assets/Students_thumb.png" /><br />
+          <img src="/static/assets/Students_thumb.png" title="Students" /><br />
           Students</div></div></a></div>
       {% endif %}
       {% if school_perms.personnel.view_employee %}
       <div class="col-lg-3">
         <a href="{% url 'employee-list' %}"><div class="card text-center"><div class="card-body">
-          <img src="/static/assets/Employees_thumb.png" /><br />
+          <img src="/static/assets/Employees_thumb.png" title="Employees" /><br />
           Employees</div></div></a></div>
       {% endif %}
       {% if school_perms.personnel.view_supplier %}
       <div class="col-lg-3">
         <a href="{% url 'supplier-list' %}"><div class="card text-center"><div class="card-body">
-          <img src="/static/assets/Suppliers_thumb.png" /><br />
+          <img src="/static/assets/Suppliers_thumb.png" title="Suppliers" /><br />
           Suppliers</div></div></a></div>
       {% endif %}
     </div>
